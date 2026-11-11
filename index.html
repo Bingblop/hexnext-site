@@ -3,32 +3,746 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>#Hex Next</title>
-<meta name="description" content="#Hex Next: a theming app for Samsung phones running One UI.">
+<title>#Hex Next · AI theming for Samsung Galaxy</title>
+<meta name="description" content="#Hex Next themes every corner of One UI: Settings, Quick panel, power menu, My Files, dialer and keyboard. 50+ theme packs, a live preview and AI that builds a whole theme from one sentence. Now in closed beta.">
+<meta name="theme-color" content="#070B16">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/icon-512.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="#Hex Next · AI theming for Samsung Galaxy">
+<meta property="og:description" content="50+ theme packs, a live preview and AI that designs a whole One UI theme from one sentence. Closed beta now open.">
+<meta property="og:image" content="https://bingblop.github.io/hexnext-site/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f7f6fb;--fg:#1b1b21;--muted:#5d5c66;--card:#fff;--accent:#5b4bd6}
-@media (prefers-color-scheme:dark){:root{--bg:#121218;--fg:#ededf3;--muted:#a8a7b3;--card:#1d1d26;--accent:#a99cff}}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:640px;margin:0 auto;padding:48px 16px}
-h1{font-size:2rem;margin:0 0 8px}
-p{color:var(--muted)}
-.card{background:var(--card);border-radius:16px;padding:20px 24px;margin-top:24px}
-a{color:var(--accent)}
-ul{padding-left:20px}
+:root{
+  --bg:#070B16;--bg2:#0C1222;--card:#111a2e;--card2:#16213a;--line:#24314f;
+  --fg:#EEF2FB;--muted:#9AA6C2;--cyan:#3DE0F5;--coral:#FF6B5B;--yellow:#FFD21F;
+  --radius:20px;--max:1160px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:var(--cyan);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3{font-family:"Space Grotesk",Inter,system-ui,sans-serif;line-height:1.1;margin:0}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+.eyebrow{font:600 13px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+.grad{background:linear-gradient(90deg,var(--cyan),#8B7BFF 50%,var(--coral));-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-weight:600;font-size:16px;border:1px solid transparent;transition:transform .15s,box-shadow .15s}
+.btn:hover{text-decoration:none;transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(90deg,var(--coral),#FF8A5B);color:#140805;box-shadow:0 10px 30px -10px rgba(255,107,91,.7)}
+.btn-ghost{border-color:var(--line);color:var(--fg);background:rgba(255,255,255,.03)}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;border:1px solid rgba(61,224,245,.35);background:rgba(61,224,245,.08);color:var(--cyan);font-size:14px;font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 0 rgba(255,107,91,.7);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px rgba(255,107,91,0)}100%{box-shadow:0 0 0 0 rgba(255,107,91,0)}}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}.btn{transition:none}html{scroll-behavior:auto}}
+
+/* nav */
+header.nav{position:sticky;top:0;z-index:20;background:rgba(7,11,22,.78);backdrop-filter:blur(14px);border-bottom:1px solid rgba(36,49,79,.6)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--fg);font:700 19px "Space Grotesk",sans-serif}
+.brand img{width:34px;height:34px;border-radius:9px}
+.nav nav{display:flex;gap:26px;font-size:15px}
+.nav nav a{color:var(--muted)}
+.nav nav a:hover{color:var(--fg);text-decoration:none}
+.nav .btn{padding:9px 16px;font-size:14px}
+@media (max-width:860px){.nav nav{display:none}}
+
+/* hero */
+.hero{position:relative;padding:72px 0 40px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto;height:120%;background:radial-gradient(600px 400px at 20% 20%,rgba(61,224,245,.16),transparent 70%),radial-gradient(520px 380px at 85% 30%,rgba(255,107,91,.16),transparent 70%);pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(40px,6vw,68px);letter-spacing:-.02em;margin:18px 0 18px}
+.hero p.lead{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:560px;margin:0 0 28px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.hero small{display:block;margin-top:16px;color:var(--muted);font-size:14px}
+.phones{position:relative;height:560px}
+.phone{position:absolute;width:236px;aspect-ratio:9/19.5;border-radius:34px;padding:8px;background:#0a0d14;border:1px solid #2a3350;box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.04) inset}
+.phone img{width:100%;height:100%;object-fit:cover;border-radius:27px}
+.phone.p1{left:2%;top:40px;transform:rotate(-8deg)}
+.phone.p2{left:32%;top:0;z-index:2}
+.phone.p3{left:62%;top:40px;transform:rotate(8deg)}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.phones{height:440px;max-width:520px;margin:0 auto;width:100%}.phone{width:180px}.phone.p2{left:calc(50% - 90px)}.phone.p1{left:0}.phone.p3{left:auto;right:0}}
+@media (max-width:420px){.phones{height:360px}.phone{width:140px;border-radius:26px}.phone img{border-radius:20px}.phone.p2{left:calc(50% - 70px)}}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px auto 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.stat b{display:block;font:700 34px/1 "Space Grotesk",sans-serif}
+.stat span{color:var(--muted);font-size:14px}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+section{padding:88px 0}
+.sec-head{max-width:720px;margin-bottom:40px}
+.sec-head h2{font-size:clamp(30px,4vw,46px);letter-spacing:-.01em;margin:12px 0 14px}
+.sec-head p{color:var(--muted);font-size:18px;margin:0}
+
+/* showcase */
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.tab{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:10px 18px;border-radius:999px;font:600 15px Inter,sans-serif;display:flex;align-items:center;gap:10px}
+.tab i{width:14px;height:14px;border-radius:50%;display:inline-block}
+.tab[aria-selected="true"]{border-color:var(--accent,var(--cyan));box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,var(--cyan)) 25%,transparent)}
+.show{display:none;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start}
+.show.on{display:grid}
+.show figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:10px;overflow:hidden}
+.show figure img{border-radius:12px;width:100%;aspect-ratio:526/1080;object-fit:cover}
+.show figcaption{font-size:13px;color:var(--muted);padding:8px 4px 2px}
+.show .info{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--radius);padding:24px;align-self:stretch;display:flex;flex-direction:column;gap:14px}
+.show .info h3{font-size:30px}
+.show .info p{margin:0;color:var(--muted)}
+.swatches{display:flex;gap:8px}
+.swatches i{width:30px;height:30px;border-radius:9px;border:1px solid rgba(255,255,255,.12)}
+.icons{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:auto}
+.icons img{width:100%;aspect-ratio:1;object-fit:contain}
+@media (max-width:980px){.show{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.show{grid-template-columns:1fr 1fr;gap:10px}.show .info{grid-column:1/-1}}
+
+/* features */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+.feat .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(61,224,245,.1);color:var(--cyan);margin-bottom:16px}
+.feat:nth-child(3n+2) .ic{background:rgba(255,107,91,.12);color:var(--coral)}
+.feat:nth-child(3n) .ic{background:rgba(255,210,31,.12);color:var(--yellow)}
+.feat h3{font-size:20px;margin-bottom:8px}
+.feat p{margin:0;color:var(--muted);font-size:15px}
+@media (max-width:900px){.grid3{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.grid3{grid-template-columns:1fr}}
+
+/* live preview */
+.live{display:grid;grid-template-columns:1fr 1.25fr;gap:44px;align-items:center}
+.strip{display:flex;gap:14px;overflow-x:auto;padding:6px 2px 16px;scroll-snap-type:x mandatory}
+.strip figure{flex:0 0 200px;margin:0;scroll-snap-align:start}
+.strip img{border-radius:22px;border:1px solid var(--line);aspect-ratio:9/16;object-fit:cover}
+.strip figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-align:center}
+.checks{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:12px}
+.checks li{display:flex;gap:12px;color:var(--fg)}
+.checks li::before{content:"";flex:0 0 22px;height:22px;border-radius:50%;background:rgba(61,224,245,.15) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%233DE0F5' stroke-width='3' d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/14px no-repeat}
+@media (max-width:900px){.live{grid-template-columns:1fr}}
+
+/* AI */
+.ai{background:radial-gradient(900px 500px at 50% 0,rgba(139,123,255,.14),transparent 70%),var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.prompt{max-width:760px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;display:flex;gap:14px;align-items:center;margin:0 0 36px;font-size:17px}
+.prompt span{color:var(--muted)}
+.prompt b{font-weight:500}
+.prompt .go{margin-left:auto;background:var(--cyan);color:#04121a;border-radius:12px;padding:8px 14px;font-weight:600;font-size:14px;white-space:nowrap}
+.models{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.model{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.model h3{font-size:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.model p{margin:0;color:var(--muted);font-size:14px}
+.tag{font:600 11px/1 Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:6px;background:rgba(61,224,245,.12);color:var(--cyan)}
+.tag.free{background:rgba(255,210,31,.14);color:var(--yellow)}
+.tag.img{background:rgba(255,107,91,.14);color:var(--coral)}
+@media (max-width:900px){.models{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.models{grid-template-columns:1fr}.prompt{flex-wrap:wrap}.prompt .go{margin-left:0}}
+
+/* pricing */
+.prices{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch}
+.price{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:10px;position:relative}
+.price.best{border-color:var(--coral);background:linear-gradient(180deg,rgba(255,107,91,.1),var(--card) 40%)}
+.price .badge{position:absolute;top:-12px;left:22px;background:var(--coral);color:#160806;font:700 12px/1 Inter;padding:6px 10px;border-radius:999px;letter-spacing:.04em}
+.price h3{font-size:19px}
+.price .amt{font:700 38px/1 "Space Grotesk",sans-serif}
+.price .amt small{font:500 15px Inter;color:var(--muted)}
+.price ul{margin:6px 0 0;padding-left:18px;color:var(--muted);font-size:14.5px}
+.note{color:var(--muted);font-size:14px;margin-top:18px}
+@media (max-width:980px){.prices{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.prices{grid-template-columns:1fr}}
+
+/* beta */
+.beta{border-radius:28px;padding:48px;background:linear-gradient(120deg,rgba(255,107,91,.18),rgba(61,224,245,.12)),var(--card);border:1px solid var(--line);display:grid;grid-template-columns:1.4fr 1fr;gap:30px;align-items:center}
+.beta h2{font-size:clamp(28px,4vw,42px);margin:12px 0}
+.beta p{color:var(--muted);margin:0 0 22px}
+.reddit{display:flex;gap:16px;align-items:center;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:18px;padding:18px}
+.reddit svg{flex:0 0 46px}
+@media (max-width:820px){.beta{grid-template-columns:1fr;padding:30px}}
+
+/* faq */
+details{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 22px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600;font-size:17px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";float:right;color:var(--cyan);font-size:22px;line-height:1}
+details[open] summary::after{content:"–"}
+details p{color:var(--muted);margin:12px 0 0}
+
+/* try it: free theme generator */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.try{background:radial-gradient(800px 420px at 85% 0,color-mix(in srgb,var(--t-pri,#3DE0F5) 16%,transparent),transparent 70%),radial-gradient(700px 420px at 0 100%,color-mix(in srgb,var(--t-acc,#FF6B5B) 12%,transparent),transparent 70%);transition:background .4s}
+.try-top{display:grid;grid-template-columns:1fr 220px;gap:30px;align-items:center}
+.try-orb{width:220px;border-radius:28px;mask-image:radial-gradient(circle,#000 55%,transparent 72%);-webkit-mask-image:radial-gradient(circle,#000 55%,transparent 72%)}
+@media (max-width:760px){.try-top{grid-template-columns:1fr}.try-orb{display:none}}
+.try-free{display:flex;gap:14px;align-items:flex-start;background:rgba(255,210,31,.07);border:1px solid rgba(255,210,31,.35);border-radius:16px;padding:14px 18px;margin:0 0 20px}
+.try-free p{margin:0;color:var(--muted);font-size:14.5px}.try-free b{color:var(--fg)}
+.try-free .tag{white-space:nowrap;margin-top:2px}
+@media (max-width:600px){.try-free{flex-direction:column;gap:8px}}
+.try-form{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px 10px 10px 18px;max-width:860px}
+.try-form input,.try-follow input,.try-pop input[type=text],.pop-ask input{flex:1;min-width:0;background:transparent;border:0;color:var(--fg);font:16px Inter,sans-serif;outline:none;padding:8px 0}
+.try-form:focus-within{border-color:var(--cyan)}
+.try-form .btn{padding:11px 18px;font-size:15px;border:0;cursor:pointer}
+.try-form .btn:disabled{opacity:.6;cursor:progress}
+@media (max-width:600px){.try-form{flex-wrap:wrap}.try-form input{flex-basis:calc(100% - 40px)}.try-form .btn{width:100%;justify-content:center}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
+.chips button{cursor:pointer;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--fg);border-radius:999px;padding:7px 14px;font:500 14px Inter,sans-serif}
+.chips button:hover{border-color:var(--cyan)}
+.try-status{color:var(--muted);font-size:14px;min-height:22px;margin:8px 0 22px}
+.working .try-status::before{content:"";display:inline-block;width:12px;height:12px;margin-right:8px;border:2px solid var(--cyan);border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite;vertical-align:-1px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.try-result{position:relative;display:grid;grid-template-columns:260px 1fr;gap:26px;align-items:start}
+@media (max-width:980px){.try-result{grid-template-columns:1fr}}
+.try-meta{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:12px}
+.try-meta h3{font-size:26px}
+.try-meta p{margin:0;color:var(--muted);font-size:14.5px}
+.pal{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:6px}
+.pal label{display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;cursor:pointer;padding:4px;border-radius:10px}
+.pal label:hover{background:rgba(255,255,255,.04)}
+.pal input[type=color]{width:36px;height:36px;padding:0;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:none;cursor:pointer}
+.pal input[type=color]::-webkit-color-swatch-wrapper{padding:0}.pal input[type=color]::-webkit-color-swatch{border:0;border-radius:9px}
+.pal input[type=color]::-moz-color-swatch{border:0;border-radius:9px}
+.pal b{font-size:14px;font-weight:600}.pal span{font:12px ui-monospace,monospace;color:var(--muted)}
+.styles{display:grid;gap:8px}
+.styles label{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.styles select{background:var(--card2);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:7px 10px;font:14px Inter,sans-serif}
+.btn.small{padding:9px 14px;font-size:14px;justify-content:center;cursor:pointer}
+.try-tip{grid-column:2;display:flex;gap:10px;align-items:flex-start;color:var(--muted);font-size:14.5px;background:rgba(61,224,245,.07);border:1px dashed rgba(61,224,245,.4);border-radius:14px;padding:12px 16px;margin-bottom:-10px}
+.try-tip svg{flex:0 0 18px;color:var(--cyan);margin-top:3px}.try-tip b{color:var(--fg)}
+@media (max-width:980px){.try-tip{grid-column:1}}
+.try-stage{grid-column:2;display:flex;gap:16px;overflow-x:auto;padding:6px 2px 18px;scroll-snap-type:x mandatory}
+@media (max-width:980px){.try-stage{grid-column:1}}
+.mock{flex:0 0 220px;margin:0;scroll-snap-align:start}
+.mock figcaption{text-align:center;color:var(--muted);font-size:13px;margin-top:8px}
+.scr{position:relative;aspect-ratio:9/19.5;border-radius:30px;border:7px solid #05070c;box-shadow:0 0 0 1px #2a3350,0 30px 60px -30px #000;background:var(--t-bg);color:var(--t-fg);font-family:var(--t-font);overflow:hidden;padding:10px 12px;font-size:11px;line-height:1.3;transition:background .3s,color .3s;cursor:pointer}
+.scr *{transition:background .3s,color .3s,border-color .3s}
+.sb{display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:600;position:relative;z-index:1}
+.sb svg{width:11px;height:11px;margin-left:3px;vertical-align:-1px}
+.m-title{font-size:22px;font-weight:700;margin:26px 2px 12px;letter-spacing:-.01em}
+.m-search{display:flex;gap:6px;align-items:center;background:var(--t-card);border-radius:999px;padding:6px 10px;color:var(--t-mut);margin-bottom:8px}
+.m-search svg{width:12px;height:12px}
+.m-card{background:var(--t-card);border-radius:16px;padding:4px 8px;margin-bottom:8px}
+.row{display:flex;gap:8px;align-items:center;padding:5px 0}
+.row span{display:flex;flex-direction:column;min-width:0}
+.row b{font-size:11px;font-weight:600}.row small,.m-card small,.media small,.notif small{color:var(--t-mut);font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ic{--g1:var(--t-pri);--g2:var(--t-acc);flex:0 0 26px;width:26px;height:26px;border-radius:var(--t-ic);display:grid;place-items:center;color:#fff;background:var(--g1);position:relative}
+.ic svg{width:15px;height:15px}
+.ic.c2{--g1:var(--t-sec);--g2:var(--t-pri)}.ic.c3{--g1:var(--t-acc);--g2:var(--t-sec)}.ic.c4{--g1:color-mix(in srgb,var(--t-acc) 60%,var(--t-pri));--g2:var(--t-sec)}
+[data-icons="3d"] .ic{background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.55),transparent 45%),linear-gradient(145deg,var(--g1),var(--g2));box-shadow:inset 0 -3px 5px rgba(0,0,0,.3),inset 0 2px 2px rgba(255,255,255,.35),0 4px 8px -3px color-mix(in srgb,var(--g2) 70%,#000)}
+[data-icons="3d"] .ic svg{filter:drop-shadow(0 1.5px 1px rgba(0,0,0,.35))}
+[data-icons="filled"] .ic{background:var(--g1);color:var(--t-on)}
+[data-icons="outline"] .ic{background:transparent;color:var(--g1);box-shadow:inset 0 0 0 1.5px var(--g1)}
+.qp,.lock{padding:10px 12px}
+.t-wall{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s}
+.t-wall.ready{opacity:1}
+.lock{background:var(--t-grad,linear-gradient(160deg,var(--t-pri),var(--t-sec) 55%,var(--t-acc)))}
+.qp{background:linear-gradient(180deg,color-mix(in srgb,var(--t-bg) 70%,transparent),var(--t-bg) 70%),var(--t-grad,var(--t-pri))}
+.qp .t-wall.dim.ready{opacity:.35}
+.qp>*:not(.t-wall){position:relative}
+.m-date{font-size:16px;font-weight:600;margin:20px 2px 10px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;background:color-mix(in srgb,var(--t-card) 88%,transparent);border-radius:18px;padding:9px}
+.tiles i{aspect-ratio:1;border-radius:var(--t-ic);display:grid;place-items:center;background:color-mix(in srgb,var(--t-fg) 10%,transparent);color:var(--t-fg)}
+.tiles i svg{width:14px;height:14px}
+.tiles i.on{background:var(--t-pri);color:var(--t-on)}
+[data-icons="3d"] .tiles i.on{background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.5),transparent 45%),linear-gradient(145deg,var(--t-pri),var(--t-acc));color:#fff;box-shadow:inset 0 -3px 5px rgba(0,0,0,.3),0 4px 8px -4px var(--t-acc)}
+.bright{display:flex;gap:8px;align-items:center;background:color-mix(in srgb,var(--t-card) 88%,transparent);border-radius:999px;padding:6px 10px;margin:8px 0;color:var(--t-pri)}
+.bright svg{width:13px;height:13px}
+.bright span,.prog,.track{flex:1;height:6px;border-radius:9px;background:color-mix(in srgb,var(--t-fg) 15%,transparent);position:relative;display:block}
+.bright span i,.prog i,.track i{position:absolute;left:0;top:0;bottom:0;border-radius:9px;background:var(--t-pri);width:60%}
+.prog i{background:var(--t-acc)}
+.media,.notif{background:color-mix(in srgb,var(--t-card) 92%,transparent);border-radius:16px;padding:9px 10px;margin-bottom:8px;display:flex;flex-direction:column;gap:3px}
+.media .prog{margin-top:6px;flex:none}
+.notif{flex-direction:row;align-items:center;gap:8px}.notif span{display:flex;flex-direction:column;min-width:0}
+.m-sub{font-size:10px;font-weight:600;color:var(--t-mut);margin:6px 2px}
+.recent{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px}
+.recent i{aspect-ratio:1;border-radius:12px;background:linear-gradient(145deg,var(--t-sec),var(--t-acc));opacity:.85}
+.recent i:nth-child(2){background:linear-gradient(145deg,var(--t-pri),var(--t-sec))}
+.recent i:nth-child(3){background:linear-gradient(145deg,var(--t-acc),var(--t-pri))}
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 4px;background:var(--t-card);border-radius:16px;padding:10px 4px;margin-bottom:8px}
+.cats span{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:9px}
+.cats .ic{width:30px;height:30px;flex-basis:30px}
+.store{padding:9px 10px;display:flex;flex-direction:column;gap:3px}
+.store .prog{margin-top:5px;flex:none}
+.ctl{padding:4px 10px}
+.row2{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:11px;border-bottom:1px solid color-mix(in srgb,var(--t-fg) 8%,transparent)}
+.sw{width:30px;height:17px;border-radius:9px;background:color-mix(in srgb,var(--t-fg) 25%,transparent);position:relative}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:#fff}
+.sw.on{background:var(--t-pri)}.sw.on::after{left:15px}
+.cb{width:15px;height:15px;border-radius:4px;border:2px solid var(--t-mut)}
+.cb.on{background:var(--t-pri);border-color:var(--t-pri);box-shadow:inset 0 0 0 2px var(--t-card)}
+.rd{width:15px;height:15px;border-radius:50%;border:2px solid var(--t-mut)}
+.rd.on{border-color:var(--t-pri);background:radial-gradient(circle,var(--t-pri) 40%,transparent 45%)}
+.sl{padding:9px 0 6px;display:flex;flex-direction:column;gap:9px;font-size:11px}
+.track{flex:none}.track b{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--t-pri);box-shadow:0 0 0 3px color-mix(in srgb,var(--t-pri) 30%,transparent)}
+.dlg{padding:12px;display:flex;flex-direction:column;gap:4px}
+.dlg b{font-size:13px}
+.btns{display:flex;justify-content:space-around;margin-top:8px;font-weight:600;color:var(--t-pri)}
+.btns .pri{background:var(--t-pri);color:var(--t-on);border-radius:999px;padding:4px 14px}
+.lock>*:not(.t-wall){position:relative}
+.clock{font-size:52px;font-weight:300;text-align:center;margin-top:38px;letter-spacing:-.02em;text-shadow:0 2px 12px rgba(0,0,0,.35);color:#fff}
+.ldate{text-align:center;font-size:11px;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.lnotif{position:absolute!important;left:12px;right:12px;bottom:18px;display:flex;gap:8px;align-items:center;background:color-mix(in srgb,var(--t-card) 80%,transparent);backdrop-filter:blur(8px);border-radius:16px;padding:8px;font-size:10px}
+.lock .sb{color:#fff}
+[data-role]:hover{outline:2px dashed color-mix(in srgb,var(--t-acc) 80%,#fff);outline-offset:1px}
+.scr[data-role]:hover{outline:none}
+.picked{outline:2px solid var(--cyan)!important;outline-offset:2px}
+.try-pop{position:absolute;z-index:5;width:300px;max-width:calc(100% - 16px);background:#0f1729;border:1px solid var(--cyan);border-radius:16px;padding:14px;box-shadow:0 20px 50px -10px #000;display:flex;flex-direction:column;gap:10px}
+.try-pop[hidden]{display:none}
+.try-pop b{font-size:14px;padding-right:20px}
+.pop-pick{display:flex;gap:10px;align-items:center;font-size:14px;color:var(--muted);cursor:pointer}
+.pop-pick input{width:40px;height:32px;border:0;background:none;padding:0;cursor:pointer}
+.pop-ask{display:flex;gap:8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px 4px 4px 10px}
+.pop-ask input{font-size:14px}
+.pop-ask .btn{padding:7px 12px;font-size:13px;border:0;cursor:pointer}
+.pop-x{position:absolute;top:8px;right:10px;background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer}
+.try-follow{margin-top:16px;max-width:860px}
+.try-follow div{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px 8px 8px 16px;margin-top:10px}
+.try-follow .btn{padding:9px 16px;cursor:pointer}
+
+/* one big phone with screen tabs, like the app's live preview */
+.try-stage{display:block;overflow:visible;padding:4px 0 0}
+.mock{display:none;width:max-content;margin:0 auto}
+.mock.on{display:block}
+.mock .scr{width:220px;zoom:1.6}
+.mock figcaption{display:none}
+.scr-tabs{grid-column:2;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:-6px}
+.scr-tabs button{cursor:pointer;background:var(--card);border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:7px 14px;font:600 13px Inter,sans-serif}
+.scr-tabs button[aria-selected="true"]{color:#04121a;background:var(--cyan);border-color:var(--cyan)}
+@media (max-width:980px){.scr-tabs{grid-column:1}}
+@media (max-width:420px){.mock .scr{zoom:1.35}}
+
+/* Gemini-drawn artwork */
+.hero::after{content:"";position:absolute;inset:0;background:url(assets/art/hero-backdrop.webp) center/cover no-repeat;opacity:.28;mask-image:linear-gradient(180deg,#000 40%,transparent);-webkit-mask-image:linear-gradient(180deg,#000 40%,transparent);pointer-events:none}
+.hero>.wrap{z-index:1}
+#t-galaxy .info{background:linear-gradient(180deg,rgba(17,26,46,.55),var(--card) 62%),url(assets/art/galaxy-mood.webp) top/cover no-repeat}
+#t-heroes .info{background:linear-gradient(180deg,rgba(17,26,46,.55),var(--card) 62%),url(assets/art/heroes-mood.webp) top/cover no-repeat}
+#t-kameha .info{background:linear-gradient(180deg,rgba(17,26,46,.55),var(--card) 62%),url(assets/art/kameha-mood.webp) top/cover no-repeat}
+#features{background:linear-gradient(180deg,var(--bg),rgba(7,11,22,.86) 30%,rgba(7,11,22,.92)),url(assets/art/palette-wave.webp) center/cover no-repeat}
+.beta{background:linear-gradient(120deg,rgba(7,11,22,.75),rgba(7,11,22,.35)),url(assets/art/beta-glow.webp) right center/cover no-repeat,var(--card)}
+.ai .sec-head{position:relative}
+
+.try-meta{grid-row:1 / span 3;align-self:start}
+.lock::after{content:"";position:absolute;inset:0;background:var(--t-grad);mix-blend-mode:color;opacity:.85;pointer-events:none}
+.lock>.t-wall{z-index:0}.lock>*:not(.t-wall){z-index:1}
+.qp::after{content:"";position:absolute;inset:0;background:var(--t-grad);mix-blend-mode:color;opacity:.6;pointer-events:none;z-index:0}
+.qp>*:not(.t-wall){z-index:1}
+@media (max-width:980px){.try-meta{grid-row:auto}}
+
+footer{border-top:1px solid var(--line);padding:40px 0 60px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:20px 40px;justify-content:space-between}
+footer nav{display:flex;flex-wrap:wrap;gap:18px}
+footer a{color:var(--fg)}
 </style>
 </head>
 <body>
-<main>
-<h1>#Hex Next</h1>
-<p>A theming app for Samsung phones running One UI 7, 8 and 9. Colours, icon packs, fonts and backgrounds for the system apps, built on your device.</p>
-<div class="card">
-<ul>
-<li><a href="privacy-policy.html">Privacy policy</a></li>
-<li><a href="terms-of-service.html">Terms of service</a></li>
-<li><a href="https://github.com/Bingblop/Hex-Next">Source and releases</a></li>
-</ul>
-</div>
-<p>#Hex Next needs root (UID 0) or, if root is not an option, system access (UID 1000) on a Samsung One UI device; both give the full feature set. Shizuku over wireless debugging applies the accent colour only. It is not affiliated with Samsung or Google.</p>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/icon-512.png" alt="">#Hex Next</a>
+    <nav aria-label="Sections">
+      <a href="#themes">Themes</a>
+      <a href="#preview">Live preview</a>
+      <a href="#ai">AI</a>
+      <a href="#try">Try it</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-primary" href="https://www.reddit.com/r/HexNext/" rel="noopener">Join the beta</a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="pill"><span class="dot"></span>Closed beta now open</span>
+      <h1>Your Galaxy.<br><span class="grad">Every pixel, your theme.</span></h1>
+      <p class="lead">#Hex Next themes all of One UI: Settings, the Quick panel, the power menu, My Files, the dialer and the keyboard. Pick from 50+ theme packs, or describe a look in one sentence and let AI design the whole theme. You watch it in a live preview before anything touches your phone.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://www.reddit.com/r/HexNext/" rel="noopener">Get beta access on r/HexNext</a>
+        <a class="btn btn-ghost" href="#themes">See the themes</a>
+      </div>
+      <small>For Samsung Galaxy phones on One UI 7, 8 and 9 (Android 15 to 17). Root or system access required.</small>
+    </div>
+    <div class="phones" aria-hidden="true">
+      <div class="phone p1"><img src="assets/themes/heroes/wallpaper.webp" alt=""></div>
+      <div class="phone p2"><img src="assets/themes/galaxy/preview-002.webp" alt=""></div>
+      <div class="phone p3"><img src="assets/themes/kameha/wallpaper.webp" alt=""></div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><b class="grad">50+</b><span>theme packs, with more on the way</span></div>
+      <div class="stat"><b>9</b><span>AI services built in, two of them free</span></div>
+      <div class="stat"><b>200+</b><span>One UI colours you can set one by one</span></div>
+      <div class="stat"><b>9</b><span>app languages</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="themes">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Theme packs</span>
+      <h2>50+ packs. Every one themes the whole phone.</h2>
+      <p>Each pack recolours One UI and swaps in its own art for Settings icons, Quick panel tiles, the power menu, My Files and the wallpaper. Here are three of the packs drawn for #Hex Next, with more being added all the time.</p>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Theme examples">
+      <button class="tab" role="tab" aria-selected="true" aria-controls="t-galaxy" id="b-galaxy" style="--accent:#FFE81F"><i style="background:#FFE81F"></i>Galaxy</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="t-heroes" id="b-heroes" style="--accent:#ED1D24"><i style="background:#ED1D24"></i>Heroes</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="t-kameha" id="b-kameha" style="--accent:#FF8A00"><i style="background:#FF8A00"></i>Kameha</button>
+    </div>
+
+    <div class="show on" id="t-galaxy" role="tabpanel" aria-labelledby="b-galaxy">
+      <div class="info">
+        <span class="eyebrow" style="color:#FFE81F">Space opera</span>
+        <h3>Galaxy</h3>
+        <p>Deep-space black with lightsaber yellow and plasma blue. A ringed planet drifts across the wallpaper, and every icon glows like a cockpit display.</p>
+        <div class="swatches"><i style="background:#05070D"></i><i style="background:#FFE81F"></i><i style="background:#3FA9FF"></i><i style="background:#141A24"></i><i style="background:#FFFFFF"></i></div>
+        <div class="icons">
+          <img src="assets/themes/galaxy/icons/connections.webp" alt="Connections icon" loading="lazy"><img src="assets/themes/galaxy/icons/battery.webp" alt="Battery icon" loading="lazy"><img src="assets/themes/galaxy/icons/display.webp" alt="Display icon" loading="lazy"><img src="assets/themes/galaxy/icons/devicecare.webp" alt="Device care icon" loading="lazy">
+        </div>
+      </div>
+      <figure><img src="assets/themes/galaxy/preview-001.webp" alt="Galaxy pack: themed Settings" loading="lazy"><figcaption>Settings</figcaption></figure>
+      <figure><img src="assets/themes/galaxy/preview-002.webp" alt="Galaxy pack: Quick panel and power menu" loading="lazy"><figcaption>Quick panel and power menu</figcaption></figure>
+      <figure><img src="assets/themes/galaxy/wallpaper.webp" alt="Galaxy pack wallpaper" loading="lazy"><figcaption>Wallpaper</figcaption></figure>
+    </div>
+
+    <div class="show" id="t-heroes" role="tabpanel" aria-labelledby="b-heroes" hidden>
+      <div class="info">
+        <span class="eyebrow" style="color:#ED1D24">Comic-book action</span>
+        <h3>Heroes</h3>
+        <p>Bold red and gold straight off the printed page. Halftone bursts, starburst badges and a city skyline that lights up at night.</p>
+        <div class="swatches"><i style="background:#140A0B"></i><i style="background:#ED1D24"></i><i style="background:#FFC20E"></i><i style="background:#2A1416"></i><i style="background:#FFFFFF"></i></div>
+        <div class="icons">
+          <img src="assets/themes/heroes/icons/connections.webp" alt="Connections icon" loading="lazy"><img src="assets/themes/heroes/icons/battery.webp" alt="Battery icon" loading="lazy"><img src="assets/themes/heroes/icons/display.webp" alt="Display icon" loading="lazy"><img src="assets/themes/heroes/icons/devicecare.webp" alt="Device care icon" loading="lazy">
+        </div>
+      </div>
+      <figure><img src="assets/themes/heroes/preview-001.webp" alt="Heroes pack: themed Settings" loading="lazy"><figcaption>Settings</figcaption></figure>
+      <figure><img src="assets/themes/heroes/preview-002.webp" alt="Heroes pack: Quick panel and power menu" loading="lazy"><figcaption>Quick panel and power menu</figcaption></figure>
+      <figure><img src="assets/themes/heroes/wallpaper.webp" alt="Heroes pack wallpaper" loading="lazy"><figcaption>Wallpaper</figcaption></figure>
+    </div>
+
+    <div class="show" id="t-kameha" role="tabpanel" aria-labelledby="b-kameha" hidden>
+      <div class="info">
+        <span class="eyebrow" style="color:#FF8A00">Power level: over 9000</span>
+        <h3>Kameha</h3>
+        <p>Night-sky navy charged with energy-blast orange and gold. Glowing aura icons, a rising energy sphere and spiky badges on every power button.</p>
+        <div class="swatches"><i style="background:#0B1530"></i><i style="background:#FF8A00"></i><i style="background:#FFD21F"></i><i style="background:#16264A"></i><i style="background:#FFFFFF"></i></div>
+        <div class="icons">
+          <img src="assets/themes/kameha/icons/connections.webp" alt="Connections icon" loading="lazy"><img src="assets/themes/kameha/icons/battery.webp" alt="Battery icon" loading="lazy"><img src="assets/themes/kameha/icons/display.webp" alt="Display icon" loading="lazy"><img src="assets/themes/kameha/icons/devicecare.webp" alt="Device care icon" loading="lazy">
+        </div>
+      </div>
+      <figure><img src="assets/themes/kameha/preview-001.webp" alt="Kameha pack: themed Settings" loading="lazy"><figcaption>Settings</figcaption></figure>
+      <figure><img src="assets/themes/kameha/preview-002.webp" alt="Kameha pack: Quick panel and power menu" loading="lazy"><figcaption>Quick panel and power menu</figcaption></figure>
+      <figure><img src="assets/themes/kameha/wallpaper.webp" alt="Kameha pack wallpaper" loading="lazy"><figcaption>Wallpaper</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="preview" style="padding-top:20px">
+  <div class="wrap live">
+    <div>
+      <span class="eyebrow">Live preview</span>
+      <h2 style="font-size:clamp(30px,4vw,46px);margin:12px 0 14px">See it before you apply it.</h2>
+      <p style="color:var(--muted);font-size:18px;margin:0">#Hex Next scans your phone and draws your own Samsung apps, so the preview matches what you'll get. Flip between screens, switch light and dark, and tap any element to recolour it on the spot.</p>
+      <ul class="checks">
+        <li>Settings, Quick panel, notifications, power menu, My Files, dialer, keyboard, contacts and more</li>
+        <li>Light and dark versions of every theme, side by side</li>
+        <li>Tap anything in the preview to jump straight to its colour</li>
+        <li>Test Mode tries a theme until the next restart, so nothing is permanent until you're happy</li>
+      </ul>
+    </div>
+    <div class="strip" aria-label="Themes applied on a Galaxy phone">
+      <figure><img src="assets/device/settings.webp" alt="Settings themed down to the icons on a Galaxy phone" loading="lazy"><figcaption>Settings, themed down to the icons</figcaption></figure>
+      <figure><img src="assets/device/dialer.webp" alt="Themed phone dialer" loading="lazy"><figcaption>Every system app, even the dialer</figcaption></figure>
+      <figure><img src="assets/device/keyboard.webp" alt="Samsung Keyboard in the theme's colours" loading="lazy"><figcaption>Keyboard colours follow the theme</figcaption></figure>
+      <figure><img src="assets/device/dialogs.webp" alt="System dialog matching the theme" loading="lazy"><figcaption>System dialogs match too</figcaption></figure>
+      <figure><img src="assets/device/light.webp" alt="Same theme in light mode" loading="lazy"><figcaption>Light and dark, both covered</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="ai" class="ai">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">AI Themes</span>
+      <h2>Describe it. <span class="grad">AI builds the whole theme.</span></h2>
+      <p>Type a sentence and the AI picks the colours, Quick panel style, icons and font, then draws matching icons and a wallpaper. Keep chatting to fine-tune it: each message changes only what you name.</p>
+    </div>
+    <div class="prompt" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3DE0F5" stroke-width="2"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>
+      <span>Theme:</span><b>Deep ocean at night, calm, a little neon</b><span class="go">Generate</span>
+    </div>
+    <div class="models">
+      <div class="model"><h3>OpenAI <span class="tag">Themes</span><span class="tag img">Images</span></h3><p>GPT models write the theme; GPT Image draws icons and wallpapers.</p></div>
+      <div class="model"><h3>Google Gemini <span class="tag">Themes</span><span class="tag img">Images</span></h3><p>Gemini Flash and Pro, plus Gemini image models. The API key is free and needs no card.</p></div>
+      <div class="model"><h3>Anthropic Claude <span class="tag">Themes</span></h3><p>Claude designs the theme and draws crisp vector glyph icons.</p></div>
+      <div class="model"><h3>xAI Grok <span class="tag img">Images</span></h3><p>Grok image models for bold icon and wallpaper art.</p></div>
+      <div class="model"><h3>Stability AI <span class="tag img">Images</span></h3><p>Stable Diffusion 3, Core and Ultra for detailed picture icons.</p></div>
+      <div class="model"><h3>Perplexity <span class="tag">Themes</span></h3><p>Sonar models write the theme and draw vector glyph icons.</p></div>
+      <div class="model"><h3>Muse (Meta) <span class="tag">Themes</span></h3><p>Meta's Muse Spark models, which can also read photos you attach.</p></div>
+      <div class="model"><h3>OpenCode <span class="tag free">Free</span><span class="tag">Themes</span></h3><p>Open-source models such as Big Pickle, DeepSeek, GLM and MiniMax. No key needed (experimental).</p></div>
+      <div class="model"><h3>Pollinations <span class="tag free">Free</span><span class="tag img">Images</span></h3><p>Open-source FLUX image generation for icons and wallpapers. No key needed (experimental).</p></div>
+    </div>
+    <p class="note">Pick the model for each service in Settings › AI providers. Your keys stay encrypted on your phone and go only to the service they belong to.</p>
+  </div>
+</section>
+
+<section id="try" class="try">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="g-wifi" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0120 0M5 12.5a10 10 0 0114 0M8.5 16a5 5 0 017 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19" r="1.6" fill="currentColor"/></symbol>
+      <symbol id="g-bt" viewBox="0 0 24 24"><path d="M7 7l10 10-5 4V3l5 4L7 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+      <symbol id="g-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4zM10 20a2 2 0 004 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+      <symbol id="g-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="g-sound" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="g-img" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="10" r="2" fill="currentColor"/><path d="M21 16l-5-5-9 9" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+      <symbol id="g-bat" viewBox="0 0 24 24"><rect x="3" y="7" width="16" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="5.5" y="9.5" width="9" height="5" rx="1" fill="currentColor"/><path d="M21 10v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="g-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/><path d="M8 10V8a4 4 0 018 0v2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+      <symbol id="g-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2" fill="currentColor"/><rect x="14" y="3" width="7" height="7" rx="2" fill="currentColor"/><rect x="3" y="14" width="7" height="7" rx="2" fill="currentColor"/><rect x="14" y="14" width="7" height="7" rx="2" fill="currentColor"/></symbol>
+      <symbol id="g-plane" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 00-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" fill="currentColor"/></symbol>
+      <symbol id="g-torch" viewBox="0 0 24 24"><path d="M7 3h10v4l-3 4v10h-4V11L7 7z" fill="currentColor"/></symbol>
+      <symbol id="g-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z" fill="currentColor"/></symbol>
+      <symbol id="g-rot" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3M18 3v4h-4M6 21v-4h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="g-video" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="3" fill="currentColor"/><path d="M16 10l5-3v10l-5-3z" fill="currentColor"/></symbol>
+      <symbol id="g-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="6.5" cy="18" r="2.8" fill="currentColor"/><circle cx="17.5" cy="16" r="2.8" fill="currentColor"/></symbol>
+      <symbol id="g-doc" viewBox="0 0 24 24"><path d="M6 2h8l5 5v15H6z" fill="currentColor"/><path d="M9 12h7M9 16h7" stroke="#0007" stroke-width="2"/></symbol>
+      <symbol id="g-down" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+      <symbol id="g-apk" viewBox="0 0 24 24"><path d="M5 10a7 7 0 0114 0v9H5z" fill="currentColor"/><path d="M8 4l1.5 2.5M16 4l-1.5 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="g-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    </defs>
+  </svg>
+  <div class="wrap">
+    <div class="try-top">
+      <div class="sec-head">
+        <span class="eyebrow">Try it free, right here</span>
+        <h2>Make a #Hex Next theme <span class="grad">from one sentence.</span></h2>
+        <p>Type a mood and a free AI designs a theme, then paints it across Settings, the Quick panel, My Files, the controls and a wallpaper, just like the live preview in the app.</p>
+      </div>
+      <img class="try-orb" src="assets/art/ai-orb.webp" alt="" loading="lazy">
+    </div>
+
+    <div class="try-free" role="note">
+      <span class="tag free">Free · open source · experimental</span>
+      <p>This demo runs on a free, open-source agent (GPT-OSS 20B) with no account and no key. Results are <b>lower quality than #Hex Next's full potential</b>. In the app, connect Google Gemini (free key, no card), OpenAI or Claude for much richer themes, matching icon sets and wallpapers.</p>
+    </div>
+
+    <form class="try-form" autocomplete="off">
+      <label for="try-input" class="sr">Describe your theme</label>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3DE0F5" stroke-width="2" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>
+      <input id="try-input" maxlength="200" placeholder="Describe a look, e.g. cozy autumn cabin at dusk" value="">
+      <button id="try-go" class="btn btn-primary" type="submit">Generate theme</button>
+    </form>
+    <div class="chips">
+      <button type="button" data-idea="Cyberpunk city in the rain, magenta and teal neon">Cyberpunk rain</button>
+      <button type="button" data-idea="Cozy autumn cabin at dusk">Autumn cabin</button>
+      <button type="button" data-idea="Cherry blossom morning, soft pastel and light">Sakura morning</button>
+      <button type="button" data-idea="Molten lava and black volcanic glass">Lava glass</button>
+      <button type="button" data-idea="Arctic aurora over a frozen lake">Arctic aurora</button>
+    </div>
+    <p id="try-status" class="try-status" aria-live="polite">Showing a sample theme. Type your own idea above.</p>
+
+    <div class="try-result">
+      <div class="try-pop" id="try-pop" hidden role="dialog" aria-label="Recolour this element">
+      <b id="pop-title">Recolour</b>
+      <label class="pop-pick"><input type="color" id="pop-color"><span>Pick a colour</span></label>
+      <form id="pop-form" class="pop-ask"><input id="pop-input" maxlength="160" placeholder="Or ask the AI: make this warmer"><button class="btn btn-primary" type="submit">Ask</button></form>
+      <button type="button" class="pop-x" id="pop-x" aria-label="Close">×</button>
+    </div>
+      <div class="try-meta">
+        <h3 id="try-name">Midnight Tide</h3>
+        <p id="try-tag"></p>
+        <ul id="try-swatches" class="pal" aria-label="Colour palette"></ul>
+        <div class="styles">
+          <label>Icon shape<select data-k="iconShape"><option value="circle">Circle</option><option value="squircle">Squircle</option><option value="square">Square</option></select></label>
+          <label>Icon style<select data-k="iconStyle"><option value="3d">3D multicolour</option><option value="filled">Flat</option><option value="outline">Outline</option></select></label>
+          <label>Font<select data-k="font"><option value="rounded">Rounded</option><option value="sharp">Modern</option><option value="classic">Classic</option></select></label>
+        </div>
+        <button type="button" class="btn btn-ghost small" id="try-shuffle">Random seed colour</button>
+      </div>
+
+      <div class="try-tip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11V5a2 2 0 014 0v6m0-2a2 2 0 014 0v3m-8-1V9a2 2 0 00-4 0v5a8 8 0 0016 0v-2a2 2 0 00-4 0"/></svg><span><b>Tap anything you don't like.</b> Recolour that part with a colour picker, or ask the AI to change just that bit. Everything else stays put, the same way the app's live preview and AI chat work.</span></div>
+      <div class="scr-tabs" role="tablist" aria-label="Preview screens">
+          <button type="button" role="tab" aria-selected="true" data-screen="0">Settings</button>
+          <button type="button" role="tab" aria-selected="false" data-screen="1">Quick panel</button>
+          <button type="button" role="tab" aria-selected="false" data-screen="2">My Files</button>
+          <button type="button" role="tab" aria-selected="false" data-screen="3">Controls</button>
+          <button type="button" role="tab" aria-selected="false" data-screen="4">Wallpaper</button>
+        </div>
+      <div class="try-stage">
+        <figure class="mock"><div class="scr" data-role="background">
+          <div class="sb"><span>12:45</span><span><svg><use href="#g-wifi"/></svg><svg><use href="#g-bat"/></svg></span></div>
+          <div class="m-title" data-role="text">Settings</div>
+          <div class="m-search" data-role="surface"><svg><use href="#g-search"/></svg>Search</div>
+          <div data-role="surface" class="m-card">
+            <div class="row"><i class="ic c1" data-role="primary"><svg><use href="#g-wifi"/></svg></i><span><b>Connections</b><small>Wi-Fi · Bluetooth</small></span></div>
+            <div class="row"><i class="ic c2" data-role="secondary"><svg><use href="#g-sound"/></svg></i><span><b>Sounds</b><small>Volume · Vibration</small></span></div>
+            <div class="row"><i class="ic c3" data-role="accent"><svg><use href="#g-bell"/></svg></i><span><b>Notifications</b><small>Status bar · Do not disturb</small></span></div>
+          </div>
+          <div data-role="surface" class="m-card">
+            <div class="row"><i class="ic c4" data-role="accent"><svg><use href="#g-sun"/></svg></i><span><b>Display</b><small>Brightness · Dark mode</small></span></div>
+            <div class="row"><i class="ic c1" data-role="primary"><svg><use href="#g-img"/></svg></i><span><b>Wallpaper and style</b><small>Colour palette</small></span></div>
+            <div class="row"><i class="ic c2" data-role="secondary"><svg><use href="#g-bat"/></svg></i><span><b>Battery</b><small>Power saving</small></span></div>
+            <div class="row"><i class="ic c3" data-role="accent"><svg><use href="#g-lock"/></svg></i><span><b>Security</b><small>Biometrics · Privacy</small></span></div>
+            <div class="row"><i class="ic c4" data-role="accent"><svg><use href="#g-grid"/></svg></i><span><b>Apps</b><small>Default apps</small></span></div>
+          </div>
+        </div><figcaption>Settings</figcaption></figure>
+
+        <figure class="mock"><div class="scr qp" data-role="background">
+          <img class="t-wall dim" alt="">
+          <div class="sb"><span>12:45</span><span><svg><use href="#g-wifi"/></svg><svg><use href="#g-bat"/></svg></span></div>
+          <div class="m-date">Wed, Nov 11</div>
+          <div class="tiles"><i class="on" data-role="primary"><svg><use href="#g-wifi"/></svg></i><i class="on" data-role="primary"><svg><use href="#g-bt"/></svg></i><i data-role="surface"><svg><use href="#g-sound"/></svg></i><i data-role="surface"><svg><use href="#g-rot"/></svg></i>
+            <i data-role="surface"><svg><use href="#g-plane"/></svg></i><i class="on" data-role="primary"><svg><use href="#g-torch"/></svg></i><i data-role="surface"><svg><use href="#g-moon"/></svg></i><i class="on" data-role="primary"><svg><use href="#g-lock"/></svg></i>
+          </div>
+          <div class="bright" data-role="primary"><svg><use href="#g-sun"/></svg><span><i style="width:64%"></i></span></div>
+          <div class="media" data-role="surface"><b>Now playing</b><small>Your favourite song</small><span class="prog" data-role="accent"><i></i></span></div>
+          <div class="notif" data-role="surface"><i class="ic c2" data-role="secondary"><svg><use href="#g-bell"/></svg></i><span><b>#Hex Next</b><small>Your theme is ready to apply</small></span></div>
+        </div><figcaption>Quick panel</figcaption></figure>
+
+        <figure class="mock"><div class="scr" data-role="background">
+          <div class="sb"><span>12:45</span><span><svg><use href="#g-wifi"/></svg><svg><use href="#g-bat"/></svg></span></div>
+          <div class="m-title" data-role="text">My Files</div>
+          <div class="m-sub">Recent files</div>
+          <div class="recent" data-role="secondary"><i></i><i></i><i></i></div>
+          <div class="m-sub">Categories</div>
+          <div class="cats">
+            <span><i class="ic c1" data-role="primary"><svg><use href="#g-img"/></svg></i>Images</span>
+            <span><i class="ic c2" data-role="secondary"><svg><use href="#g-video"/></svg></i>Videos</span>
+            <span><i class="ic c3" data-role="accent"><svg><use href="#g-music"/></svg></i>Audio</span>
+            <span><i class="ic c4" data-role="accent"><svg><use href="#g-doc"/></svg></i>Docs</span>
+            <span><i class="ic c1" data-role="primary"><svg><use href="#g-down"/></svg></i>Downloads</span>
+            <span><i class="ic c2" data-role="secondary"><svg><use href="#g-apk"/></svg></i>APKs</span>
+          </div>
+          <div data-role="surface" class="m-card store"><b>Internal storage</b><small>148 GB of 256 GB used</small><span class="prog" data-role="accent"><i style="width:58%"></i></span></div>
+        </div><figcaption>My Files</figcaption></figure>
+
+        <figure class="mock"><div class="scr" data-role="background">
+          <div class="sb"><span>12:45</span><span><svg><use href="#g-wifi"/></svg><svg><use href="#g-bat"/></svg></span></div>
+          <div class="m-title" data-role="text">Controls</div>
+          <div data-role="surface" class="m-card ctl">
+            <div class="row2"><span>Dark mode</span><i class="sw on" data-role="primary"></i></div>
+            <div class="row2"><span>Eye comfort</span><i class="sw"></i></div>
+            <div class="row2"><span>Auto brightness</span><i class="cb on" data-role="primary"></i></div>
+            <div class="row2"><span>Sound</span><i class="rd on" data-role="primary"></i></div>
+            <div class="row2"><span>Vibrate</span><i class="rd"></i></div>
+            <div class="sl"><span>Font size</span><span class="track" data-role="primary"><i style="width:45%"></i><b style="left:45%"></b></span></div>
+          </div>
+          <div data-role="surface" class="m-card dlg">
+            <b>Apply theme?</b><small>Your phone will refresh its look.</small>
+            <div class="btns"><span>Cancel</span><span class="pri" data-role="primary">Apply</span></div>
+          </div>
+        </div><figcaption>Switches, sliders and dialogs</figcaption></figure>
+
+        <figure class="mock"><div class="scr lock" data-role="background">
+          <img class="t-wall" alt="AI wallpaper for this theme">
+          <div class="sb"><span></span><span><svg><use href="#g-wifi"/></svg><svg><use href="#g-bat"/></svg></span></div>
+          <div class="clock" data-role="text">12:45</div>
+          <div class="ldate">Wednesday, November 11</div>
+          <div class="lnotif"><i class="ic c1" data-role="primary"><svg><use href="#g-bell"/></svg></i><span>2 new themes on r/HexNext</span></div>
+        </div><figcaption>Wallpaper and lock screen</figcaption></figure>
+      </div>
+    </div>
+
+    
+    <form class="try-follow" id="try-follow" autocomplete="off"><label for="follow-input" class="eyebrow">Follow up with the AI</label><div><input id="follow-input" maxlength="200" placeholder="e.g. make the switches gold and the cards a bit lighter"><button class="btn btn-ghost" type="submit">Send</button></div></form>
+    <p class="note">A website mock-up of what #Hex Next does on a real phone. The app applies the theme to Samsung's own screens through the live preview, Test Mode and one-tap Remove.</p>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Everything you can change</span>
+      <h2>A full theme studio in your pocket.</h2>
+    </div>
+    <div class="grid3">
+      <div class="feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 000 18c1.5 0 2-1 2-2s-1-1.5-1-2.5 1-1.5 2-1.5h2a4 4 0 004-4c0-4.4-4-8-9-8z"/></svg></div><h3>Colour every element</h3><p>Over 200 One UI colours, from switches and sliders to notification cards, each one adjustable on its own or all at once from one seed colour.</p></div>
+      <div class="feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></div><h3>Mix packs per part</h3><p>Galaxy icons in Settings, Heroes in the Quick panel and Kameha in My Files? Choose a different pack for every part of the phone.</p></div>
+      <div class="feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5h16v2M9 19h6M12 5v14"/></svg></div><h3>Fonts and Google Fonts</h3><p>Install a system font from your files or browse Google Fonts right in the app.</p></div>
+      <div class="feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg></div><h3>Your own icons and art</h3><p>Import PNGs, assign them to any icon, or generate a matching set with AI. Backgrounds and wallpapers too.</p></div>
+      <div class="feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg></div><h3>Save, share and back up</h3><p>Keep any theme as your own pack, share it as a file, and back up or restore your whole setup.</p></div>
+      <div class="feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Safe by design</h3><p>Test Mode, one-tap Remove and a recovery watchdog that steps in if something won't start. Overlays only touch Samsung's own apps.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" style="padding-top:20px">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Pricing</span>
+      <h2>Free to start. Unlock as much as you like.</h2>
+      <p>The app, the colour studio, the live preview and the Quartz pack are free. Every paid option is a Google Play purchase you can restore on a new phone.</p>
+    </div>
+    <div class="prices">
+      <div class="price best"><span class="badge">MOST POPULAR</span><h3>Everything</h3><div class="amt">$4.99<small> / month</small></div><ul><li>Every theme pack, including new ones</li><li>AI Themes, AI icons and wallpapers</li><li>Theme backup, restore, export and import</li><li>Cancel any time</li></ul></div>
+      <div class="price"><h3>Lifetime</h3><div class="amt">$29.99<small> once</small></div><ul><li>Everything in the monthly plan</li><li>Every future feature</li><li>Pay once, keep it forever</li></ul></div>
+      <div class="price"><h3>All theme packs</h3><div class="amt">$9.99<small> once</small></div><ul><li>Every preset pack, today and tomorrow</li><li>Pack per part mixing</li></ul></div>
+      <div class="price"><h3>Single pack</h3><div class="amt">$0.99<small> each</small></div><ul><li>Only the packs you love</li><li>Yours to keep</li></ul></div>
+    </div>
+    <p class="note">Prices in US dollars; Google Play shows the price in your currency. AI services you connect with your own key bill you directly.</p>
+  </div>
+</section>
+
+<section style="padding-top:20px">
+  <div class="wrap">
+    <div class="beta">
+      <div>
+        <span class="pill"><span class="dot"></span>Closed beta</span>
+        <h2>Be one of the first to theme with #Hex Next.</h2>
+        <p>#Hex Next is in closed beta on Google Play. Join the community on Reddit to get an invite, share your themes, report bugs and help shape what comes next.</p>
+        <a class="btn btn-primary" href="https://www.reddit.com/r/HexNext/" rel="noopener">Join r/HexNext</a>
+      </div>
+      <a class="reddit" href="https://www.reddit.com/r/HexNext/" rel="noopener">
+        <svg viewBox="0 0 48 48" width="46" height="46" aria-hidden="true"><circle cx="24" cy="24" r="24" fill="#FF4500"/><ellipse cx="24" cy="28" rx="12" ry="8.5" fill="#fff"/><circle cx="34.5" cy="21.5" r="3" fill="#fff"/><circle cx="13.5" cy="21.5" r="3" fill="#fff"/><circle cx="19.5" cy="27" r="1.9" fill="#FF4500"/><circle cx="28.5" cy="27" r="1.9" fill="#FF4500"/><path d="M19.5 31.5c2.6 1.8 6.4 1.8 9 0" stroke="#FF4500" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="31" cy="12" r="2.4" fill="#fff"/><path d="M24 19.5l2-7.5 5 1" stroke="#fff" stroke-width="1.6" fill="none"/></svg>
+        <span><b style="color:var(--fg)">r/HexNext</b><br><span style="color:var(--muted)">Beta invites, theme showcases and news</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap" style="max-width:820px">
+    <div class="sec-head"><span class="eyebrow">FAQ</span><h2>Questions</h2></div>
+    <details><summary>Which phones work?</summary><p>Samsung Galaxy phones on One UI 7, 8 and 9 (Android 15 to 17). #Hex Next themes Samsung's own system apps.</p></details>
+    <details><summary>Do I need root?</summary><p>Full theming needs root (any root manager, such as KernelSU or Magisk) or system access through Shizuku running as root. Without root, Shizuku over wireless debugging can still apply the accent colour.</p></details>
+    <details><summary>Is it safe? Can I undo it?</summary><p>Yes. Test Mode tries a theme only until the next restart, Remove takes every overlay off in one tap, and a recovery watchdog turns the theme off if System UI keeps crashing after a restart. #Hex Next never touches your files.</p></details>
+    <details><summary>Do I need my own AI key?</summary><p>No. Two free, experimental agents work out of the box, though their themes may be lower quality. For the best results add a key for any supported service. A Google Gemini key is free and needs no card: get one at <a href="https://aistudio.google.com/app/apikey" rel="noopener">aistudio.google.com</a>.</p></details>
+    <details><summary>How many theme packs are there?</summary><p>More than 50, from minimal to wild, with new packs added regularly. Any theme you build can also be saved as your own pack.</p></details>
+    <details><summary>What happens to my data?</summary><p>Your themes, images and fonts stay on your phone. Read the <a href="privacy-policy.html">privacy policy</a> for the details.</p></details>
+  </div>
+</section>
 </main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a class="brand" href="#top"><img src="assets/icon-512.png" alt="">#Hex Next</a>
+      <p style="margin:12px 0 0;max-width:420px">#Hex Next is an independent app and is not affiliated with, endorsed by or sponsored by Samsung or Google. Galaxy and One UI are trademarks of Samsung Electronics.</p>
+    </div>
+    <nav aria-label="Footer">
+      <a href="privacy-policy.html">Privacy policy</a>
+      <a href="terms-of-service.html">Terms of service</a>
+      <a href="privacy-policy.html#delete-data">Delete your data</a>
+      <a href="https://www.reddit.com/r/HexNext/" rel="noopener">Reddit</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.tab').forEach(function (tab) {
+  tab.addEventListener('click', function () {
+    document.querySelectorAll('.tab').forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      panel.hidden = !on;
+      panel.classList.toggle('on', on);
+    });
+  });
+});
+</script>
+<script src="assets/try.js" defer></script>
 </body>
 </html>
