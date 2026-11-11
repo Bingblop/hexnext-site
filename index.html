@@ -168,6 +168,165 @@ summary::after{content:"+";float:right;color:var(--cyan);font-size:22px;line-hei
 details[open] summary::after{content:"–"}
 details p{color:var(--muted);margin:12px 0 0}
 
+/* try it: free theme generator */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.try{background:radial-gradient(800px 420px at 85% 0,color-mix(in srgb,var(--t-pri,#3DE0F5) 16%,transparent),transparent 70%),radial-gradient(700px 420px at 0 100%,color-mix(in srgb,var(--t-acc,#FF6B5B) 12%,transparent),transparent 70%);transition:background .4s}
+.try-top{display:grid;grid-template-columns:1fr 220px;gap:30px;align-items:center}
+.try-orb{width:220px;border-radius:28px;mask-image:radial-gradient(circle,#000 55%,transparent 72%);-webkit-mask-image:radial-gradient(circle,#000 55%,transparent 72%)}
+@media (max-width:760px){.try-top{grid-template-columns:1fr}.try-orb{display:none}}
+.try-free{display:flex;gap:14px;align-items:flex-start;background:rgba(255,210,31,.07);border:1px solid rgba(255,210,31,.35);border-radius:16px;padding:14px 18px;margin:0 0 20px}
+.try-free p{margin:0;color:var(--muted);font-size:14.5px}.try-free b{color:var(--fg)}
+.try-free .tag{white-space:nowrap;margin-top:2px}
+@media (max-width:600px){.try-free{flex-direction:column;gap:8px}}
+.try-form{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px 10px 10px 18px;max-width:860px}
+.try-form input,.try-follow input,.try-pop input[type=text],.pop-ask input{flex:1;min-width:0;background:transparent;border:0;color:var(--fg);font:16px Inter,sans-serif;outline:none;padding:8px 0}
+.try-form:focus-within{border-color:var(--cyan)}
+.try-form .btn{padding:11px 18px;font-size:15px;border:0;cursor:pointer}
+.try-form .btn:disabled{opacity:.6;cursor:progress}
+@media (max-width:600px){.try-form{flex-wrap:wrap}.try-form input{flex-basis:calc(100% - 40px)}.try-form .btn{width:100%;justify-content:center}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
+.chips button{cursor:pointer;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--fg);border-radius:999px;padding:7px 14px;font:500 14px Inter,sans-serif}
+.chips button:hover{border-color:var(--cyan)}
+.try-status{color:var(--muted);font-size:14px;min-height:22px;margin:8px 0 22px}
+.working .try-status::before{content:"";display:inline-block;width:12px;height:12px;margin-right:8px;border:2px solid var(--cyan);border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite;vertical-align:-1px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.try-result{position:relative;display:grid;grid-template-columns:260px 1fr;gap:26px;align-items:start}
+@media (max-width:980px){.try-result{grid-template-columns:1fr}}
+.try-meta{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:12px}
+.try-meta h3{font-size:26px}
+.try-meta p{margin:0;color:var(--muted);font-size:14.5px}
+.pal{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:6px}
+.pal label{display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;cursor:pointer;padding:4px;border-radius:10px}
+.pal label:hover{background:rgba(255,255,255,.04)}
+.pal input[type=color]{width:36px;height:36px;padding:0;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:none;cursor:pointer}
+.pal input[type=color]::-webkit-color-swatch-wrapper{padding:0}.pal input[type=color]::-webkit-color-swatch{border:0;border-radius:9px}
+.pal input[type=color]::-moz-color-swatch{border:0;border-radius:9px}
+.pal b{font-size:14px;font-weight:600}.pal span{font:12px ui-monospace,monospace;color:var(--muted)}
+.styles{display:grid;gap:8px}
+.styles label{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.styles select{background:var(--card2);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:7px 10px;font:14px Inter,sans-serif}
+.btn.small{padding:9px 14px;font-size:14px;justify-content:center;cursor:pointer}
+.try-tip{grid-column:2;display:flex;gap:10px;align-items:flex-start;color:var(--muted);font-size:14.5px;background:rgba(61,224,245,.07);border:1px dashed rgba(61,224,245,.4);border-radius:14px;padding:12px 16px;margin-bottom:-10px}
+.try-tip svg{flex:0 0 18px;color:var(--cyan);margin-top:3px}.try-tip b{color:var(--fg)}
+@media (max-width:980px){.try-tip{grid-column:1}}
+.try-stage{grid-column:2;display:flex;gap:16px;overflow-x:auto;padding:6px 2px 18px;scroll-snap-type:x mandatory}
+@media (max-width:980px){.try-stage{grid-column:1}}
+.mock{flex:0 0 220px;margin:0;scroll-snap-align:start}
+.mock figcaption{text-align:center;color:var(--muted);font-size:13px;margin-top:8px}
+.scr{position:relative;aspect-ratio:9/19.5;border-radius:30px;border:7px solid #05070c;box-shadow:0 0 0 1px #2a3350,0 30px 60px -30px #000;background:var(--t-bg);color:var(--t-fg);font-family:var(--t-font);overflow:hidden;padding:10px 12px;font-size:11px;line-height:1.3;transition:background .3s,color .3s;cursor:pointer}
+.scr *{transition:background .3s,color .3s,border-color .3s}
+.sb{display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:600;position:relative;z-index:1}
+.sb svg{width:11px;height:11px;margin-left:3px;vertical-align:-1px}
+.m-title{font-size:22px;font-weight:700;margin:26px 2px 12px;letter-spacing:-.01em}
+.m-search{display:flex;gap:6px;align-items:center;background:var(--t-card);border-radius:999px;padding:6px 10px;color:var(--t-mut);margin-bottom:8px}
+.m-search svg{width:12px;height:12px}
+.m-card{background:var(--t-card);border-radius:16px;padding:4px 8px;margin-bottom:8px}
+.row{display:flex;gap:8px;align-items:center;padding:5px 0}
+.row span{display:flex;flex-direction:column;min-width:0}
+.row b{font-size:11px;font-weight:600}.row small,.m-card small,.media small,.notif small{color:var(--t-mut);font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ic{--g1:var(--t-pri);--g2:var(--t-acc);flex:0 0 26px;width:26px;height:26px;border-radius:var(--t-ic);display:grid;place-items:center;color:#fff;background:var(--g1);position:relative}
+.ic svg{width:15px;height:15px}
+.ic.c2{--g1:var(--t-sec);--g2:var(--t-pri)}.ic.c3{--g1:var(--t-acc);--g2:var(--t-sec)}.ic.c4{--g1:color-mix(in srgb,var(--t-acc) 60%,var(--t-pri));--g2:var(--t-sec)}
+[data-icons="3d"] .ic{background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.55),transparent 45%),linear-gradient(145deg,var(--g1),var(--g2));box-shadow:inset 0 -3px 5px rgba(0,0,0,.3),inset 0 2px 2px rgba(255,255,255,.35),0 4px 8px -3px color-mix(in srgb,var(--g2) 70%,#000)}
+[data-icons="3d"] .ic svg{filter:drop-shadow(0 1.5px 1px rgba(0,0,0,.35))}
+[data-icons="filled"] .ic{background:var(--g1);color:var(--t-on)}
+[data-icons="outline"] .ic{background:transparent;color:var(--g1);box-shadow:inset 0 0 0 1.5px var(--g1)}
+.qp,.lock{padding:10px 12px}
+.t-wall{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s}
+.t-wall.ready{opacity:1}
+.lock{background:var(--t-grad,linear-gradient(160deg,var(--t-pri),var(--t-sec) 55%,var(--t-acc)))}
+.qp{background:linear-gradient(180deg,color-mix(in srgb,var(--t-bg) 70%,transparent),var(--t-bg) 70%),var(--t-grad,var(--t-pri))}
+.qp .t-wall.dim.ready{opacity:.35}
+.qp>*:not(.t-wall){position:relative}
+.m-date{font-size:16px;font-weight:600;margin:20px 2px 10px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;background:color-mix(in srgb,var(--t-card) 88%,transparent);border-radius:18px;padding:9px}
+.tiles i{aspect-ratio:1;border-radius:var(--t-ic);display:grid;place-items:center;background:color-mix(in srgb,var(--t-fg) 10%,transparent);color:var(--t-fg)}
+.tiles i svg{width:14px;height:14px}
+.tiles i.on{background:var(--t-pri);color:var(--t-on)}
+[data-icons="3d"] .tiles i.on{background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.5),transparent 45%),linear-gradient(145deg,var(--t-pri),var(--t-acc));color:#fff;box-shadow:inset 0 -3px 5px rgba(0,0,0,.3),0 4px 8px -4px var(--t-acc)}
+.bright{display:flex;gap:8px;align-items:center;background:color-mix(in srgb,var(--t-card) 88%,transparent);border-radius:999px;padding:6px 10px;margin:8px 0;color:var(--t-pri)}
+.bright svg{width:13px;height:13px}
+.bright span,.prog,.track{flex:1;height:6px;border-radius:9px;background:color-mix(in srgb,var(--t-fg) 15%,transparent);position:relative;display:block}
+.bright span i,.prog i,.track i{position:absolute;left:0;top:0;bottom:0;border-radius:9px;background:var(--t-pri);width:60%}
+.prog i{background:var(--t-acc)}
+.media,.notif{background:color-mix(in srgb,var(--t-card) 92%,transparent);border-radius:16px;padding:9px 10px;margin-bottom:8px;display:flex;flex-direction:column;gap:3px}
+.media .prog{margin-top:6px;flex:none}
+.notif{flex-direction:row;align-items:center;gap:8px}.notif span{display:flex;flex-direction:column;min-width:0}
+.m-sub{font-size:10px;font-weight:600;color:var(--t-mut);margin:6px 2px}
+.recent{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px}
+.recent i{aspect-ratio:1;border-radius:12px;background:linear-gradient(145deg,var(--t-sec),var(--t-acc));opacity:.85}
+.recent i:nth-child(2){background:linear-gradient(145deg,var(--t-pri),var(--t-sec))}
+.recent i:nth-child(3){background:linear-gradient(145deg,var(--t-acc),var(--t-pri))}
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 4px;background:var(--t-card);border-radius:16px;padding:10px 4px;margin-bottom:8px}
+.cats span{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:9px}
+.cats .ic{width:30px;height:30px;flex-basis:30px}
+.store{padding:9px 10px;display:flex;flex-direction:column;gap:3px}
+.store .prog{margin-top:5px;flex:none}
+.ctl{padding:4px 10px}
+.row2{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:11px;border-bottom:1px solid color-mix(in srgb,var(--t-fg) 8%,transparent)}
+.sw{width:30px;height:17px;border-radius:9px;background:color-mix(in srgb,var(--t-fg) 25%,transparent);position:relative}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:#fff}
+.sw.on{background:var(--t-pri)}.sw.on::after{left:15px}
+.cb{width:15px;height:15px;border-radius:4px;border:2px solid var(--t-mut)}
+.cb.on{background:var(--t-pri);border-color:var(--t-pri);box-shadow:inset 0 0 0 2px var(--t-card)}
+.rd{width:15px;height:15px;border-radius:50%;border:2px solid var(--t-mut)}
+.rd.on{border-color:var(--t-pri);background:radial-gradient(circle,var(--t-pri) 40%,transparent 45%)}
+.sl{padding:9px 0 6px;display:flex;flex-direction:column;gap:9px;font-size:11px}
+.track{flex:none}.track b{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--t-pri);box-shadow:0 0 0 3px color-mix(in srgb,var(--t-pri) 30%,transparent)}
+.dlg{padding:12px;display:flex;flex-direction:column;gap:4px}
+.dlg b{font-size:13px}
+.btns{display:flex;justify-content:space-around;margin-top:8px;font-weight:600;color:var(--t-pri)}
+.btns .pri{background:var(--t-pri);color:var(--t-on);border-radius:999px;padding:4px 14px}
+.lock>*:not(.t-wall){position:relative}
+.clock{font-size:52px;font-weight:300;text-align:center;margin-top:38px;letter-spacing:-.02em;text-shadow:0 2px 12px rgba(0,0,0,.35);color:#fff}
+.ldate{text-align:center;font-size:11px;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.lnotif{position:absolute!important;left:12px;right:12px;bottom:18px;display:flex;gap:8px;align-items:center;background:color-mix(in srgb,var(--t-card) 80%,transparent);backdrop-filter:blur(8px);border-radius:16px;padding:8px;font-size:10px}
+.lock .sb{color:#fff}
+[data-role]:hover{outline:2px dashed color-mix(in srgb,var(--t-acc) 80%,#fff);outline-offset:1px}
+.scr[data-role]:hover{outline:none}
+.picked{outline:2px solid var(--cyan)!important;outline-offset:2px}
+.try-pop{position:absolute;z-index:5;width:300px;max-width:calc(100% - 16px);background:#0f1729;border:1px solid var(--cyan);border-radius:16px;padding:14px;box-shadow:0 20px 50px -10px #000;display:flex;flex-direction:column;gap:10px}
+.try-pop[hidden]{display:none}
+.try-pop b{font-size:14px;padding-right:20px}
+.pop-pick{display:flex;gap:10px;align-items:center;font-size:14px;color:var(--muted);cursor:pointer}
+.pop-pick input{width:40px;height:32px;border:0;background:none;padding:0;cursor:pointer}
+.pop-ask{display:flex;gap:8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px 4px 4px 10px}
+.pop-ask input{font-size:14px}
+.pop-ask .btn{padding:7px 12px;font-size:13px;border:0;cursor:pointer}
+.pop-x{position:absolute;top:8px;right:10px;background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer}
+.try-follow{margin-top:16px;max-width:860px}
+.try-follow div{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px 8px 8px 16px;margin-top:10px}
+.try-follow .btn{padding:9px 16px;cursor:pointer}
+
+/* one big phone with screen tabs, like the app's live preview */
+.try-stage{display:block;overflow:visible;padding:4px 0 0}
+.mock{display:none;width:max-content;margin:0 auto}
+.mock.on{display:block}
+.mock .scr{width:220px;zoom:1.6}
+.mock figcaption{display:none}
+.scr-tabs{grid-column:2;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:-6px}
+.scr-tabs button{cursor:pointer;background:var(--card);border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:7px 14px;font:600 13px Inter,sans-serif}
+.scr-tabs button[aria-selected="true"]{color:#04121a;background:var(--cyan);border-color:var(--cyan)}
+@media (max-width:980px){.scr-tabs{grid-column:1}}
+@media (max-width:420px){.mock .scr{zoom:1.35}}
+
+/* Gemini-drawn artwork */
+.hero::after{content:"";position:absolute;inset:0;background:url(assets/art/hero-backdrop.webp) center/cover no-repeat;opacity:.28;mask-image:linear-gradient(180deg,#000 40%,transparent);-webkit-mask-image:linear-gradient(180deg,#000 40%,transparent);pointer-events:none}
+.hero>.wrap{z-index:1}
+#t-galaxy .info{background:linear-gradient(180deg,rgba(17,26,46,.55),var(--card) 62%),url(assets/art/galaxy-mood.webp) top/cover no-repeat}
+#t-heroes .info{background:linear-gradient(180deg,rgba(17,26,46,.55),var(--card) 62%),url(assets/art/heroes-mood.webp) top/cover no-repeat}
+#t-kameha .info{background:linear-gradient(180deg,rgba(17,26,46,.55),var(--card) 62%),url(assets/art/kameha-mood.webp) top/cover no-repeat}
+#features{background:linear-gradient(180deg,var(--bg),rgba(7,11,22,.86) 30%,rgba(7,11,22,.92)),url(assets/art/palette-wave.webp) center/cover no-repeat}
+.beta{background:linear-gradient(120deg,rgba(7,11,22,.75),rgba(7,11,22,.35)),url(assets/art/beta-glow.webp) right center/cover no-repeat,var(--card)}
+.ai .sec-head{position:relative}
+
+.try-meta{grid-row:1 / span 3;align-self:start}
+.lock::after{content:"";position:absolute;inset:0;background:var(--t-grad);mix-blend-mode:color;opacity:.85;pointer-events:none}
+.lock>.t-wall{z-index:0}.lock>*:not(.t-wall){z-index:1}
+.qp::after{content:"";position:absolute;inset:0;background:var(--t-grad);mix-blend-mode:color;opacity:.6;pointer-events:none;z-index:0}
+.qp>*:not(.t-wall){z-index:1}
+@media (max-width:980px){.try-meta{grid-row:auto}}
+
 footer{border-top:1px solid var(--line);padding:40px 0 60px;color:var(--muted);font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:20px 40px;justify-content:space-between}
 footer nav{display:flex;flex-wrap:wrap;gap:18px}
@@ -183,6 +342,7 @@ footer a{color:var(--fg)}
       <a href="#themes">Themes</a>
       <a href="#preview">Live preview</a>
       <a href="#ai">AI</a>
+      <a href="#try">Try it</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
     </nav>
@@ -329,6 +489,168 @@ footer a{color:var(--fg)}
   </div>
 </section>
 
+<section id="try" class="try">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="g-wifi" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0120 0M5 12.5a10 10 0 0114 0M8.5 16a5 5 0 017 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19" r="1.6" fill="currentColor"/></symbol>
+      <symbol id="g-bt" viewBox="0 0 24 24"><path d="M7 7l10 10-5 4V3l5 4L7 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+      <symbol id="g-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4zM10 20a2 2 0 004 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+      <symbol id="g-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="g-sound" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="g-img" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="10" r="2" fill="currentColor"/><path d="M21 16l-5-5-9 9" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+      <symbol id="g-bat" viewBox="0 0 24 24"><rect x="3" y="7" width="16" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="5.5" y="9.5" width="9" height="5" rx="1" fill="currentColor"/><path d="M21 10v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="g-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/><path d="M8 10V8a4 4 0 018 0v2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+      <symbol id="g-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2" fill="currentColor"/><rect x="14" y="3" width="7" height="7" rx="2" fill="currentColor"/><rect x="3" y="14" width="7" height="7" rx="2" fill="currentColor"/><rect x="14" y="14" width="7" height="7" rx="2" fill="currentColor"/></symbol>
+      <symbol id="g-plane" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 00-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" fill="currentColor"/></symbol>
+      <symbol id="g-torch" viewBox="0 0 24 24"><path d="M7 3h10v4l-3 4v10h-4V11L7 7z" fill="currentColor"/></symbol>
+      <symbol id="g-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z" fill="currentColor"/></symbol>
+      <symbol id="g-rot" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3M18 3v4h-4M6 21v-4h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="g-video" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="3" fill="currentColor"/><path d="M16 10l5-3v10l-5-3z" fill="currentColor"/></symbol>
+      <symbol id="g-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="6.5" cy="18" r="2.8" fill="currentColor"/><circle cx="17.5" cy="16" r="2.8" fill="currentColor"/></symbol>
+      <symbol id="g-doc" viewBox="0 0 24 24"><path d="M6 2h8l5 5v15H6z" fill="currentColor"/><path d="M9 12h7M9 16h7" stroke="#0007" stroke-width="2"/></symbol>
+      <symbol id="g-down" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+      <symbol id="g-apk" viewBox="0 0 24 24"><path d="M5 10a7 7 0 0114 0v9H5z" fill="currentColor"/><path d="M8 4l1.5 2.5M16 4l-1.5 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="g-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    </defs>
+  </svg>
+  <div class="wrap">
+    <div class="try-top">
+      <div class="sec-head">
+        <span class="eyebrow">Try it free, right here</span>
+        <h2>Make a #Hex Next theme <span class="grad">from one sentence.</span></h2>
+        <p>Type a mood and a free AI designs a theme, then paints it across Settings, the Quick panel, My Files, the controls and a wallpaper, just like the live preview in the app.</p>
+      </div>
+      <img class="try-orb" src="assets/art/ai-orb.webp" alt="" loading="lazy">
+    </div>
+
+    <div class="try-free" role="note">
+      <span class="tag free">Free · open source · experimental</span>
+      <p>This demo runs on a free, open-source agent (GPT-OSS 20B) with no account and no key. Results are <b>lower quality than #Hex Next's full potential</b>. In the app, connect Google Gemini (free key, no card), OpenAI or Claude for much richer themes, matching icon sets and wallpapers.</p>
+    </div>
+
+    <form class="try-form" autocomplete="off">
+      <label for="try-input" class="sr">Describe your theme</label>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3DE0F5" stroke-width="2" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>
+      <input id="try-input" maxlength="200" placeholder="Describe a look, e.g. cozy autumn cabin at dusk" value="">
+      <button id="try-go" class="btn btn-primary" type="submit">Generate theme</button>
+    </form>
+    <div class="chips">
+      <button type="button" data-idea="Cyberpunk city in the rain, magenta and teal neon">Cyberpunk rain</button>
+      <button type="button" data-idea="Cozy autumn cabin at dusk">Autumn cabin</button>
+      <button type="button" data-idea="Cherry blossom morning, soft pastel and light">Sakura morning</button>
+      <button type="button" data-idea="Molten lava and black volcanic glass">Lava glass</button>
+      <button type="button" data-idea="Arctic aurora over a frozen lake">Arctic aurora</button>
+    </div>
+    <p id="try-status" class="try-status" aria-live="polite">Showing a sample theme. Type your own idea above.</p>
+
+    <div class="try-result">
+      <div class="try-pop" id="try-pop" hidden role="dialog" aria-label="Recolour this element">
+      <b id="pop-title">Recolour</b>
+      <label class="pop-pick"><input type="color" id="pop-color"><span>Pick a colour</span></label>
+      <form id="pop-form" class="pop-ask"><input id="pop-input" maxlength="160" placeholder="Or ask the AI: make this warmer"><button class="btn btn-primary" type="submit">Ask</button></form>
+      <button type="button" class="pop-x" id="pop-x" aria-label="Close">×</button>
+    </div>
+      <div class="try-meta">
+        <h3 id="try-name">Midnight Tide</h3>
+        <p id="try-tag"></p>
+        <ul id="try-swatches" class="pal" aria-label="Colour palette"></ul>
+        <div class="styles">
+          <label>Icon shape<select data-k="iconShape"><option value="circle">Circle</option><option value="squircle">Squircle</option><option value="square">Square</option></select></label>
+          <label>Icon style<select data-k="iconStyle"><option value="3d">3D multicolour</option><option value="filled">Flat</option><option value="outline">Outline</option></select></label>
+          <label>Font<select data-k="font"><option value="rounded">Rounded</option><option value="sharp">Modern</option><option value="classic">Classic</option></select></label>
+        </div>
+        <button type="button" class="btn btn-ghost small" id="try-shuffle">Random seed colour</button>
+      </div>
+
+      <div class="try-tip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11V5a2 2 0 014 0v6m0-2a2 2 0 014 0v3m-8-1V9a2 2 0 00-4 0v5a8 8 0 0016 0v-2a2 2 0 00-4 0"/></svg><span><b>Tap anything you don't like.</b> Recolour that part with a colour picker, or ask the AI to change just that bit. Everything else stays put, the same way the app's live preview and AI chat work.</span></div>
+      <div class="scr-tabs" role="tablist" aria-label="Preview screens">
+          <button type="button" role="tab" aria-selected="true" data-screen="0">Settings</button>
+          <button type="button" role="tab" aria-selected="false" data-screen="1">Quick panel</button>
+          <button type="button" role="tab" aria-selected="false" data-screen="2">My Files</button>
+          <button type="button" role="tab" aria-selected="false" data-screen="3">Controls</button>
+          <button type="button" role="tab" aria-selected="false" data-screen="4">Wallpaper</button>
+        </div>
+      <div class="try-stage">
+        <figure class="mock"><div class="scr" data-role="background">
+          <div class="sb"><span>12:45</span><span><svg><use href="#g-wifi"/></svg><svg><use href="#g-bat"/></svg></span></div>
+          <div class="m-title" data-role="text">Settings</div>
+          <div class="m-search" data-role="surface"><svg><use href="#g-search"/></svg>Search</div>
+          <div data-role="surface" class="m-card">
+            <div class="row"><i class="ic c1" data-role="primary"><svg><use href="#g-wifi"/></svg></i><span><b>Connections</b><small>Wi-Fi · Bluetooth</small></span></div>
+            <div class="row"><i class="ic c2" data-role="secondary"><svg><use href="#g-sound"/></svg></i><span><b>Sounds</b><small>Volume · Vibration</small></span></div>
+            <div class="row"><i class="ic c3" data-role="accent"><svg><use href="#g-bell"/></svg></i><span><b>Notifications</b><small>Status bar · Do not disturb</small></span></div>
+          </div>
+          <div data-role="surface" class="m-card">
+            <div class="row"><i class="ic c4" data-role="accent"><svg><use href="#g-sun"/></svg></i><span><b>Display</b><small>Brightness · Dark mode</small></span></div>
+            <div class="row"><i class="ic c1" data-role="primary"><svg><use href="#g-img"/></svg></i><span><b>Wallpaper and style</b><small>Colour palette</small></span></div>
+            <div class="row"><i class="ic c2" data-role="secondary"><svg><use href="#g-bat"/></svg></i><span><b>Battery</b><small>Power saving</small></span></div>
+            <div class="row"><i class="ic c3" data-role="accent"><svg><use href="#g-lock"/></svg></i><span><b>Security</b><small>Biometrics · Privacy</small></span></div>
+            <div class="row"><i class="ic c4" data-role="accent"><svg><use href="#g-grid"/></svg></i><span><b>Apps</b><small>Default apps</small></span></div>
+          </div>
+        </div><figcaption>Settings</figcaption></figure>
+
+        <figure class="mock"><div class="scr qp" data-role="background">
+          <img class="t-wall dim" alt="">
+          <div class="sb"><span>12:45</span><span><svg><use href="#g-wifi"/></svg><svg><use href="#g-bat"/></svg></span></div>
+          <div class="m-date">Wed, Nov 11</div>
+          <div class="tiles"><i class="on" data-role="primary"><svg><use href="#g-wifi"/></svg></i><i class="on" data-role="primary"><svg><use href="#g-bt"/></svg></i><i data-role="surface"><svg><use href="#g-sound"/></svg></i><i data-role="surface"><svg><use href="#g-rot"/></svg></i>
+            <i data-role="surface"><svg><use href="#g-plane"/></svg></i><i class="on" data-role="primary"><svg><use href="#g-torch"/></svg></i><i data-role="surface"><svg><use href="#g-moon"/></svg></i><i class="on" data-role="primary"><svg><use href="#g-lock"/></svg></i>
+          </div>
+          <div class="bright" data-role="primary"><svg><use href="#g-sun"/></svg><span><i style="width:64%"></i></span></div>
+          <div class="media" data-role="surface"><b>Now playing</b><small>Your favourite song</small><span class="prog" data-role="accent"><i></i></span></div>
+          <div class="notif" data-role="surface"><i class="ic c2" data-role="secondary"><svg><use href="#g-bell"/></svg></i><span><b>#Hex Next</b><small>Your theme is ready to apply</small></span></div>
+        </div><figcaption>Quick panel</figcaption></figure>
+
+        <figure class="mock"><div class="scr" data-role="background">
+          <div class="sb"><span>12:45</span><span><svg><use href="#g-wifi"/></svg><svg><use href="#g-bat"/></svg></span></div>
+          <div class="m-title" data-role="text">My Files</div>
+          <div class="m-sub">Recent files</div>
+          <div class="recent" data-role="secondary"><i></i><i></i><i></i></div>
+          <div class="m-sub">Categories</div>
+          <div class="cats">
+            <span><i class="ic c1" data-role="primary"><svg><use href="#g-img"/></svg></i>Images</span>
+            <span><i class="ic c2" data-role="secondary"><svg><use href="#g-video"/></svg></i>Videos</span>
+            <span><i class="ic c3" data-role="accent"><svg><use href="#g-music"/></svg></i>Audio</span>
+            <span><i class="ic c4" data-role="accent"><svg><use href="#g-doc"/></svg></i>Docs</span>
+            <span><i class="ic c1" data-role="primary"><svg><use href="#g-down"/></svg></i>Downloads</span>
+            <span><i class="ic c2" data-role="secondary"><svg><use href="#g-apk"/></svg></i>APKs</span>
+          </div>
+          <div data-role="surface" class="m-card store"><b>Internal storage</b><small>148 GB of 256 GB used</small><span class="prog" data-role="accent"><i style="width:58%"></i></span></div>
+        </div><figcaption>My Files</figcaption></figure>
+
+        <figure class="mock"><div class="scr" data-role="background">
+          <div class="sb"><span>12:45</span><span><svg><use href="#g-wifi"/></svg><svg><use href="#g-bat"/></svg></span></div>
+          <div class="m-title" data-role="text">Controls</div>
+          <div data-role="surface" class="m-card ctl">
+            <div class="row2"><span>Dark mode</span><i class="sw on" data-role="primary"></i></div>
+            <div class="row2"><span>Eye comfort</span><i class="sw"></i></div>
+            <div class="row2"><span>Auto brightness</span><i class="cb on" data-role="primary"></i></div>
+            <div class="row2"><span>Sound</span><i class="rd on" data-role="primary"></i></div>
+            <div class="row2"><span>Vibrate</span><i class="rd"></i></div>
+            <div class="sl"><span>Font size</span><span class="track" data-role="primary"><i style="width:45%"></i><b style="left:45%"></b></span></div>
+          </div>
+          <div data-role="surface" class="m-card dlg">
+            <b>Apply theme?</b><small>Your phone will refresh its look.</small>
+            <div class="btns"><span>Cancel</span><span class="pri" data-role="primary">Apply</span></div>
+          </div>
+        </div><figcaption>Switches, sliders and dialogs</figcaption></figure>
+
+        <figure class="mock"><div class="scr lock" data-role="background">
+          <img class="t-wall" alt="AI wallpaper for this theme">
+          <div class="sb"><span></span><span><svg><use href="#g-wifi"/></svg><svg><use href="#g-bat"/></svg></span></div>
+          <div class="clock" data-role="text">12:45</div>
+          <div class="ldate">Wednesday, November 11</div>
+          <div class="lnotif"><i class="ic c1" data-role="primary"><svg><use href="#g-bell"/></svg></i><span>2 new themes on r/HexNext</span></div>
+        </div><figcaption>Wallpaper and lock screen</figcaption></figure>
+      </div>
+    </div>
+
+    
+    <form class="try-follow" id="try-follow" autocomplete="off"><label for="follow-input" class="eyebrow">Follow up with the AI</label><div><input id="follow-input" maxlength="200" placeholder="e.g. make the switches gold and the cards a bit lighter"><button class="btn btn-ghost" type="submit">Send</button></div></form>
+    <p class="note">A website mock-up of what #Hex Next does on a real phone. The app applies the theme to Samsung's own screens through the live preview, Test Mode and one-tap Remove.</p>
+  </div>
+</section>
+
 <section id="features">
   <div class="wrap">
     <div class="sec-head">
@@ -421,5 +743,6 @@ document.querySelectorAll('.tab').forEach(function (tab) {
   });
 });
 </script>
+<script src="assets/try.js" defer></script>
 </body>
 </html>
