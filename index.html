@@ -3,32 +3,423 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>#Hex Next</title>
-<meta name="description" content="#Hex Next: a theming app for Samsung phones running One UI.">
+<title>#Hex Next · AI theming for Samsung Galaxy</title>
+<meta name="description" content="#Hex Next themes every corner of One UI: Settings, Quick panel, power menu, My Files, dialer and keyboard. 50+ theme packs, a live preview and AI that builds a whole theme from one sentence. Now in closed beta.">
+<meta name="theme-color" content="#070B16">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/icon-512.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="#Hex Next · AI theming for Samsung Galaxy">
+<meta property="og:description" content="50+ theme packs, a live preview and AI that designs a whole One UI theme from one sentence. Closed beta now open.">
+<meta property="og:image" content="https://bingblop.github.io/hexnext-site/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f7f6fb;--fg:#1b1b21;--muted:#5d5c66;--card:#fff;--accent:#5b4bd6}
-@media (prefers-color-scheme:dark){:root{--bg:#121218;--fg:#ededf3;--muted:#a8a7b3;--card:#1d1d26;--accent:#a99cff}}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:640px;margin:0 auto;padding:48px 16px}
-h1{font-size:2rem;margin:0 0 8px}
-p{color:var(--muted)}
-.card{background:var(--card);border-radius:16px;padding:20px 24px;margin-top:24px}
-a{color:var(--accent)}
-ul{padding-left:20px}
+:root{
+  --bg:#070B16;--bg2:#0C1222;--card:#111a2e;--card2:#16213a;--line:#24314f;
+  --fg:#EEF2FB;--muted:#9AA6C2;--cyan:#3DE0F5;--coral:#FF6B5B;--yellow:#FFD21F;
+  --radius:20px;--max:1160px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:var(--cyan);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3{font-family:"Space Grotesk",Inter,system-ui,sans-serif;line-height:1.1;margin:0}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+.eyebrow{font:600 13px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+.grad{background:linear-gradient(90deg,var(--cyan),#8B7BFF 50%,var(--coral));-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-weight:600;font-size:16px;border:1px solid transparent;transition:transform .15s,box-shadow .15s}
+.btn:hover{text-decoration:none;transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(90deg,var(--coral),#FF8A5B);color:#140805;box-shadow:0 10px 30px -10px rgba(255,107,91,.7)}
+.btn-ghost{border-color:var(--line);color:var(--fg);background:rgba(255,255,255,.03)}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;border:1px solid rgba(61,224,245,.35);background:rgba(61,224,245,.08);color:var(--cyan);font-size:14px;font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 0 rgba(255,107,91,.7);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px rgba(255,107,91,0)}100%{box-shadow:0 0 0 0 rgba(255,107,91,0)}}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}.btn{transition:none}html{scroll-behavior:auto}}
+
+/* nav */
+header.nav{position:sticky;top:0;z-index:20;background:rgba(7,11,22,.78);backdrop-filter:blur(14px);border-bottom:1px solid rgba(36,49,79,.6)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--fg);font:700 19px "Space Grotesk",sans-serif}
+.brand img{width:34px;height:34px;border-radius:9px}
+.nav nav{display:flex;gap:26px;font-size:15px}
+.nav nav a{color:var(--muted)}
+.nav nav a:hover{color:var(--fg);text-decoration:none}
+.nav .btn{padding:9px 16px;font-size:14px}
+@media (max-width:860px){.nav nav{display:none}}
+
+/* hero */
+.hero{position:relative;padding:72px 0 40px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto;height:120%;background:radial-gradient(600px 400px at 20% 20%,rgba(61,224,245,.16),transparent 70%),radial-gradient(520px 380px at 85% 30%,rgba(255,107,91,.16),transparent 70%);pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(40px,6vw,68px);letter-spacing:-.02em;margin:18px 0 18px}
+.hero p.lead{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:560px;margin:0 0 28px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.hero small{display:block;margin-top:16px;color:var(--muted);font-size:14px}
+.phones{position:relative;height:560px}
+.phone{position:absolute;width:236px;aspect-ratio:9/19.5;border-radius:34px;padding:8px;background:#0a0d14;border:1px solid #2a3350;box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.04) inset}
+.phone img{width:100%;height:100%;object-fit:cover;border-radius:27px}
+.phone.p1{left:2%;top:40px;transform:rotate(-8deg)}
+.phone.p2{left:32%;top:0;z-index:2}
+.phone.p3{left:62%;top:40px;transform:rotate(8deg)}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.phones{height:440px;max-width:520px;margin:0 auto;width:100%}.phone{width:180px}.phone.p2{left:calc(50% - 90px)}.phone.p1{left:0}.phone.p3{left:auto;right:0}}
+@media (max-width:420px){.phones{height:360px}.phone{width:140px;border-radius:26px}.phone img{border-radius:20px}.phone.p2{left:calc(50% - 70px)}}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px auto 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.stat b{display:block;font:700 34px/1 "Space Grotesk",sans-serif}
+.stat span{color:var(--muted);font-size:14px}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+section{padding:88px 0}
+.sec-head{max-width:720px;margin-bottom:40px}
+.sec-head h2{font-size:clamp(30px,4vw,46px);letter-spacing:-.01em;margin:12px 0 14px}
+.sec-head p{color:var(--muted);font-size:18px;margin:0}
+
+/* showcase */
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.tab{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:10px 18px;border-radius:999px;font:600 15px Inter,sans-serif;display:flex;align-items:center;gap:10px}
+.tab i{width:14px;height:14px;border-radius:50%;display:inline-block}
+.tab[aria-selected="true"]{border-color:var(--accent,var(--cyan));box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,var(--cyan)) 25%,transparent)}
+.show{display:none;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start}
+.show.on{display:grid}
+.show figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:10px;overflow:hidden}
+.show figure img{border-radius:12px;width:100%;aspect-ratio:526/1080;object-fit:cover}
+.show figcaption{font-size:13px;color:var(--muted);padding:8px 4px 2px}
+.show .info{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--radius);padding:24px;align-self:stretch;display:flex;flex-direction:column;gap:14px}
+.show .info h3{font-size:30px}
+.show .info p{margin:0;color:var(--muted)}
+.swatches{display:flex;gap:8px}
+.swatches i{width:30px;height:30px;border-radius:9px;border:1px solid rgba(255,255,255,.12)}
+.icons{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:auto}
+.icons img{width:100%;aspect-ratio:1;object-fit:contain}
+@media (max-width:980px){.show{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.show{grid-template-columns:1fr 1fr;gap:10px}.show .info{grid-column:1/-1}}
+
+/* features */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+.feat .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(61,224,245,.1);color:var(--cyan);margin-bottom:16px}
+.feat:nth-child(3n+2) .ic{background:rgba(255,107,91,.12);color:var(--coral)}
+.feat:nth-child(3n) .ic{background:rgba(255,210,31,.12);color:var(--yellow)}
+.feat h3{font-size:20px;margin-bottom:8px}
+.feat p{margin:0;color:var(--muted);font-size:15px}
+@media (max-width:900px){.grid3{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.grid3{grid-template-columns:1fr}}
+
+/* live preview */
+.live{display:grid;grid-template-columns:1fr 1.25fr;gap:44px;align-items:center}
+.strip{display:flex;gap:14px;overflow-x:auto;padding:6px 2px 16px;scroll-snap-type:x mandatory}
+.strip figure{flex:0 0 200px;margin:0;scroll-snap-align:start}
+.strip img{border-radius:22px;border:1px solid var(--line);aspect-ratio:9/16;object-fit:cover}
+.strip figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-align:center}
+.checks{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:12px}
+.checks li{display:flex;gap:12px;color:var(--fg)}
+.checks li::before{content:"";flex:0 0 22px;height:22px;border-radius:50%;background:rgba(61,224,245,.15) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%233DE0F5' stroke-width='3' d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/14px no-repeat}
+@media (max-width:900px){.live{grid-template-columns:1fr}}
+
+/* AI */
+.ai{background:radial-gradient(900px 500px at 50% 0,rgba(139,123,255,.14),transparent 70%),var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.prompt{max-width:760px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;display:flex;gap:14px;align-items:center;margin:0 0 36px;font-size:17px}
+.prompt span{color:var(--muted)}
+.prompt b{font-weight:500}
+.prompt .go{margin-left:auto;background:var(--cyan);color:#04121a;border-radius:12px;padding:8px 14px;font-weight:600;font-size:14px;white-space:nowrap}
+.models{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.model{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.model h3{font-size:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.model p{margin:0;color:var(--muted);font-size:14px}
+.tag{font:600 11px/1 Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:6px;background:rgba(61,224,245,.12);color:var(--cyan)}
+.tag.free{background:rgba(255,210,31,.14);color:var(--yellow)}
+.tag.img{background:rgba(255,107,91,.14);color:var(--coral)}
+@media (max-width:900px){.models{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.models{grid-template-columns:1fr}.prompt{flex-wrap:wrap}.prompt .go{margin-left:0}}
+
+/* pricing */
+.prices{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch}
+.price{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:10px;position:relative}
+.price.best{border-color:var(--coral);background:linear-gradient(180deg,rgba(255,107,91,.1),var(--card) 40%)}
+.price .badge{position:absolute;top:-12px;left:22px;background:var(--coral);color:#160806;font:700 12px/1 Inter;padding:6px 10px;border-radius:999px;letter-spacing:.04em}
+.price h3{font-size:19px}
+.price .amt{font:700 38px/1 "Space Grotesk",sans-serif}
+.price .amt small{font:500 15px Inter;color:var(--muted)}
+.price ul{margin:6px 0 0;padding-left:18px;color:var(--muted);font-size:14.5px}
+.note{color:var(--muted);font-size:14px;margin-top:18px}
+@media (max-width:980px){.prices{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.prices{grid-template-columns:1fr}}
+
+/* beta */
+.beta{border-radius:28px;padding:48px;background:linear-gradient(120deg,rgba(255,107,91,.18),rgba(61,224,245,.12)),var(--card);border:1px solid var(--line);display:grid;grid-template-columns:1.4fr 1fr;gap:30px;align-items:center}
+.beta h2{font-size:clamp(28px,4vw,42px);margin:12px 0}
+.beta p{color:var(--muted);margin:0 0 22px}
+.reddit{display:flex;gap:16px;align-items:center;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:18px;padding:18px}
+.reddit svg{flex:0 0 46px}
+@media (max-width:820px){.beta{grid-template-columns:1fr;padding:30px}}
+
+/* faq */
+details{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 22px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600;font-size:17px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";float:right;color:var(--cyan);font-size:22px;line-height:1}
+details[open] summary::after{content:"–"}
+details p{color:var(--muted);margin:12px 0 0}
+
+footer{border-top:1px solid var(--line);padding:40px 0 60px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:20px 40px;justify-content:space-between}
+footer nav{display:flex;flex-wrap:wrap;gap:18px}
+footer a{color:var(--fg)}
 </style>
 </head>
 <body>
-<main>
-<h1>#Hex Next</h1>
-<p>A theming app for Samsung phones running One UI 7, 8 and 9. Colours, icon packs, fonts and backgrounds for the system apps, built on your device.</p>
-<div class="card">
-<ul>
-<li><a href="privacy-policy.html">Privacy policy</a></li>
-<li><a href="terms-of-service.html">Terms of service</a></li>
-<li><a href="https://github.com/Bingblop/Hex-Next">Source and releases</a></li>
-</ul>
-</div>
-<p>#Hex Next needs root (UID 0) or, if root is not an option, system access (UID 1000) on a Samsung One UI device; both give the full feature set. Shizuku over wireless debugging applies the accent colour only. It is not affiliated with Samsung or Google.</p>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/icon-512.png" alt="">#Hex Next</a>
+    <nav aria-label="Sections">
+      <a href="#themes">Themes</a>
+      <a href="#preview">Live preview</a>
+      <a href="#ai">AI</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-primary" href="https://www.reddit.com/r/HexNext/" rel="noopener">Join the beta</a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="pill"><span class="dot"></span>Closed beta now open</span>
+      <h1>Your Galaxy.<br><span class="grad">Every pixel, your theme.</span></h1>
+      <p class="lead">#Hex Next themes all of One UI: Settings, the Quick panel, the power menu, My Files, the dialer and the keyboard. Pick from 50+ theme packs, or describe a look in one sentence and let AI design the whole theme. You watch it in a live preview before anything touches your phone.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://www.reddit.com/r/HexNext/" rel="noopener">Get beta access on r/HexNext</a>
+        <a class="btn btn-ghost" href="#themes">See the themes</a>
+      </div>
+      <small>For Samsung Galaxy phones on One UI 7, 8 and 9 (Android 15 to 17). Root or system access required.</small>
+    </div>
+    <div class="phones" aria-hidden="true">
+      <div class="phone p1"><img src="assets/themes/heroes/wallpaper.webp" alt=""></div>
+      <div class="phone p2"><img src="assets/themes/galaxy/preview-002.webp" alt=""></div>
+      <div class="phone p3"><img src="assets/themes/kameha/wallpaper.webp" alt=""></div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><b class="grad">50+</b><span>theme packs, with more on the way</span></div>
+      <div class="stat"><b>9</b><span>AI services built in, two of them free</span></div>
+      <div class="stat"><b>200+</b><span>One UI colours you can set one by one</span></div>
+      <div class="stat"><b>9</b><span>app languages</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="themes">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Theme packs</span>
+      <h2>50+ packs. Every one themes the whole phone.</h2>
+      <p>Each pack recolours One UI and swaps in its own art for Settings icons, Quick panel tiles, the power menu, My Files and the wallpaper. Here are three of the packs drawn for #Hex Next, with more being added all the time.</p>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Theme examples">
+      <button class="tab" role="tab" aria-selected="true" aria-controls="t-galaxy" id="b-galaxy" style="--accent:#FFE81F"><i style="background:#FFE81F"></i>Galaxy</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="t-heroes" id="b-heroes" style="--accent:#ED1D24"><i style="background:#ED1D24"></i>Heroes</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="t-kameha" id="b-kameha" style="--accent:#FF8A00"><i style="background:#FF8A00"></i>Kameha</button>
+    </div>
+
+    <div class="show on" id="t-galaxy" role="tabpanel" aria-labelledby="b-galaxy">
+      <div class="info">
+        <span class="eyebrow" style="color:#FFE81F">Space opera</span>
+        <h3>Galaxy</h3>
+        <p>Deep-space black with lightsaber yellow and plasma blue. A ringed planet drifts across the wallpaper, and every icon glows like a cockpit display.</p>
+        <div class="swatches"><i style="background:#05070D"></i><i style="background:#FFE81F"></i><i style="background:#3FA9FF"></i><i style="background:#141A24"></i><i style="background:#FFFFFF"></i></div>
+        <div class="icons">
+          <img src="assets/themes/galaxy/icons/connections.webp" alt="Connections icon" loading="lazy"><img src="assets/themes/galaxy/icons/battery.webp" alt="Battery icon" loading="lazy"><img src="assets/themes/galaxy/icons/display.webp" alt="Display icon" loading="lazy"><img src="assets/themes/galaxy/icons/devicecare.webp" alt="Device care icon" loading="lazy">
+        </div>
+      </div>
+      <figure><img src="assets/themes/galaxy/preview-001.webp" alt="Galaxy pack: themed Settings" loading="lazy"><figcaption>Settings</figcaption></figure>
+      <figure><img src="assets/themes/galaxy/preview-002.webp" alt="Galaxy pack: Quick panel and power menu" loading="lazy"><figcaption>Quick panel and power menu</figcaption></figure>
+      <figure><img src="assets/themes/galaxy/wallpaper.webp" alt="Galaxy pack wallpaper" loading="lazy"><figcaption>Wallpaper</figcaption></figure>
+    </div>
+
+    <div class="show" id="t-heroes" role="tabpanel" aria-labelledby="b-heroes" hidden>
+      <div class="info">
+        <span class="eyebrow" style="color:#ED1D24">Comic-book action</span>
+        <h3>Heroes</h3>
+        <p>Bold red and gold straight off the printed page. Halftone bursts, starburst badges and a city skyline that lights up at night.</p>
+        <div class="swatches"><i style="background:#140A0B"></i><i style="background:#ED1D24"></i><i style="background:#FFC20E"></i><i style="background:#2A1416"></i><i style="background:#FFFFFF"></i></div>
+        <div class="icons">
+          <img src="assets/themes/heroes/icons/connections.webp" alt="Connections icon" loading="lazy"><img src="assets/themes/heroes/icons/battery.webp" alt="Battery icon" loading="lazy"><img src="assets/themes/heroes/icons/display.webp" alt="Display icon" loading="lazy"><img src="assets/themes/heroes/icons/devicecare.webp" alt="Device care icon" loading="lazy">
+        </div>
+      </div>
+      <figure><img src="assets/themes/heroes/preview-001.webp" alt="Heroes pack: themed Settings" loading="lazy"><figcaption>Settings</figcaption></figure>
+      <figure><img src="assets/themes/heroes/preview-002.webp" alt="Heroes pack: Quick panel and power menu" loading="lazy"><figcaption>Quick panel and power menu</figcaption></figure>
+      <figure><img src="assets/themes/heroes/wallpaper.webp" alt="Heroes pack wallpaper" loading="lazy"><figcaption>Wallpaper</figcaption></figure>
+    </div>
+
+    <div class="show" id="t-kameha" role="tabpanel" aria-labelledby="b-kameha" hidden>
+      <div class="info">
+        <span class="eyebrow" style="color:#FF8A00">Power level: over 9000</span>
+        <h3>Kameha</h3>
+        <p>Night-sky navy charged with energy-blast orange and gold. Glowing aura icons, a rising energy sphere and spiky badges on every power button.</p>
+        <div class="swatches"><i style="background:#0B1530"></i><i style="background:#FF8A00"></i><i style="background:#FFD21F"></i><i style="background:#16264A"></i><i style="background:#FFFFFF"></i></div>
+        <div class="icons">
+          <img src="assets/themes/kameha/icons/connections.webp" alt="Connections icon" loading="lazy"><img src="assets/themes/kameha/icons/battery.webp" alt="Battery icon" loading="lazy"><img src="assets/themes/kameha/icons/display.webp" alt="Display icon" loading="lazy"><img src="assets/themes/kameha/icons/devicecare.webp" alt="Device care icon" loading="lazy">
+        </div>
+      </div>
+      <figure><img src="assets/themes/kameha/preview-001.webp" alt="Kameha pack: themed Settings" loading="lazy"><figcaption>Settings</figcaption></figure>
+      <figure><img src="assets/themes/kameha/preview-002.webp" alt="Kameha pack: Quick panel and power menu" loading="lazy"><figcaption>Quick panel and power menu</figcaption></figure>
+      <figure><img src="assets/themes/kameha/wallpaper.webp" alt="Kameha pack wallpaper" loading="lazy"><figcaption>Wallpaper</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="preview" style="padding-top:20px">
+  <div class="wrap live">
+    <div>
+      <span class="eyebrow">Live preview</span>
+      <h2 style="font-size:clamp(30px,4vw,46px);margin:12px 0 14px">See it before you apply it.</h2>
+      <p style="color:var(--muted);font-size:18px;margin:0">#Hex Next scans your phone and draws your own Samsung apps, so the preview matches what you'll get. Flip between screens, switch light and dark, and tap any element to recolour it on the spot.</p>
+      <ul class="checks">
+        <li>Settings, Quick panel, notifications, power menu, My Files, dialer, keyboard, contacts and more</li>
+        <li>Light and dark versions of every theme, side by side</li>
+        <li>Tap anything in the preview to jump straight to its colour</li>
+        <li>Test Mode tries a theme until the next restart, so nothing is permanent until you're happy</li>
+      </ul>
+    </div>
+    <div class="strip" aria-label="Themes applied on a Galaxy phone">
+      <figure><img src="assets/device/settings.webp" alt="Settings themed down to the icons on a Galaxy phone" loading="lazy"><figcaption>Settings, themed down to the icons</figcaption></figure>
+      <figure><img src="assets/device/dialer.webp" alt="Themed phone dialer" loading="lazy"><figcaption>Every system app, even the dialer</figcaption></figure>
+      <figure><img src="assets/device/keyboard.webp" alt="Samsung Keyboard in the theme's colours" loading="lazy"><figcaption>Keyboard colours follow the theme</figcaption></figure>
+      <figure><img src="assets/device/dialogs.webp" alt="System dialog matching the theme" loading="lazy"><figcaption>System dialogs match too</figcaption></figure>
+      <figure><img src="assets/device/light.webp" alt="Same theme in light mode" loading="lazy"><figcaption>Light and dark, both covered</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="ai" class="ai">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">AI Themes</span>
+      <h2>Describe it. <span class="grad">AI builds the whole theme.</span></h2>
+      <p>Type a sentence and the AI picks the colours, Quick panel style, icons and font, then draws matching icons and a wallpaper. Keep chatting to fine-tune it: each message changes only what you name.</p>
+    </div>
+    <div class="prompt" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3DE0F5" stroke-width="2"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>
+      <span>Theme:</span><b>Deep ocean at night, calm, a little neon</b><span class="go">Generate</span>
+    </div>
+    <div class="models">
+      <div class="model"><h3>OpenAI <span class="tag">Themes</span><span class="tag img">Images</span></h3><p>GPT models write the theme; GPT Image draws icons and wallpapers.</p></div>
+      <div class="model"><h3>Google Gemini <span class="tag">Themes</span><span class="tag img">Images</span></h3><p>Gemini Flash and Pro, plus Gemini image models. The API key is free and needs no card.</p></div>
+      <div class="model"><h3>Anthropic Claude <span class="tag">Themes</span></h3><p>Claude designs the theme and draws crisp vector glyph icons.</p></div>
+      <div class="model"><h3>xAI Grok <span class="tag img">Images</span></h3><p>Grok image models for bold icon and wallpaper art.</p></div>
+      <div class="model"><h3>Stability AI <span class="tag img">Images</span></h3><p>Stable Diffusion 3, Core and Ultra for detailed picture icons.</p></div>
+      <div class="model"><h3>Perplexity <span class="tag">Themes</span></h3><p>Sonar models write the theme and draw vector glyph icons.</p></div>
+      <div class="model"><h3>Muse (Meta) <span class="tag">Themes</span></h3><p>Meta's Muse Spark models, which can also read photos you attach.</p></div>
+      <div class="model"><h3>OpenCode <span class="tag free">Free</span><span class="tag">Themes</span></h3><p>Open-source models such as Big Pickle, DeepSeek, GLM and MiniMax. No key needed (experimental).</p></div>
+      <div class="model"><h3>Pollinations <span class="tag free">Free</span><span class="tag img">Images</span></h3><p>Open-source FLUX image generation for icons and wallpapers. No key needed (experimental).</p></div>
+    </div>
+    <p class="note">Pick the model for each service in Settings › AI providers. Your keys stay encrypted on your phone and go only to the service they belong to.</p>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Everything you can change</span>
+      <h2>A full theme studio in your pocket.</h2>
+    </div>
+    <div class="grid3">
+      <div class="feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 000 18c1.5 0 2-1 2-2s-1-1.5-1-2.5 1-1.5 2-1.5h2a4 4 0 004-4c0-4.4-4-8-9-8z"/></svg></div><h3>Colour every element</h3><p>Over 200 One UI colours, from switches and sliders to notification cards, each one adjustable on its own or all at once from one seed colour.</p></div>
+      <div class="feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></div><h3>Mix packs per part</h3><p>Galaxy icons in Settings, Heroes in the Quick panel and Kameha in My Files? Choose a different pack for every part of the phone.</p></div>
+      <div class="feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5h16v2M9 19h6M12 5v14"/></svg></div><h3>Fonts and Google Fonts</h3><p>Install a system font from your files or browse Google Fonts right in the app.</p></div>
+      <div class="feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg></div><h3>Your own icons and art</h3><p>Import PNGs, assign them to any icon, or generate a matching set with AI. Backgrounds and wallpapers too.</p></div>
+      <div class="feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg></div><h3>Save, share and back up</h3><p>Keep any theme as your own pack, share it as a file, and back up or restore your whole setup.</p></div>
+      <div class="feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Safe by design</h3><p>Test Mode, one-tap Remove and a recovery watchdog that steps in if something won't start. Overlays only touch Samsung's own apps.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" style="padding-top:20px">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Pricing</span>
+      <h2>Free to start. Unlock as much as you like.</h2>
+      <p>The app, the colour studio, the live preview and the Quartz pack are free. Every paid option is a Google Play purchase you can restore on a new phone.</p>
+    </div>
+    <div class="prices">
+      <div class="price best"><span class="badge">MOST POPULAR</span><h3>Everything</h3><div class="amt">$4.99<small> / month</small></div><ul><li>Every theme pack, including new ones</li><li>AI Themes, AI icons and wallpapers</li><li>Theme backup, restore, export and import</li><li>Cancel any time</li></ul></div>
+      <div class="price"><h3>Lifetime</h3><div class="amt">$29.99<small> once</small></div><ul><li>Everything in the monthly plan</li><li>Every future feature</li><li>Pay once, keep it forever</li></ul></div>
+      <div class="price"><h3>All theme packs</h3><div class="amt">$9.99<small> once</small></div><ul><li>Every preset pack, today and tomorrow</li><li>Pack per part mixing</li></ul></div>
+      <div class="price"><h3>Single pack</h3><div class="amt">$0.99<small> each</small></div><ul><li>Only the packs you love</li><li>Yours to keep</li></ul></div>
+    </div>
+    <p class="note">Prices in US dollars; Google Play shows the price in your currency. AI services you connect with your own key bill you directly.</p>
+  </div>
+</section>
+
+<section style="padding-top:20px">
+  <div class="wrap">
+    <div class="beta">
+      <div>
+        <span class="pill"><span class="dot"></span>Closed beta</span>
+        <h2>Be one of the first to theme with #Hex Next.</h2>
+        <p>#Hex Next is in closed beta on Google Play. Join the community on Reddit to get an invite, share your themes, report bugs and help shape what comes next.</p>
+        <a class="btn btn-primary" href="https://www.reddit.com/r/HexNext/" rel="noopener">Join r/HexNext</a>
+      </div>
+      <a class="reddit" href="https://www.reddit.com/r/HexNext/" rel="noopener">
+        <svg viewBox="0 0 48 48" width="46" height="46" aria-hidden="true"><circle cx="24" cy="24" r="24" fill="#FF4500"/><ellipse cx="24" cy="28" rx="12" ry="8.5" fill="#fff"/><circle cx="34.5" cy="21.5" r="3" fill="#fff"/><circle cx="13.5" cy="21.5" r="3" fill="#fff"/><circle cx="19.5" cy="27" r="1.9" fill="#FF4500"/><circle cx="28.5" cy="27" r="1.9" fill="#FF4500"/><path d="M19.5 31.5c2.6 1.8 6.4 1.8 9 0" stroke="#FF4500" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="31" cy="12" r="2.4" fill="#fff"/><path d="M24 19.5l2-7.5 5 1" stroke="#fff" stroke-width="1.6" fill="none"/></svg>
+        <span><b style="color:var(--fg)">r/HexNext</b><br><span style="color:var(--muted)">Beta invites, theme showcases and news</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap" style="max-width:820px">
+    <div class="sec-head"><span class="eyebrow">FAQ</span><h2>Questions</h2></div>
+    <details><summary>Which phones work?</summary><p>Samsung Galaxy phones on One UI 7, 8 and 9 (Android 15 to 17). #Hex Next themes Samsung's own system apps.</p></details>
+    <details><summary>Do I need root?</summary><p>Full theming needs root (any root manager, such as KernelSU or Magisk) or system access through Shizuku running as root. Without root, Shizuku over wireless debugging can still apply the accent colour.</p></details>
+    <details><summary>Is it safe? Can I undo it?</summary><p>Yes. Test Mode tries a theme only until the next restart, Remove takes every overlay off in one tap, and a recovery watchdog turns the theme off if System UI keeps crashing after a restart. #Hex Next never touches your files.</p></details>
+    <details><summary>Do I need my own AI key?</summary><p>No. Two free, experimental agents work out of the box, though their themes may be lower quality. For the best results add a key for any supported service. A Google Gemini key is free and needs no card: get one at <a href="https://aistudio.google.com/app/apikey" rel="noopener">aistudio.google.com</a>.</p></details>
+    <details><summary>How many theme packs are there?</summary><p>More than 50, from minimal to wild, with new packs added regularly. Any theme you build can also be saved as your own pack.</p></details>
+    <details><summary>What happens to my data?</summary><p>Your themes, images and fonts stay on your phone. Read the <a href="privacy-policy.html">privacy policy</a> for the details.</p></details>
+  </div>
+</section>
 </main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a class="brand" href="#top"><img src="assets/icon-512.png" alt="">#Hex Next</a>
+      <p style="margin:12px 0 0;max-width:420px">#Hex Next is an independent app and is not affiliated with, endorsed by or sponsored by Samsung or Google. Galaxy and One UI are trademarks of Samsung Electronics.</p>
+    </div>
+    <nav aria-label="Footer">
+      <a href="privacy-policy.html">Privacy policy</a>
+      <a href="terms-of-service.html">Terms of service</a>
+      <a href="privacy-policy.html#delete-data">Delete your data</a>
+      <a href="https://www.reddit.com/r/HexNext/" rel="noopener">Reddit</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.tab').forEach(function (tab) {
+  tab.addEventListener('click', function () {
+    document.querySelectorAll('.tab').forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      panel.hidden = !on;
+      panel.classList.toggle('on', on);
+    });
+  });
+});
+</script>
 </body>
 </html>
