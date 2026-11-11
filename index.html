@@ -327,6 +327,11 @@ details p{color:var(--muted);margin:12px 0 0}
 .qp>*:not(.t-wall){z-index:1}
 @media (max-width:980px){.try-meta{grid-row:auto}}
 
+.banner-top{padding:22px 0 0;position:relative;z-index:1}
+.banner-top img{width:100%;height:auto;border-radius:26px;box-shadow:0 40px 90px -40px rgba(91,60,255,.75),0 0 0 1px rgba(255,255,255,.06)}
+@media (max-width:600px){.banner-top{padding-top:12px}.banner-top img{border-radius:16px}}
+.hero{padding-top:44px}
+
 footer{border-top:1px solid var(--line);padding:40px 0 60px;color:var(--muted);font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:20px 40px;justify-content:space-between}
 footer nav{display:flex;flex-wrap:wrap;gap:18px}
@@ -351,6 +356,7 @@ footer a{color:var(--fg)}
 </header>
 
 <main id="top">
+<div class="banner-top"><div class="wrap"><img src="assets/banner.webp" width="1024" height="500" alt="#Hex Next. Theme every corner of One UI: colours, icon packs, fonts and backgrounds for Samsung One UI elements and the device Monet palette." fetchpriority="high"></div></div>
 <section class="hero">
   <div class="wrap">
     <div>
