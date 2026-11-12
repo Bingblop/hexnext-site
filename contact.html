@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact #Hex Next</title>
+<meta name="description" content="Report an issue with #Hex Next or send the developer a message.">
+<link rel="icon" href="assets/favicon.png">
+<style>
+  :root { color-scheme: light dark; --fg:#1b1c20; --bg:#ffffff; --muted:#5a5f6b; --line:#e3e5ea; --card:#f5f6f8; --accent:#0a8fa8; --err:#c2410c; --ok:#15803d; }
+  @media (prefers-color-scheme: dark) { :root { --fg:#e8eaee; --bg:#16181e; --muted:#9aa0ad; --line:#2a2e38; --card:#1e2129; --accent:#45d4e6; --err:#fb923c; --ok:#4ade80; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:640px; margin:0 auto; padding:32px 16px 64px; }
+  a { color:var(--accent); overflow-wrap:anywhere; }
+  h1 { font-size:30px; margin:0 0 4px; }
+  p.meta { color:var(--muted); margin:0 0 24px; }
+  nav.top { margin:0 0 24px; font-size:15px; }
+  .seg { display:flex; gap:6px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:4px; margin:0 0 20px; }
+  .seg label { flex:1; text-align:center; padding:10px 12px; border-radius:999px; cursor:pointer; font-weight:600; color:var(--muted); }
+  .seg input { position:absolute; opacity:0; pointer-events:none; }
+  .seg input:checked + span { color:#06121a; }
+  .seg label:has(input:checked) { background:var(--accent); }
+  .seg label:has(input:focus-visible) { outline:2px solid var(--fg); outline-offset:2px; }
+  .field { margin:0 0 16px; }
+  .field label { display:block; font-weight:600; margin:0 0 6px; }
+  .field small { display:block; color:var(--muted); margin:4px 0 0; }
+  input[type=email], input[type=text], textarea { box-sizing:border-box; width:100%; padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:var(--card); color:var(--fg); font:inherit; }
+  textarea { min-height:180px; resize:vertical; }
+  input:focus, textarea:focus { outline:2px solid var(--accent); outline-offset:1px; border-color:transparent; }
+  .hp { position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; }
+  button { display:inline-block; padding:12px 22px; border:0; border-radius:999px; background:var(--accent); color:#06121a; font:inherit; font-weight:600; cursor:pointer; }
+  button[disabled] { opacity:.6; cursor:progress; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:14px 0; }
+  .note { border-left:4px solid var(--accent); }
+  #status { margin:16px 0 0; min-height:1.6em; }
+  #status.err { color:var(--err); } #status.ok { color:var(--ok); }
+  .counter { float:right; font-weight:400; color:var(--muted); font-size:14px; }
+</style>
+</head>
+<body>
+<main>
+<nav class="top"><a href="index.html">← #Hex Next home</a></nav>
+<h1>Contact</h1>
+<p class="meta">Report a problem with #Hex Next or send the developer a message. Replies come by email.</p>
+
+<form id="form" novalidate>
+  <div class="seg" role="radiogroup" aria-label="What would you like to do?">
+    <label><input type="radio" name="kind" value="issue" checked><span>Report an issue</span></label>
+    <label><input type="radio" name="kind" value="contact"><span>Contact the developer</span></label>
+  </div>
+
+  <div class="card note" id="issue-note"><p style="margin:0">Issue reports are posted publicly on <a href="https://github.com/Bingblop/hexnext-site/issues" rel="noopener">GitHub</a> so others can follow them. Your email address is never shown there; only the developer sees it.</p></div>
+  <div class="card note" id="contact-note" hidden><p style="margin:0">Your message goes privately to the developer. Nothing is posted publicly.</p></div>
+
+  <div class="field">
+    <label for="email">Your email address</label>
+    <input id="email" name="email" type="email" autocomplete="email" required maxlength="254">
+    <small>Only used to reply to you.</small>
+  </div>
+  <div class="field">
+    <label for="subject" id="subject-label">What went wrong, in a few words</label>
+    <input id="subject" name="subject" type="text" maxlength="120">
+  </div>
+  <div class="field" id="device-field">
+    <label for="device">Phone and One UI version</label>
+    <input id="device" name="device" type="text" maxlength="200" placeholder="Galaxy S26 Ultra, One UI 9.0">
+    <small>Settings › About phone shows both.</small>
+  </div>
+  <div class="field">
+    <label for="message"><span id="message-label">What happened</span> <span class="counter" id="counter">0 / 5000</span></label>
+    <textarea id="message" name="message" required minlength="10" maxlength="5000"></textarea>
+    <small id="message-hint">Which app or screen, what you expected, and what you saw instead.</small>
+  </div>
+  <div class="hp" aria-hidden="true"><label for="website">Leave this empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+
+  <button type="submit" id="send">Send report</button>
+  <p id="status" role="status" aria-live="polite"></p>
+</form>
+
+<p class="meta" style="margin-top:48px"><a href="index.html">#Hex Next</a> · <a href="setup-guide.html">Setup guide</a> · <a href="privacy-policy.html">Privacy policy</a> · <a href="https://www.reddit.com/r/HexNext/" rel="noopener">r/HexNext</a></p>
+</main>
+<script>
+(function () {
+  var ENDPOINT = 'https://hexnext-license-server.hexnext.workers.dev/v1/contact';
+  var form = document.getElementById('form');
+  var status = document.getElementById('status');
+  var send = document.getElementById('send');
+  var msg = document.getElementById('message');
+  var counter = document.getElementById('counter');
+  var COPY = {
+    issue: { subject: 'What went wrong, in a few words', message: 'What happened', hint: 'Which app or screen, what you expected, and what you saw instead.', button: 'Send report' },
+    contact: { subject: 'Subject', message: 'Your message', hint: '', button: 'Send message' }
+  };
+  function kind() { return form.querySelector('input[name=kind]:checked').value; }
+  function apply() {
+    var k = kind(), c = COPY[k];
+    document.getElementById('issue-note').hidden = k !== 'issue';
+    document.getElementById('contact-note').hidden = k !== 'contact';
+    document.getElementById('device-field').hidden = k !== 'issue';
+    document.getElementById('subject-label').textContent = c.subject;
+    document.getElementById('message-label').textContent = c.message;
+    document.getElementById('message-hint').textContent = c.hint;
+    send.textContent = c.button;
+  }
+  var params = new URLSearchParams(location.search);
+  if (params.get('type') === 'contact') form.querySelector('input[value=contact]').checked = true;
+  form.querySelectorAll('input[name=kind]').forEach(function (r) { r.addEventListener('change', apply); });
+  msg.addEventListener('input', function () { counter.textContent = msg.value.length + ' / 5000'; });
+  apply();
+
+  var REASONS = {
+    invalid_email: 'Please enter a valid email address.',
+    message_too_short: 'Please write at least a sentence.',
+    message_too_long: 'Please keep it under 5000 characters.',
+    rate_limited: 'Too many messages in a short time. Please wait a minute and try again.',
+    contact_unavailable: 'The form is not switched on yet. Please post on r/HexNext for now.'
+  };
+  function show(text, cls) { status.textContent = text; status.className = cls || ''; }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = form.email.value.trim();
+    if (!form.email.checkValidity() || !email) { show(REASONS.invalid_email, 'err'); form.email.focus(); return; }
+    if (msg.value.trim().length < 10) { show(REASONS.message_too_short, 'err'); msg.focus(); return; }
+    var k = kind();
+    var body = {
+      kind: k, email: email, subject: form.subject.value.trim(), message: msg.value.trim(),
+      device: k === 'issue' ? form.device.value.trim() : '', website: form.website.value
+    };
+    send.disabled = true; show('Sending…');
+    fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { r: r, j: j }; }); })
+      .then(function (res) {
+        if (res.r.ok && res.j.ok) {
+          form.reset(); apply(); counter.textContent = '0 / 5000';
+          if (k === 'issue' && res.j.issueUrl) {
+            status.className = 'ok';
+            status.textContent = 'Thanks, your report is in. You can follow it ';
+            var a = document.createElement('a'); a.href = res.j.issueUrl; a.rel = 'noopener'; a.textContent = 'on GitHub';
+            status.appendChild(a); status.appendChild(document.createTextNode('.'));
+          } else {
+            show('Thanks, your message was sent. The developer will reply by email.', 'ok');
+          }
+        } else {
+          show(REASONS[res.j.reason] || 'Sorry, it could not be sent. Please try again later.', 'err');
+        }
+      })
+      .catch(function () { show('Could not reach the server. Check your connection and try again.', 'err'); })
+      .then(function () { send.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>
