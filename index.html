@@ -349,6 +349,8 @@ footer a{color:var(--fg)}
       <a href="#ai">AI</a>
       <a href="#try">Try it</a>
       <a href="#pricing">Pricing</a>
+      <a href="#module">Module</a>
+      <a href="setup-guide.html">Setup guide</a>
       <a href="#faq">FAQ</a>
     </nav>
     <a class="btn btn-primary" href="https://www.reddit.com/r/HexNext/" rel="noopener">Join the beta</a>
@@ -708,11 +710,27 @@ footer a{color:var(--fg)}
   </div>
 </section>
 
+<section id="module">
+  <div class="wrap" style="max-width:820px">
+    <div class="sec-head"><span class="eyebrow">Optional download</span><h2>HexNext-QS-Notifications-Module</h2></div>
+    <p style="color:var(--muted)">System UI paints every Quick panel tile one colour and keeps pictures off notification cards, so overlays alone cannot show them the way the theme previews do. This optional LSPosed module keeps a theme's full-colour tile glyphs, puts its art behind your notifications and colours the status bar icons. Turn each part on or off in #Hex Next under Packs › System UI hook.</p>
+    <p style="margin:22px 0"><a class="btn btn-primary" href="downloads/HexNext-QS-Notifications-Module.apk" download>Download HexNext-QS-Notifications-Module.apk</a></p>
+    <p style="color:var(--muted);font-size:14px;overflow-wrap:anywhere">Version <span id="module-version">1.2</span> · <span id="module-size">2.0 MB</span> · SHA-256 <code>91a53788d2e98c3b90e7752eaaac66c2db42658361bbfe2b8230527eb06ed9b8</code></p>
+    <p><a class="btn btn-ghost" href="setup-guide.html">Full setup guide: root, Zygisk, Vector and the module</a></p>
+    <details open><summary>How to set it up</summary><p>You need root with Zygisk (Zygisk Next or ReZygisk on KernelSU, or Magisk's Zygisk) and Vector, the current LSPosed.</p>
+      <p>1. Install the APK. Owner and beta builds of #Hex Next can install it for you from the System UI hook card.<br>
+      2. Open Vector › Modules and tap HexNext-QS-Notifications-Module.<br>
+      3. Tick System UI in its scope first, then switch the module on.<br>
+      4. Restart the phone. The System UI hook card in #Hex Next then says Hook active.</p></details>
+    <details><summary>Is it safe?</summary><p>The module only changes how System UI draws tile icons, the status bar icons and notification card backgrounds, and only for themes from #Hex Next. It reads nothing else and sends nothing anywhere. To stop it, switch it off in Vector and restart.</p></details>
+  </div>
+</section>
+
 <section id="faq">
   <div class="wrap" style="max-width:820px">
     <div class="sec-head"><span class="eyebrow">FAQ</span><h2>Questions</h2></div>
     <details><summary>Which phones work?</summary><p>Samsung Galaxy phones on One UI 7, 8 and 9 (Android 15 to 17). #Hex Next themes Samsung's own system apps.</p></details>
-    <details><summary>Do I need root?</summary><p>Full theming needs root (any root manager, such as KernelSU or Magisk) or system access through Shizuku running as root. Without root, Shizuku over wireless debugging can still apply the accent colour.</p></details>
+    <details><summary>Do I need root?</summary><p>Full theming needs root (any root manager, such as KernelSU or Magisk) or system access through Shizuku running as root. Without root, Shizuku over wireless debugging can still apply the accent colour. The <a href="setup-guide.html">setup guide</a> lists the root methods for each security update.</p></details>
     <details><summary>Is it safe? Can I undo it?</summary><p>Yes. Test Mode tries a theme only until the next restart, Remove takes every overlay off in one tap, and a recovery watchdog turns the theme off if System UI keeps crashing after a restart. #Hex Next never touches your files.</p></details>
     <details><summary>Do I need my own AI key?</summary><p>No. Two free, experimental agents work out of the box, though their themes may be lower quality. For the best results add a key for any supported service. A Google Gemini key is free and needs no card: get one at <a href="https://aistudio.google.com/app/apikey" rel="noopener">aistudio.google.com</a>.</p></details>
     <details><summary>How many theme packs are there?</summary><p>More than 50, from minimal to wild, with new packs added regularly. Any theme you build can also be saved as your own pack.</p></details>
@@ -731,6 +749,8 @@ footer a{color:var(--fg)}
       <a href="privacy-policy.html">Privacy policy</a>
       <a href="terms-of-service.html">Terms of service</a>
       <a href="privacy-policy.html#delete-data">Delete your data</a>
+      <a href="#module">System UI module</a>
+      <a href="setup-guide.html">Setup guide</a>
       <a href="https://www.reddit.com/r/HexNext/" rel="noopener">Reddit</a>
     </nav>
   </div>

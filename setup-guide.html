@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#Hex Next Setup Guide</title>
+<meta name="description" content="Get temporary root on a Samsung Galaxy phone and set up the HexNext-QS-Notifications-Module (Zygisk + Vector) for #Hex Next.">
+<link rel="icon" href="assets/favicon.png">
+<style>
+  :root { color-scheme: light dark; --fg:#1b1c20; --bg:#ffffff; --muted:#5a5f6b; --line:#e3e5ea; --card:#f5f6f8; --accent:#0a8fa8; }
+  @media (prefers-color-scheme: dark) { :root { --fg:#e8eaee; --bg:#16181e; --muted:#9aa0ad; --line:#2a2e38; --card:#1e2129; --accent:#45d4e6; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:32px 16px 64px; }
+  a { color:var(--accent); overflow-wrap:anywhere; }
+  h1 { font-size:30px; margin:0 0 4px; } h2 { font-size:22px; margin:40px 0 10px; } h3 { font-size:18px; margin:24px 0 6px; }
+  p.meta { color:var(--muted); margin:0 0 24px; }
+  ol, ul { padding-left:22px; } li { margin:6px 0; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:14px 0; }
+  .note { border-left:4px solid var(--accent); }
+  .warn { border-left:4px solid #e0703a; }
+  .btn { display:inline-block; padding:12px 20px; border-radius:999px; background:var(--accent); color:#06121a; font-weight:600; text-decoration:none; margin:6px 0; }
+  code { background:var(--card); border:1px solid var(--line); border-radius:6px; padding:1px 6px; font-size:14px; }
+  nav.top { margin:0 0 24px; font-size:15px; }
+</style>
+</head>
+<body>
+<main>
+<nav class="top"><a href="index.html">← #Hex Next home</a></nav>
+<h1>Setup guide</h1>
+<p class="meta">Temporary root on a Samsung Galaxy phone, then Zygisk, Vector (LSPosed) and the HexNext-QS-Notifications-Module, so #Hex Next can theme everything, including full-colour Quick panel tiles and notification card art.</p>
+
+<div class="card warn"><p style="margin:0">Rooting can void your warranty, trip Samsung Knox and, in rare cases, stop a phone from starting normally. These tools are made by independent developers, not by #Hex Next. Follow each project's own instructions, keep a backup, and only use them on a phone you own.</p></div>
+
+<h2 id="before">Before you start: locked bootloaders</h2>
+<ol>
+  <li><b>Stay off new security updates.</b> Temporary root on a locked bootloader is confirmed to work up to the October 2026 security update so far, but Samsung will patch the exploit soon. Avoid installing security updates, and turn off <b>Auto update system</b> in Developer options.</li>
+  <li><b>Never change anything that runs while the phone is starting.</b> With a locked bootloader, any setting that modifies the phone during boot will almost certainly brick it or leave it in a boot loop. Only changes made after the phone has finished starting are safe, such as getting root again automatically once it has booted.</li>
+  <li><b>Don't touch settings you don't understand.</b> In Root My Galaxy and KernelSU, never apply a setting before you know exactly what it does.</li>
+  <li><b>Keep modules to a minimum.</b> Only install KernelSU modules you absolutely need, such as Zygisk (required for any module to work) and Vector (LSPosed).</li>
+</ol>
+
+<h2 id="root">1. Get root</h2>
+<p>Pick the method that matches your phone and its security update (Settings › About phone › Software information).</p>
+
+<h3><a href="https://github.com/BuSung-dev/Root-My-Galaxy" rel="noopener">Root My Galaxy</a></h3>
+<p>Works for older devices on older security updates.</p>
+
+<h3><a href="https://github.com/rushiranpise/Root-My-Galaxy-Next" rel="noopener">Root My Galaxy Next</a></h3>
+<p>The continuation of Root My Galaxy, for newer models and security updates.</p>
+
+<h3><a href="https://github.com/mitschud/DirtyFrag" rel="noopener">DirtyFrag</a> + <a href="https://github.com/diabl0w/KernelSU/releases" rel="noopener">Diabl0w's KernelSU</a></h3>
+<p>These two go hand in hand. Together they work on almost every Samsung device up to about the June or July 2026 security update.</p>
+
+<h3><a href="https://github.com/xorpix/Root-My-Galaxy-Ultra" rel="noopener">Root My Galaxy Ultra</a></h3>
+<p>Works on the September and October 2026 security updates.</p>
+
+<h3><a href="https://github.com/KernelSU-Next/KernelSU-Next" rel="noopener">KernelSU-Next</a></h3>
+<p>The best root manager to use with any Root My Galaxy method.</p>
+<div class="card note">
+  <p style="margin:0 0 8px"><b>KernelSU asks you to upgrade after Root My Galaxy?</b></p>
+  <ol style="margin:0">
+    <li>Open KernelSU-Next › Actions › <a href="https://github.com/KernelSU-Next/KernelSU-Next/actions/workflows/build-manager-ci.yml" rel="noopener">Build Manager CI</a>.</li>
+    <li>Open the latest workflow run that passed and download its <code>manager</code> file.</li>
+    <li>Use it to update your KernelSU-Next manager. This usually fixes it without rooting again.</li>
+    <li>If it doesn't, try the next older passed run, and keep going down the list until you find the version that matches your phone. Be patient: one of them will work.</li>
+  </ol>
+</div>
+
+<h2 id="modules">2. Install Zygisk and Vector</h2>
+<ol>
+  <li>Download any one Zygisk variant: <a href="https://github.com/Dr-TSNG/ZygiskNext" rel="noopener">Zygisk Next</a>, <a href="https://github.com/JingMatrix/NeoZygisk" rel="noopener">NeoZygisk</a> or <a href="https://github.com/PerformanC/ReZygisk" rel="noopener">ReZygisk</a>. Whichever you like. Install it in KernelSU › Modules, then reboot.</li>
+  <li>Download <a href="https://github.com/JingMatrix/Vector" rel="noopener">Vector</a> (the current LSPosed), install it in KernelSU › Modules, then reboot again.</li>
+</ol>
+<div class="card note"><p style="margin:0"><b>Soft reboot every time you grant root.</b> With temporary root, root comes back only after you run your root method again following a restart. Each time you do, perform a soft reboot so Zygisk loads. Every other module, Vector included, depends on it.</p></div>
+
+<h2 id="hook">3. Install the HexNext-QS-Notifications-Module</h2>
+<p><a class="btn" href="downloads/HexNext-QS-Notifications-Module.apk" download>Download HexNext-QS-Notifications-Module.apk</a></p>
+<p>Owner and beta builds of #Hex Next can also install it for you: Packs › System UI hook › Install module.</p>
+<ol>
+  <li>Install the APK.</li>
+  <li>Open Vector from its notification, or from KernelSU › Modules › Vector.</li>
+  <li>With Vector open, go to the Modules tab and tap <b>HexNext-QS-Notifications-Module</b>. <b>Don't enable it yet.</b></li>
+  <li>Tick <b>System UI</b> in its scope first. You may need to use the filter to show system apps.</li>
+  <li>Once System UI is ticked, switch the module on with the toggle in the top right corner, then reboot.</li>
+</ol>
+
+<h2 id="done">You're set</h2>
+<p>#Hex Next can now theme your phone to its fullest, with no further setup. The hook loads by itself every time you grant root after a restart. Just don't forget the soft reboot each time, or Zygisk won't load and the modules that depend on it won't run.</p>
+<p>In #Hex Next, Packs › System UI hook shows <b>Hook active</b> once it is running. Turn on <b>Quick panel tiles in full colour</b> and <b>Notification card art</b> there.</p>
+
+<p class="meta" style="margin-top:48px"><a href="index.html">#Hex Next</a> · <a href="privacy-policy.html">Privacy policy</a> · <a href="terms-of-service.html">Terms of service</a></p>
+</main>
+</body>
+</html>
