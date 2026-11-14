@@ -78,6 +78,8 @@ header.nav{position:sticky;top:0;z-index:20;background:rgba(7,11,22,.78);backdro
 
 section{padding:88px 0}
 #themes{scroll-margin-top:56px}
+/* #module (the app's "Download page" link) lands with the eyebrow right under the sticky header: the section's 88px top padding minus the header's height. */
+#module{scroll-margin-top:-20px}
 .sec-head{max-width:720px;margin-bottom:40px}
 .sec-head h2{font-size:clamp(30px,4vw,46px);letter-spacing:-.01em;margin:12px 0 14px}
 .sec-head p{color:var(--muted);font-size:18px;margin:0}
@@ -790,7 +792,7 @@ footer a{color:var(--fg)}
       <p>1. Install the APK. Owner and beta builds of #Hex Next can install it for you from the System UI hook card.<br>
       2. Open Vector › Modules and tap HexNext-QS-Notifications-Module.<br>
       3. Tick System UI in its scope first, then switch the module on.<br>
-      4. Restart the phone. The System UI hook card in #Hex Next then says Hook active.</p></details>
+      4. Force stop #Hex Next from its app settings page (Settings › Apps › #Hex Next › Force stop) and open it again. No reboot is needed. The System UI hook card then shows a green Module Hook Running badge.<br><b>Note:</b> Vector loads the hook when System UI starts, so on some phones a force stop is not enough. If the badge stays yellow, do a soft reboot.</p></details>
     <details><summary>Is it safe?</summary><p>The module only changes how System UI draws tile icons, the status bar icons and notification card backgrounds, and only for themes from #Hex Next. It reads nothing else and sends nothing anywhere. To stop it, switch it off in Vector and restart.</p></details>
   </div>
 </section>
@@ -829,5 +831,26 @@ footer a{color:var(--fg)}
 </footer>
 
 <script src="assets/try.js" defer></script>
+<script>
+// The app opens index.html#module. The gallery above loads its pictures after the browser has
+// already jumped, which pushed the module section down and left the page stopped short of it.
+// Re-align to #module while the page is still settling, until the visitor scrolls themselves.
+(function () {
+  if (location.hash !== '#module') return;
+  var target = document.getElementById('module');
+  if (!target) return;
+  var done = false;
+  function stop() { done = true; }
+  ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (e) { addEventListener(e, stop, { once: true, passive: true }); });
+  function align() { if (!done) target.scrollIntoView({ block: 'start' }); }
+  if ('ResizeObserver' in window) {
+    var ro = new ResizeObserver(align);
+    ro.observe(document.body);
+    setTimeout(function () { ro.disconnect(); }, 6000);
+  }
+  addEventListener('load', align);
+  align();
+})();
+</script>
 </body>
 </html>
