@@ -77,29 +77,87 @@ header.nav{position:sticky;top:0;z-index:20;background:rgba(7,11,22,.78);backdro
 @media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
 
 section{padding:88px 0}
+#themes{scroll-margin-top:56px}
 .sec-head{max-width:720px;margin-bottom:40px}
 .sec-head h2{font-size:clamp(30px,4vw,46px);letter-spacing:-.01em;margin:12px 0 14px}
 .sec-head p{color:var(--muted);font-size:18px;margin:0}
 
-/* showcase */
-.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
-.tab{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:10px 18px;border-radius:999px;font:600 15px Inter,sans-serif;display:flex;align-items:center;gap:10px}
-.tab i{width:14px;height:14px;border-radius:50%;display:inline-block}
-.tab[aria-selected="true"]{border-color:var(--accent,var(--cyan));box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,var(--cyan)) 25%,transparent)}
-.show{display:none;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start}
-.show.on{display:grid}
-.show figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:10px;overflow:hidden}
-.show figure img{border-radius:12px;width:100%;aspect-ratio:526/1080;object-fit:cover}
-.show figcaption{font-size:13px;color:var(--muted);padding:8px 4px 2px}
-.show .info{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--radius);padding:24px;align-self:stretch;display:flex;flex-direction:column;gap:14px}
-.show .info h3{font-size:30px}
-.show .info p{margin:0;color:var(--muted)}
+/* showcase: a rolling strip of every pack, and the chosen pack's art */
+.rail{position:sticky;top:64px;z-index:15;margin:0 -20px 22px;padding:10px 20px;background:rgba(7,11,22,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(36,49,79,.6)}
+.tabs{display:flex;gap:10px;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:5px 4px;margin:0 -4px;cursor:grab;
+  --fl:0px;--fr:0px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 var(--fl),#000 calc(100% - var(--fr)),transparent);mask-image:linear-gradient(90deg,transparent,#000 var(--fl),#000 calc(100% - var(--fr)),transparent)}
+.tabs::-webkit-scrollbar{display:none}
+.rail:not(.at-start) .tabs{--fl:56px}
+.rail:not(.at-end) .tabs{--fr:56px}
+.rail.dragging .tabs{cursor:grabbing;user-select:none}
+.rail.dragging .tab{pointer-events:none}
+.tab{flex:0 0 auto;white-space:nowrap;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:10px 18px;border-radius:999px;font:600 15px Inter,sans-serif;display:flex;align-items:center;gap:10px;transition:border-color .15s,background .15s}
+.tab i{width:14px;height:14px;border-radius:50%;display:inline-block;background:var(--accent,var(--cyan));box-shadow:0 0 0 1px rgba(255,255,255,.14)}
+.tab:hover{border-color:color-mix(in srgb,var(--accent,var(--cyan)) 55%,var(--line))}
+.tab[aria-selected="true"]{border-color:var(--accent,var(--cyan));background:var(--card2);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,var(--cyan)) 25%,transparent)}
+.tab:focus-visible,.rail-btn:focus-visible,.seg button:focus-visible,.stepper button:focus-visible,.pics:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.rail-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card2);color:var(--fg);display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 24px -8px rgba(0,0,0,.8)}
+.rail-btn[hidden]{display:none}
+.rail-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.rail-btn.prev{left:8px}.rail-btn.next{right:8px}
+.pack{min-height:480px}
+.pack-note{color:var(--muted)}
+.pack-body{--p-bg:#10141C;--p-card:#1B2230;--p-ink:#fff;--p-card-ink:#fff;--p-accent:var(--cyan);--p-page:#F2F4F8;--p-page-ink:#10141C}
+.pack-body.in{animation:packin .28s ease-out}
+@keyframes packin{from{opacity:0;transform:translateY(8px)}}
+.pack-head{display:flex;align-items:flex-end;gap:16px 24px;flex-wrap:wrap;margin-bottom:18px}
+.pack-title{flex:1 1 220px;min-width:0}
+.pack-title .eyebrow{color:var(--p-accent)}
+.pack-title h3{font-size:clamp(30px,4vw,40px);margin:10px 0 4px}
+.pack-title p{margin:0;color:var(--muted)}
 .swatches{display:flex;gap:8px}
-.swatches i{width:30px;height:30px;border-radius:9px;border:1px solid rgba(255,255,255,.12)}
-.icons{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:auto}
-.icons img{width:100%;aspect-ratio:1;object-fit:contain}
-@media (max-width:980px){.show{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:520px){.show{grid-template-columns:1fr 1fr;gap:10px}.show .info{grid-column:1/-1}}
+.swatches i{width:30px;height:30px;border-radius:9px;border:1px solid rgba(255,255,255,.16)}
+.stepper{display:flex;gap:8px}
+.stepper button{cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-width:40px;height:40px;justify-content:center;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:600 14px Inter,sans-serif;padding:0 11px}
+.stepper button:hover{border-color:var(--p-accent)}
+.stepper.named{justify-content:space-between;width:100%}
+.stepper.named button{padding:0 16px;max-width:48%}
+.stepper.named span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pack-foot{margin-top:18px}
+.pics{display:flex;gap:14px;overflow-x:auto;padding-bottom:6px;margin-bottom:18px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.pics figure{margin:0;flex:0 0 auto;height:clamp(200px,24vw,268px);position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--p-bg);scroll-snap-align:start}
+.pics figure.wall{aspect-ratio:768/1376}
+.pics figure.card{aspect-ratio:9/4}
+.pics img{width:100%;height:100%;object-fit:cover}
+.pics figcaption{position:absolute;left:8px;bottom:8px;padding:3px 10px;border-radius:999px;background:rgba(7,11,22,.72);color:#fff;font-size:12px;font-weight:600;backdrop-filter:blur(6px)}
+.looks{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;margin-bottom:14px}
+.looks-label{font:600 13px/1 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.looks-note{margin:0;color:var(--muted);font-size:14px;flex:1 1 240px}
+.seg{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--card);border:1px solid var(--line);max-width:100%}
+.seg button{cursor:pointer;border:0;background:transparent;color:var(--muted);font:600 14px Inter,sans-serif;padding:8px 14px;border-radius:999px;white-space:nowrap}
+.seg button[aria-checked="true"]{background:var(--p-accent);color:#0B0F17}
+.arts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+.art{background:var(--p-bg);color:var(--p-ink);border:1px solid var(--line);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.art.wide{grid-column:1/-1}
+.art h4{font:700 17px/1.2 "Space Grotesk",Inter,sans-serif;margin:0}
+.art-sub{margin:2px 0 0;font-size:13px;opacity:.7;min-height:1.5em}
+.sp{display:block;width:100%;aspect-ratio:1;background-color:var(--p-card);background-image:var(--sheet,none);background-repeat:no-repeat}
+.rows{list-style:none;margin:0;padding:6px 12px;border-radius:18px;background:var(--p-card);color:var(--p-card-ink)}
+.rows li{display:flex;align-items:center;gap:14px;min-height:48px;font-size:15px}
+.rows li>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rows .sp{flex:0 0 40px;width:40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:8px}
+.cell{display:block;border-radius:12px;overflow:hidden;background:var(--p-card)}
+.grid.round .cell{border-radius:50%;padding:17%}
+.grid.g-powermenu{grid-template-columns:repeat(auto-fill,minmax(88px,1fr))}
+.surface{display:flex;flex-direction:column;gap:12px}
+.surface.day{--p-card:var(--p-page);--p-card-ink:var(--p-page-ink)}
+.surface.day .cell,.surface.day .rows{box-shadow:0 0 0 1px rgba(0,0,0,.06) inset}
+.rows.switches li>span{flex:1}
+.rows .sp.switch{flex:0 0 88px;width:88px;aspect-ratio:2}
+.dial{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:14px;align-items:start}
+.keypad{margin:0;border-radius:16px;overflow:hidden;aspect-ratio:480/604;background:var(--p-card)}
+.keypad.day{background:var(--p-page)}
+.keypad img{width:100%;height:100%;object-fit:cover}
+.dial .grid{grid-template-columns:repeat(auto-fill,minmax(64px,1fr))}
+@media (max-width:860px){.arts{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:520px){.rail{margin-bottom:16px}.rail-btn{width:34px;height:34px}.rail-btn.prev{left:4px}.rail-btn.next{right:4px}.tab{padding:9px 14px;font-size:14px}.art{padding:12px;border-radius:18px}.grid{grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:6px}.dial{grid-template-columns:minmax(0,132px) minmax(0,1fr)}.dial .grid{grid-template-columns:repeat(auto-fill,minmax(52px,1fr))}.seg button{padding:8px 11px;font-size:13px}.pack-head .stepper{display:none}}
+@media (prefers-reduced-motion:reduce){.pack-body.in{animation:none}.tab{transition:none}}
 
 /* features */
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -313,9 +371,6 @@ details p{color:var(--muted);margin:12px 0 0}
 /* Gemini-drawn artwork */
 .hero::after{content:"";position:absolute;inset:0;background:url(assets/art/hero-backdrop.webp) center/cover no-repeat;opacity:.28;mask-image:linear-gradient(180deg,#000 40%,transparent);-webkit-mask-image:linear-gradient(180deg,#000 40%,transparent);pointer-events:none}
 .hero>.wrap{z-index:1}
-#t-galaxy .info{background:linear-gradient(180deg,rgba(17,26,46,.55),var(--card) 62%),url(assets/art/galaxy-mood.webp) top/cover no-repeat}
-#t-heroes .info{background:linear-gradient(180deg,rgba(17,26,46,.55),var(--card) 62%),url(assets/art/heroes-mood.webp) top/cover no-repeat}
-#t-kameha .info{background:linear-gradient(180deg,rgba(17,26,46,.55),var(--card) 62%),url(assets/art/kameha-mood.webp) top/cover no-repeat}
 #features{background:linear-gradient(180deg,var(--bg),rgba(7,11,22,.86) 30%,rgba(7,11,22,.92)),url(assets/art/palette-wave.webp) center/cover no-repeat}
 .beta{background:linear-gradient(120deg,rgba(7,11,22,.75),rgba(7,11,22,.35)),url(assets/art/beta-glow.webp) right center/cover no-repeat,var(--card)}
 .ai .sec-head{position:relative}
@@ -352,6 +407,7 @@ footer a{color:var(--fg)}
       <a href="#module">Module</a>
       <a href="setup-guide.html">Setup guide</a>
       <a href="#faq">FAQ</a>
+      <a href="contact.html">Contact</a>
     </nav>
     <a class="btn btn-primary" href="https://www.reddit.com/r/HexNext/" rel="noopener">Join the beta</a>
   </div>
@@ -392,61 +448,71 @@ footer a{color:var(--fg)}
     <div class="sec-head">
       <span class="eyebrow">Theme packs</span>
       <h2>50+ packs. Every one themes the whole phone.</h2>
-      <p>Each pack recolours One UI and swaps in its own art for Settings icons, Quick panel tiles, the power menu, My Files and the wallpaper. Here are three of the packs drawn for #Hex Next, with more being added all the time.</p>
+      <p>Each pack recolours One UI and swaps in its own art. Roll through every pack drawn for #Hex Next and see all of it: the wallpaper, the notification cards, every icon in each colour look, the switches and the dialer, laid out the way the app shows a pack when you press and hold it.</p>
     </div>
 
-    <div class="tabs" role="tablist" aria-label="Theme examples">
-      <button class="tab" role="tab" aria-selected="true" aria-controls="t-galaxy" id="b-galaxy" style="--accent:#FFE81F"><i style="background:#FFE81F"></i>Galaxy</button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="t-heroes" id="b-heroes" style="--accent:#ED1D24"><i style="background:#ED1D24"></i>Heroes</button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="t-kameha" id="b-kameha" style="--accent:#FF8A00"><i style="background:#FF8A00"></i>Kameha</button>
-    </div>
-
-    <div class="show on" id="t-galaxy" role="tabpanel" aria-labelledby="b-galaxy">
-      <div class="info">
-        <span class="eyebrow" style="color:#FFE81F">Space opera</span>
-        <h3>Galaxy</h3>
-        <p>Deep-space black with lightsaber yellow and plasma blue. A ringed planet drifts across the wallpaper, and every icon glows like a cockpit display.</p>
-        <div class="swatches"><i style="background:#05070D"></i><i style="background:#FFE81F"></i><i style="background:#3FA9FF"></i><i style="background:#141A24"></i><i style="background:#FFFFFF"></i></div>
-        <div class="icons">
-          <img src="assets/themes/galaxy/icons/connections.webp" alt="Connections icon" loading="lazy"><img src="assets/themes/galaxy/icons/battery.webp" alt="Battery icon" loading="lazy"><img src="assets/themes/galaxy/icons/display.webp" alt="Display icon" loading="lazy"><img src="assets/themes/galaxy/icons/devicecare.webp" alt="Device care icon" loading="lazy">
-        </div>
+    <!-- themes:begin -->
+    <!-- Written by tools/build_themes.py: do not edit by hand. -->
+    <div class="rail" id="theme-rail">
+      <button class="rail-btn prev" type="button" aria-label="Scroll the themes back" tabindex="-1" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="tabs" role="tablist" aria-label="Theme packs" aria-orientation="horizontal">
+        <button class="tab" role="tab" type="button" id="b-galaxy" data-theme="galaxy" aria-selected="true" aria-controls="theme-panel" tabindex="0" style="--accent:#FFE81F"><i></i>Galaxy</button>
+        <button class="tab" role="tab" type="button" id="b-heroes" data-theme="heroes" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#ED1D24"><i></i>Heroes</button>
+        <button class="tab" role="tab" type="button" id="b-kameha" data-theme="kameha" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FF8A00"><i></i>Kameha</button>
+        <button class="tab" role="tab" type="button" id="b-anime" data-theme="anime" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FF4FA3"><i></i>Anime</button>
+        <button class="tab" role="tab" type="button" id="b-athletics" data-theme="athletics" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FF6B00"><i></i>Athletics</button>
+        <button class="tab" role="tab" type="button" id="b-beachday" data-theme="beachday" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FFB84D"><i></i>Beach Day</button>
+        <button class="tab" role="tab" type="button" id="b-medieval" data-theme="medieval" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#D4A017"><i></i>Medieval</button>
+        <button class="tab" role="tab" type="button" id="b-aquatica" data-theme="aquatica" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#00E0D0"><i></i>Aquatica</button>
+        <button class="tab" role="tab" type="button" id="b-rainforest" data-theme="rainforest" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#7BE04A"><i></i>Rainforest</button>
+        <button class="tab" role="tab" type="button" id="b-arcticfreeze" data-theme="arcticfreeze" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#7FDBFF"><i></i>Arctic Freeze</button>
+        <button class="tab" role="tab" type="button" id="b-fluffkins" data-theme="fluffkins" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FFB3C7"><i></i>Fluffkins</button>
+        <button class="tab" role="tab" type="button" id="b-galactica" data-theme="galactica" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#C77DFF"><i></i>Galactica</button>
+        <button class="tab" role="tab" type="button" id="b-magical" data-theme="magical" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FFD166"><i></i>Magical</button>
+        <button class="tab" role="tab" type="button" id="b-america" data-theme="america" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#E63946"><i></i>America</button>
+        <button class="tab" role="tab" type="button" id="b-earth" data-theme="earth" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#3DDC97"><i></i>Earth</button>
+        <button class="tab" role="tab" type="button" id="b-bluedudes" data-theme="bluedudes" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#3BA7FF"><i></i>Blue Dudes</button>
+        <button class="tab" role="tab" type="button" id="b-nostalgia" data-theme="nostalgia" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FF7A00"><i></i>Nostalgia</button>
+        <button class="tab" role="tab" type="button" id="b-videogames1" data-theme="videogames1" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FF3B30"><i></i>Video Games 1</button>
+        <button class="tab" role="tab" type="button" id="b-videogames2" data-theme="videogames2" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#2D7BFF"><i></i>Video Games 2</button>
+        <button class="tab" role="tab" type="button" id="b-pocketmonsters" data-theme="pocketmonsters" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FFCB05"><i></i>Poke</button>
+        <button class="tab" role="tab" type="button" id="b-weather" data-theme="weather" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#4FC3F7"><i></i>Weather</button>
+        <button class="tab" role="tab" type="button" id="b-autumn" data-theme="autumn" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FF8A1F"><i></i>Autumn</button>
+        <button class="tab" role="tab" type="button" id="b-junkfood" data-theme="junkfood" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FF6FB1"><i></i>Junkfood</button>
+        <button class="tab" role="tab" type="button" id="b-luxurycars" data-theme="luxurycars" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#D4AF37"><i></i>Luxury Cars</button>
+        <button class="tab" role="tab" type="button" id="b-heartattack" data-theme="heartattack" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FF3B2F"><i></i>Heart Attack</button>
+        <button class="tab" role="tab" type="button" id="b-sky" data-theme="sky" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#4DB5FF"><i></i>Sky</button>
+        <button class="tab" role="tab" type="button" id="b-upsetbirds" data-theme="upsetbirds" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#E53935"><i></i>Upset Birds</button>
+        <button class="tab" role="tab" type="button" id="b-zombieplanters" data-theme="zombieplanters" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#7BD63A"><i></i>Zombie Planters</button>
+        <button class="tab" role="tab" type="button" id="b-fantasy" data-theme="fantasy" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#E0B13A"><i></i>Fantasy</button>
+        <button class="tab" role="tab" type="button" id="b-mmo" data-theme="mmo" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#F2B632"><i></i>MMO</button>
+        <button class="tab" role="tab" type="button" id="b-ff" data-theme="ff" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#7FC8FF"><i></i>FF</button>
+        <button class="tab" role="tab" type="button" id="b-pixelized" data-theme="pixelized" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#A8C7FA"><i></i>Pixelized</button>
+        <button class="tab" role="tab" type="button" id="b-miui" data-theme="miui" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FF8A3D"><i></i>Moo Moo</button>
+        <button class="tab" role="tab" type="button" id="b-apples" data-theme="apples" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#0A84FF"><i></i>Apples</button>
+        <button class="tab" role="tab" type="button" id="b-color" data-theme="color" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#2AD181"><i></i>Color</button>
+        <button class="tab" role="tab" type="button" id="b-hyper" data-theme="hyper" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#4B91FF"><i></i>Hyper</button>
+        <button class="tab" role="tab" type="button" id="b-computer" data-theme="computer" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#60CDFF"><i></i>Computer</button>
+        <button class="tab" role="tab" type="button" id="b-mac" data-theme="mac" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#8E8BFF"><i></i>Mactop</button>
+        <button class="tab" role="tab" type="button" id="b-fruity" data-theme="fruity" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FF8A1F"><i></i>Fruity Tooty</button>
+        <button class="tab" role="tab" type="button" id="b-beanie" data-theme="beanie" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FF6FA3"><i></i>Beanie</button>
+        <button class="tab" role="tab" type="button" id="b-stoneage" data-theme="stoneage" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#FF8A3D"><i></i>Stone Age</button>
+        <button class="tab" role="tab" type="button" id="b-future" data-theme="future" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#2FD6CF"><i></i>Future</button>
+        <button class="tab" role="tab" type="button" id="b-oz" data-theme="oz" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#2EE08F"><i></i>Oz</button>
+        <button class="tab" role="tab" type="button" id="b-steroids" data-theme="steroids" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#4D9BFF"><i></i>Steroids</button>
+        <button class="tab" role="tab" type="button" id="b-oceanlife" data-theme="oceanlife" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#3CC3F5"><i></i>Ocean Life</button>
+        <button class="tab" role="tab" type="button" id="b-safari" data-theme="safari" aria-selected="false" aria-controls="theme-panel" tabindex="-1" style="--accent:#F2A03D"><i></i>Safari</button>
       </div>
-      <figure><img src="assets/themes/galaxy/preview-001.webp" alt="Galaxy pack: themed Settings" loading="lazy"><figcaption>Settings</figcaption></figure>
-      <figure><img src="assets/themes/galaxy/preview-002.webp" alt="Galaxy pack: Quick panel and power menu" loading="lazy"><figcaption>Quick panel and power menu</figcaption></figure>
-      <figure><img src="assets/themes/galaxy/wallpaper.webp" alt="Galaxy pack wallpaper" loading="lazy"><figcaption>Wallpaper</figcaption></figure>
+      <button class="rail-btn next" type="button" aria-label="Scroll the themes forward" tabindex="-1" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
-
-    <div class="show" id="t-heroes" role="tabpanel" aria-labelledby="b-heroes" hidden>
-      <div class="info">
-        <span class="eyebrow" style="color:#ED1D24">Comic-book action</span>
-        <h3>Heroes</h3>
-        <p>Bold red and gold straight off the printed page. Halftone bursts, starburst badges and a city skyline that lights up at night.</p>
-        <div class="swatches"><i style="background:#140A0B"></i><i style="background:#ED1D24"></i><i style="background:#FFC20E"></i><i style="background:#2A1416"></i><i style="background:#FFFFFF"></i></div>
-        <div class="icons">
-          <img src="assets/themes/heroes/icons/connections.webp" alt="Connections icon" loading="lazy"><img src="assets/themes/heroes/icons/battery.webp" alt="Battery icon" loading="lazy"><img src="assets/themes/heroes/icons/display.webp" alt="Display icon" loading="lazy"><img src="assets/themes/heroes/icons/devicecare.webp" alt="Device care icon" loading="lazy">
-        </div>
-      </div>
-      <figure><img src="assets/themes/heroes/preview-001.webp" alt="Heroes pack: themed Settings" loading="lazy"><figcaption>Settings</figcaption></figure>
-      <figure><img src="assets/themes/heroes/preview-002.webp" alt="Heroes pack: Quick panel and power menu" loading="lazy"><figcaption>Quick panel and power menu</figcaption></figure>
-      <figure><img src="assets/themes/heroes/wallpaper.webp" alt="Heroes pack wallpaper" loading="lazy"><figcaption>Wallpaper</figcaption></figure>
+    <div class="pack" id="theme-panel" role="tabpanel" aria-labelledby="b-galaxy" tabindex="-1">
+      <noscript><p class="pack-note">Turn on JavaScript to browse the art of all 46 packs.</p></noscript>
     </div>
-
-    <div class="show" id="t-kameha" role="tabpanel" aria-labelledby="b-kameha" hidden>
-      <div class="info">
-        <span class="eyebrow" style="color:#FF8A00">Power level: over 9000</span>
-        <h3>Kameha</h3>
-        <p>Night-sky navy charged with energy-blast orange and gold. Glowing aura icons, a rising energy sphere and spiky badges on every power button.</p>
-        <div class="swatches"><i style="background:#0B1530"></i><i style="background:#FF8A00"></i><i style="background:#FFD21F"></i><i style="background:#16264A"></i><i style="background:#FFFFFF"></i></div>
-        <div class="icons">
-          <img src="assets/themes/kameha/icons/connections.webp" alt="Connections icon" loading="lazy"><img src="assets/themes/kameha/icons/battery.webp" alt="Battery icon" loading="lazy"><img src="assets/themes/kameha/icons/display.webp" alt="Display icon" loading="lazy"><img src="assets/themes/kameha/icons/devicecare.webp" alt="Device care icon" loading="lazy">
-        </div>
-      </div>
-      <figure><img src="assets/themes/kameha/preview-001.webp" alt="Kameha pack: themed Settings" loading="lazy"><figcaption>Settings</figcaption></figure>
-      <figure><img src="assets/themes/kameha/preview-002.webp" alt="Kameha pack: Quick panel and power menu" loading="lazy"><figcaption>Quick panel and power menu</figcaption></figure>
-      <figure><img src="assets/themes/kameha/wallpaper.webp" alt="Kameha pack wallpaper" loading="lazy"><figcaption>Wallpaper</figcaption></figure>
-    </div>
+    <script type="application/json" id="themes-data">{"base":"assets/themes/","layouts":[{"pics":[["wallpaper.webp","Wallpaper","wall"],["card.webp","Notification card","card"],["card-night.webp","Notification card, dark mode","card"]],"looks":[{"k":"multicolor","label":"Multicolour","file":"look-multicolor.webp"},{"k":"signature","label":"Signature colour","file":"look-signature.webp"},{"k":"accent","label":"Accent tint","file":"look-accent.webp"}],"parts":[{"k":"settingsicon","label":"Settings icons","kind":"list","t":72,"y":0,"names":["About","Accessibility","Advanced feature","Applications","Battery","Biometrics and security","Cloud and account","Connections","Device care","Digital wellbeing","Display","Emergency","AI features","General device management","Services","Home screen","Location","Lock screen","Modes","Multi devices","Notifications","Parental controls","Privacy","Software update","Sound","Themes","Tips","User manual","Wallpaper","Warranty care"]},{"k":"myfilesicon","label":"My Files icons","kind":"list","t":72,"y":216,"names":["PDF","APK","Audio","Contact","Other","Spreadsheet","Folder","HTML","Image","Memo","Presentation","Text","Video","Document","ZIP","APK","Audio","Documents","Download","Images","Video","Cloud drive","Internal storage","Network storage","Cloud storage","Recent","SD card","Trash","USB"]},{"k":"qsglyph","label":"Quick panel glyphs","kind":"round","t":60,"y":432,"names":["Airplane off","Airplane on","Auto rotate landscape on","Auto rotate portrait off","Auto rotate portrait on","Camera off","Camera on","Colour correction off","Colour correction on","Do not disturb off","Do not disturb on","Extra dim off","Extra dim on","Eye comfort shield off","Eye comfort shield on","Accessibility high contrast fonts t character","Contrast circle lefthalf filled","Hearing aid","One-handed mode","Quick panel","Accessibility add color filter","Accessibility color adjustment","Battery mode","Calls on other devices","Desktop mode","Performance profile","Power share","Protect battery","Share nearby","Secure Wi-Fi","Screen cast","Keep screen off","Keep screen on","Screen curtain","Location off","Location on","Microphone off","Microphone on","Mobile hotspot off","Mobile hotspot on","Privacy display off","Privacy display on","Tile","Airplane mode dim","Always on display","Blue light filter","Bluetooth","Camera access","Camera access off","Data connection","Device control","Do not disturb","Eye comfort shield","Flashlight","Flashlight off","Flashlight on","Hotspot mode off","Hotspot mode on","Microphone access","Microphone access off","Mobile hotspot","Modes","Link to PC","Multi control","Mute all sounds","Mute all sounds vibrate","Mute sound","Nearby devices","QR scanner","Search","Screen recording","Share SOS","Smart capture","Sound","Sound mute","Sound vibrate","Sync","Wi-Fi","Wi-Fi off","Wi-Fi on","Audio broadcast","Bluetooth cast","Display night theme","Sound mode mute","Sound mode off","Sound mode on","Debugging wireless","NFC","NFC card","Sensors off","Wi-Fi calling","Wi-Fi calling 2","Wi-Fi off","Wi-Fi on"]},{"k":"powermenu","label":"Power menu","kind":"grid","t":90,"y":912,"names":["Emergency mode","Emergency SOS","Lockdown","Medical info","Mobile data","Power off","Restart","Safe mode"]},{"k":"navbar","label":"Navigation bar","kind":"grid","t":60,"y":1002,"names":["Back","Back dark","Home","Home dark","Recent","Recent dark"]}],"modes":[{"k":"day","label":"Light mode","switches":[["On",0,0],["Off",2,0],["Disabled",4,0]],"controls":[["Checkbox",6,0],["Checkbox",7,0],["Checkbox",0,1],["Checkbox",1,1],["Checkbox",2,1],["Checkbox",3,1],["Radio",4,1],["Radio",5,1],["Radio",6,1],["Radio",7,1],["Radio",0,2],["Radio",1,2]],"dial":[["Call button",2,2],["Call plus",3,2],["Call",4,2],["Delete",5,2],["Message",6,2],["Video call",7,2],["Wi-Fi call",0,3]],"panel":"dialpad.webp"},{"k":"night","label":"Dark mode","switches":[["On",1,3],["Off",3,3],["Disabled",5,3]],"controls":[["Checkbox",7,3],["Checkbox",0,4],["Checkbox",1,4],["Checkbox",2,4],["Checkbox",3,4],["Checkbox",4,4],["Radio",5,4],["Radio",6,4],["Radio",7,4],["Radio",0,5],["Radio",1,5],["Radio",2,5]],"dial":[["Call button",3,5],["Call plus",4,5],["Call",5,5],["Delete",6,5],["Message",7,5],["Video call",0,6],["Wi-Fi call",1,6]],"panel":"dialpad-night.webp"}],"atlas":[720,1062],"sheet":["parts.webp",8,7]}],"themes":[{"id":"galaxy","name":"Galaxy","v":"9ee1481a","c":{"bg":"#05070D","card":"#141A24","ink":"#FFFFFF","accent":"#FFE81F","second":"#3FA9FF","page":"#EEF1F5","pageCard":"#D5DBE4","pageInk":"#0B0F17","pageAccent":"#1E6FD9"},"l":0},{"id":"heroes","name":"Heroes","v":"a99672d9","c":{"bg":"#140A0B","card":"#2A1416","ink":"#FFFFFF","accent":"#ED1D24","second":"#FFC20E","page":"#FFF8F0","pageCard":"#FFE0D6","pageInk":"#140A0B","pageAccent":"#D9121A"},"l":0},{"id":"kameha","name":"Kameha","v":"8bb0c509","c":{"bg":"#0B1530","card":"#16264A","ink":"#FFFFFF","accent":"#FF8A00","second":"#FFD21F","page":"#FFF6E8","pageCard":"#FFE2B8","pageInk":"#1A1033","pageAccent":"#F06A00"},"l":0},{"id":"anime","name":"Anime","v":"a23734ab","c":{"bg":"#140A24","card":"#24143D","ink":"#FFFFFF","accent":"#FF4FA3","second":"#6EE7F9","page":"#FFF2F9","pageCard":"#FFDDED","pageInk":"#2A1035","pageAccent":"#E0287F"},"l":0},{"id":"athletics","name":"Athletics","v":"f837a5f8","c":{"bg":"#08121F","card":"#13233A","ink":"#FFFFFF","accent":"#FF6B00","second":"#2EC4FF","page":"#F2F6FA","pageCard":"#DDE6F0","pageInk":"#0B1625","pageAccent":"#E85D00"},"l":0},{"id":"beachday","name":"Beach Day","v":"e7f5bd8b","c":{"bg":"#05222E","card":"#0D3644","ink":"#FFFFFF","accent":"#FFB84D","second":"#2EC4B6","page":"#FFF7E6","pageCard":"#FFE7BD","pageInk":"#13303A","pageAccent":"#F08A00"},"l":0},{"id":"medieval","name":"Medieval","v":"0531c756","c":{"bg":"#17110B","card":"#2A2016","ink":"#F6EBD4","accent":"#D4A017","second":"#B3263A","page":"#F5ECD8","pageCard":"#E8D9B8","pageInk":"#2A1D10","pageAccent":"#8F1D2C"},"l":0},{"id":"aquatica","name":"Aquatica","v":"f5c43d40","c":{"bg":"#021A2B","card":"#082D45","ink":"#FFFFFF","accent":"#00E0D0","second":"#FF7F7F","page":"#ECFBFD","pageCard":"#CDEFF4","pageInk":"#06283A","pageAccent":"#00838F"},"l":0},{"id":"rainforest","name":"Rainforest","v":"45909d71","c":{"bg":"#08190F","card":"#12301C","ink":"#F2FFF0","accent":"#7BE04A","second":"#FF9F1C","page":"#F0F8EC","pageCard":"#D7EDD0","pageInk":"#0E2414","pageAccent":"#2E8B2E"},"l":0},{"id":"arcticfreeze","name":"Arctic Freeze","v":"0bfc0e36","c":{"bg":"#061226","card":"#10223F","ink":"#FFFFFF","accent":"#7FDBFF","second":"#C3A6FF","page":"#EEF6FD","pageCard":"#D5E7F7","pageInk":"#0A1A2E","pageAccent":"#0F6FB8"},"l":0},{"id":"fluffkins","name":"Fluffkins","v":"de1bb7cf","c":{"bg":"#231A2A","card":"#352841","ink":"#FFFFFF","accent":"#FFB3C7","second":"#9FDBFF","page":"#FFF6FA","pageCard":"#FFE1EC","pageInk":"#3A2433","pageAccent":"#E5739A"},"l":0},{"id":"galactica","name":"Galactica","v":"754935a7","c":{"bg":"#0A0520","card":"#1A1038","ink":"#FFFFFF","accent":"#C77DFF","second":"#4CC9F0","page":"#F4F0FF","pageCard":"#E3D9FF","pageInk":"#140A2E","pageAccent":"#7B2CBF"},"l":0},{"id":"magical","name":"Magical","v":"912be71f","c":{"bg":"#110A2C","card":"#221748","ink":"#FFFFFF","accent":"#FFD166","second":"#EF7AC6","page":"#FBF6FF","pageCard":"#ECE1FF","pageInk":"#1E1238","pageAccent":"#7A3FD0"},"l":0},{"id":"america","name":"America","v":"56980cbb","c":{"bg":"#0A1630","card":"#14254A","ink":"#FFFFFF","accent":"#E63946","second":"#4D8BFF","page":"#F5F7FC","pageCard":"#DDE4F2","pageInk":"#0A1630","pageAccent":"#C1121F"},"l":0},{"id":"earth","name":"Earth","v":"fd7b594c","c":{"bg":"#04121E","card":"#0C2434","ink":"#FFFFFF","accent":"#3DDC97","second":"#3FA7FF","page":"#EEF7F3","pageCard":"#D3EBDF","pageInk":"#0B1E16","pageAccent":"#1B8A5A"},"l":0},{"id":"bluedudes","name":"Blue Dudes","v":"7c925dab","c":{"bg":"#071A33","card":"#0F2B52","ink":"#FFFFFF","accent":"#3BA7FF","second":"#FF5A4F","page":"#EEF7FF","pageCard":"#D6EBFF","pageInk":"#0B2545","pageAccent":"#1976D2"},"l":0},{"id":"nostalgia","name":"Nostalgia","v":"ac14b261","c":{"bg":"#1A0F2E","card":"#2A1A4A","ink":"#FFFFFF","accent":"#FF7A00","second":"#8BE000","page":"#FFF6EA","pageCard":"#FFE3C2","pageInk":"#2A1245","pageAccent":"#F26A00"},"l":0},{"id":"videogames1","name":"Video Games 1","v":"08a9a15b","c":{"bg":"#0E1B3D","card":"#18295C","ink":"#FFFFFF","accent":"#FF3B30","second":"#FFD23F","page":"#EAF4FF","pageCard":"#D2E6FF","pageInk":"#12204A","pageAccent":"#E02020"},"l":0},{"id":"videogames2","name":"Video Games 2","v":"c838beee","c":{"bg":"#05070F","card":"#0E1630","ink":"#FFFFFF","accent":"#2D7BFF","second":"#00E0FF","page":"#EEF3FF","pageCard":"#D6E2FF","pageInk":"#0A1230","pageAccent":"#0B57D0"},"l":0},{"id":"pocketmonsters","name":"Poke","v":"a0c78737","c":{"bg":"#101426","card":"#1C2340","ink":"#FFFFFF","accent":"#FFCB05","second":"#EE1515","page":"#FFFBEA","pageCard":"#FFF0B8","pageInk":"#1A2040","pageAccent":"#E3A500"},"l":0},{"id":"weather","name":"Weather","v":"2f43c9d2","c":{"bg":"#0B1626","card":"#14263F","ink":"#FFFFFF","accent":"#4FC3F7","second":"#FFC947","page":"#EEF7FF","pageCard":"#D7ECFF","pageInk":"#0D2238","pageAccent":"#0288D1"},"l":0},{"id":"autumn","name":"Autumn","v":"ba7e0355","c":{"bg":"#1C0F08","card":"#2E1A0F","ink":"#FFF5E6","accent":"#FF8A1F","second":"#D7263D","page":"#FFF6EA","pageCard":"#FFE4C7","pageInk":"#3A1E0E","pageAccent":"#D9620B"},"l":0},{"id":"junkfood","name":"Junkfood","v":"296c0d05","c":{"bg":"#24101E","card":"#3A1A30","ink":"#FFFFFF","accent":"#FF6FB1","second":"#5FE3C0","page":"#FFF2F8","pageCard":"#FFD9EA","pageInk":"#3A1230","pageAccent":"#E83E8C"},"l":0},{"id":"luxurycars","name":"Luxury Cars","v":"f6b7e32d","c":{"bg":"#08080A","card":"#16161A","ink":"#FFFFFF","accent":"#D4AF37","second":"#C1121F","page":"#F7F4EC","pageCard":"#E9E2CF","pageInk":"#17150F","pageAccent":"#9A7B1C"},"l":0},{"id":"heartattack","name":"Heart Attack","v":"3e1a80b7","c":{"bg":"#1F0A08","card":"#35130F","ink":"#FFFFFF","accent":"#FF3B2F","second":"#FFC72C","page":"#FFF6E5","pageCard":"#FFE5B8","pageInk":"#3A120C","pageAccent":"#DA291C"},"l":0},{"id":"sky","name":"Sky","v":"6680f03f","c":{"bg":"#071A33","card":"#102B4F","ink":"#FFFFFF","accent":"#4DB5FF","second":"#FFD66B","page":"#EEF7FF","pageCard":"#D3E8FB","pageInk":"#0B2340","pageAccent":"#1877D8"},"l":0},{"id":"upsetbirds","name":"Upset Birds","v":"c4446b7a","c":{"bg":"#101A2E","card":"#1C2B48","ink":"#FFFFFF","accent":"#E53935","second":"#FFC93C","page":"#F1F8FF","pageCard":"#D9E9F8","pageInk":"#14213A","pageAccent":"#D32027"},"l":0},{"id":"zombieplanters","name":"Zombie Planters","v":"100b0af2","c":{"bg":"#12201A","card":"#1E3328","ink":"#FFFFFF","accent":"#7BD63A","second":"#FFC83D","page":"#F2FBEA","pageCard":"#DDF1CC","pageInk":"#15261B","pageAccent":"#3E9B0A"},"l":0},{"id":"fantasy","name":"Fantasy","v":"eb4f686e","c":{"bg":"#0F1A14","card":"#1B2C22","ink":"#F7F0DC","accent":"#E0B13A","second":"#E2622B","page":"#F6F1DF","pageCard":"#E4E2C4","pageInk":"#1A2418","pageAccent":"#2F6B3A"},"l":0},{"id":"mmo","name":"MMO","v":"1f23de13","c":{"bg":"#0E1424","card":"#1A2440","ink":"#FFFFFF","accent":"#F2B632","second":"#C8372D","page":"#F3F5FB","pageCard":"#DCE3F3","pageInk":"#111A30","pageAccent":"#1F56B8"},"l":0},{"id":"ff","name":"FF","v":"3a1849e2","c":{"bg":"#0A1030","card":"#141E4A","ink":"#FFFFFF","accent":"#7FC8FF","second":"#D9B8FF","page":"#F2F5FF","pageCard":"#DCE3FA","pageInk":"#0F173A","pageAccent":"#2548B8"},"l":0},{"id":"pixelized","name":"Pixelized","v":"7f299b72","c":{"bg":"#131314","card":"#1E1F20","ink":"#E3E3E3","accent":"#A8C7FA","second":"#6DD58C","page":"#F8FAFD","pageCard":"#E9EEF6","pageInk":"#1F1F1F","pageAccent":"#0B57D0"},"l":0},{"id":"miui","name":"Moo Moo","v":"928e4182","c":{"bg":"#262A2E","card":"#30353A","ink":"#FFFFFF","accent":"#FF8A3D","second":"#29C5F6","page":"#F6F7F8","pageCard":"#E9EBEE","pageInk":"#1B1E21","pageAccent":"#FF6900"},"l":0},{"id":"apples","name":"Apples","v":"932a4fa8","c":{"bg":"#000000","card":"#1C1C1E","ink":"#FFFFFF","accent":"#0A84FF","second":"#30D158","page":"#F2F2F7","pageCard":"#FFFFFF","pageInk":"#000000","pageAccent":"#007AFF"},"l":0},{"id":"color","name":"Color","v":"2652df62","c":{"bg":"#0F1110","card":"#1B1E1C","ink":"#F2F4F3","accent":"#2AD181","second":"#4C97FF","page":"#F5F7F6","pageCard":"#FFFFFF","pageInk":"#141615","pageAccent":"#0B8F52"},"l":0},{"id":"hyper","name":"Hyper","v":"badc1a9f","c":{"bg":"#000000","card":"#1A1A1C","ink":"#FFFFFF","accent":"#4B91FF","second":"#FF7A1F","page":"#F7F7F7","pageCard":"#FFFFFF","pageInk":"#111111","pageAccent":"#1F6BF0"},"l":0},{"id":"computer","name":"Computer","v":"ddfc525a","c":{"bg":"#202020","card":"#2B2B2B","ink":"#FFFFFF","accent":"#60CDFF","second":"#6CCB5F","page":"#F3F3F3","pageCard":"#FBFBFB","pageInk":"#1A1A1A","pageAccent":"#005FB8"},"l":0},{"id":"mac","name":"Mactop","v":"cb9b8c43","c":{"bg":"#1E1E1E","card":"#2A2A2C","ink":"#FFFFFF","accent":"#8E8BFF","second":"#FF9F5A","page":"#ECECEC","pageCard":"#FFFFFF","pageInk":"#1D1D1F","pageAccent":"#4B48D6"},"l":0},{"id":"fruity","name":"Fruity Tooty","v":"2fbcf17c","c":{"bg":"#1B1026","card":"#291A37","ink":"#FFF7EE","accent":"#FF8A1F","second":"#B6E03A","page":"#FFF8EC","pageCard":"#FFFFFF","pageInk":"#2B1A0F","pageAccent":"#D95300"},"l":0},{"id":"beanie","name":"Beanie","v":"0e449032","c":{"bg":"#1F1626","card":"#2C2036","ink":"#FFF5FA","accent":"#FF6FA3","second":"#A58BFF","page":"#FFF4F8","pageCard":"#FFFFFF","pageInk":"#2B1823","pageAccent":"#C22A63"},"l":0},{"id":"stoneage","name":"Stone Age","v":"74e44509","c":{"bg":"#231D17","card":"#322A21","ink":"#FFF4E3","accent":"#FF8A3D","second":"#3CC4D2","page":"#F6EEDF","pageCard":"#FFFAF0","pageInk":"#2B231A","pageAccent":"#C24A06"},"l":0},{"id":"future","name":"Future","v":"c45c68f2","c":{"bg":"#101A2E","card":"#1A2740","ink":"#F2F8FF","accent":"#2FD6CF","second":"#FF7A6B","page":"#F2F7FC","pageCard":"#FFFFFF","pageInk":"#14203A","pageAccent":"#087F7A"},"l":0},{"id":"oz","name":"Oz","v":"1caad373","c":{"bg":"#0B1F16","card":"#143024","ink":"#F2FFF8","accent":"#2EE08F","second":"#FF7FB5","page":"#F1FBF5","pageCard":"#FFFFFF","pageInk":"#0E2419","pageAccent":"#087A45"},"l":0},{"id":"steroids","name":"Steroids","v":"2765d54a","c":{"bg":"#0B0E14","card":"#171C26","ink":"#FFFFFF","accent":"#4D9BFF","second":"#3FD98A","page":"#F4F6FA","pageCard":"#FFFFFF","pageInk":"#10141C","pageAccent":"#1463E6"},"l":0},{"id":"oceanlife","name":"Ocean Life","v":"7cb500f7","c":{"bg":"#061A2E","card":"#0E2A45","ink":"#F2FAFF","accent":"#3CC3F5","second":"#FF9478","page":"#EEF8FD","pageCard":"#FFFFFF","pageInk":"#0A2238","pageAccent":"#0A6FB5"},"l":0},{"id":"safari","name":"Safari","v":"9d06f803","c":{"bg":"#1F150D","card":"#2E2116","ink":"#FFF6E8","accent":"#F2A03D","second":"#9CC255","page":"#FBF3E4","pageCard":"#FFFFFF","pageInk":"#2A1B0E","pageAccent":"#B8560B"},"l":0}]}</script>
+    <!-- themes:end -->
   </div>
 </section>
+<script src="assets/themes.js"></script>
 
 <section id="preview" style="padding-top:20px">
   <div class="wrap live">
@@ -713,9 +779,10 @@ footer a{color:var(--fg)}
 <section id="module">
   <div class="wrap" style="max-width:820px">
     <div class="sec-head"><span class="eyebrow">Optional download</span><h2>HexNext-QS-Notifications-Module</h2></div>
-    <p style="color:var(--muted)">System UI paints every Quick panel tile one colour and keeps pictures off notification cards, so overlays alone cannot show them the way the theme previews do. This optional LSPosed module keeps a theme's full-colour tile glyphs, puts its art behind your notifications and colours the status bar icons. Turn each part on or off in #Hex Next under Packs › System UI hook.</p>
+    <p style="color:var(--muted)">System UI paints every Quick panel tile one colour and keeps pictures off notification cards, so overlays alone cannot show them the way the theme previews do. This optional LSPosed module keeps a theme's full-colour tile glyphs, puts its art behind your notifications and colours the status bar icons. Turn each part on or off in #Hex Next under Theme Packs › System UI hook.</p>
     <p style="margin:22px 0"><a class="btn btn-primary" href="downloads/HexNext-QS-Notifications-Module.apk" download>Download HexNext-QS-Notifications-Module.apk</a></p>
-    <p style="color:var(--muted);font-size:14px;overflow-wrap:anywhere">Version <span id="module-version">1.2</span> · <span id="module-size">2.0 MB</span> · SHA-256 <code>91a53788d2e98c3b90e7752eaaac66c2db42658361bbfe2b8230527eb06ed9b8</code></p>
+    <p style="color:var(--muted);font-size:14px;overflow-wrap:anywhere">Version <span id="module-version">1.3</span> · <span id="module-size">2.0 MB</span> · SHA-256 <code>321117576e95c51e2b0e4992919bdf9a2f7230ad2810803971f00d10ad52b652</code></p>
+    <p style="color:var(--muted);font-size:14px">Version 1.3 is signed with the #Hex Next release key. If version 1.2 is installed, uninstall it first: Android does not update an app to a copy signed with another key. Then install 1.3 and switch it on again in Vector.</p>
     <p><a class="btn btn-ghost" href="setup-guide.html">Full setup guide: root, Zygisk, Vector and the module</a></p>
     <details open><summary>How to set it up</summary><p>You need root with Zygisk (Zygisk Next or ReZygisk on KernelSU, or Magisk's Zygisk) and Vector, the current LSPosed.</p>
       <p>1. Install the APK. Owner and beta builds of #Hex Next can install it for you from the System UI hook card.<br>
@@ -730,7 +797,7 @@ footer a{color:var(--fg)}
   <div class="wrap" style="max-width:820px">
     <div class="sec-head"><span class="eyebrow">FAQ</span><h2>Questions</h2></div>
     <details><summary>Which phones work?</summary><p>Samsung Galaxy phones on One UI 7, 8 and 9 (Android 15 to 17). #Hex Next themes Samsung's own system apps.</p></details>
-    <details><summary>Do I need root?</summary><p>Full theming needs root (any root manager, such as KernelSU or Magisk) or system access through Shizuku running as root. Without root, Shizuku over wireless debugging can still apply the accent colour. The <a href="setup-guide.html">setup guide</a> lists the root methods for each security update.</p></details>
+    <details><summary>Do I need root?</summary><p>Full theming needs root (any root manager, such as KernelSU or Magisk) or system access through Shizuku running as root. Without root, Shizuku over wireless debugging can still apply the accent colour. The <a href="setup-guide.html">setup guide</a> lists the root methods for each security update, and the community's <a href="https://github.com/fynks/awesome-temporary-root" rel="noopener">Awesome Temporary Root</a> guide keeps the current method for every model.</p></details>
     <details><summary>Is it safe? Can I undo it?</summary><p>Yes. Test Mode tries a theme only until the next restart, Remove takes every overlay off in one tap, and a recovery watchdog turns the theme off if System UI keeps crashing after a restart. #Hex Next never touches your files.</p></details>
     <details><summary>Do I need my own AI key?</summary><p>No. Two free, experimental agents work out of the box, though their themes may be lower quality. For the best results add a key for any supported service. A Google Gemini key is free and needs no card: get one at <a href="https://aistudio.google.com/app/apikey" rel="noopener">aistudio.google.com</a>.</p></details>
     <details><summary>How many theme packs are there?</summary><p>More than 50, from minimal to wild, with new packs added regularly. Any theme you build can also be saved as your own pack.</p></details>
@@ -751,24 +818,14 @@ footer a{color:var(--fg)}
       <a href="privacy-policy.html#delete-data">Delete your data</a>
       <a href="#module">System UI module</a>
       <a href="setup-guide.html">Setup guide</a>
+      <a href="https://github.com/fynks/awesome-temporary-root" rel="noopener">Temporary root guide</a>
+      <a href="contact.html?type=issue">Report an issue</a>
+      <a href="contact.html">Contact the developer</a>
       <a href="https://www.reddit.com/r/HexNext/" rel="noopener">Reddit</a>
     </nav>
   </div>
 </footer>
 
-<script>
-document.querySelectorAll('.tab').forEach(function (tab) {
-  tab.addEventListener('click', function () {
-    document.querySelectorAll('.tab').forEach(function (t) {
-      var on = t === tab;
-      t.setAttribute('aria-selected', on ? 'true' : 'false');
-      var panel = document.getElementById(t.getAttribute('aria-controls'));
-      panel.hidden = !on;
-      panel.classList.toggle('on', on);
-    });
-  });
-});
-</script>
 <script src="assets/try.js" defer></script>
 </body>
 </html>
