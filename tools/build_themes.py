@@ -48,7 +48,7 @@ TILE = 96            # tile of the controls sheet, px
 ATLAS_W = 720        # width of a look's sprite sheet, px
 ICON_SHARE = 0.9     # how much of its tile an icon fills; the rest is the card colour around it
 PARTS_COLS = 8
-OWNED = re.compile(r"(wallpaper|card|card-night|dialpad|dialpad-night|parts|look-[a-z0-9]+)\.webp")
+OWNED = re.compile(r"(wallpaper|card|card-night|keyboard|keyboard-night|dialpad|dialpad-night|parts|look-[a-z0-9]+)\.webp")
 SWITCH_SPAN = 2      # a switch takes two tiles
 MAX_ENTRY = 16 * 1024 * 1024
 IMAGE = re.compile(r".*\.(png|jpg|jpeg|webp)$", re.I)
@@ -382,6 +382,62 @@ def switch(track: Patch | None, thumb: Patch | None, on: bool, ink: tuple[int, i
     return out
 
 
+
+KEYBOARD_ROWS = ["qwertyuiop", "asdfghjkl", "^zxcvbnm<", "!,_.>"]   # ^ shift, < delete, _ space, ! symbols, > enter
+KEYBOARD_SIZE = (720, 504)   # the keys and, above them, room for the toolbar row
+
+
+def keyboard(pack: Pack, category: str) -> Image.Image | None:
+    """The Samsung Keyboard as a pack draws it: its backdrop and its key art, four rows of keys.
+
+    Letter keys use textinput_qwerty_btn, the shift, delete, symbols and enter keys the lighter
+    textinput_qwerty_btn_light, as the keyboard does; each is a nine-patch stretched to the key.
+    The letters take white or near black, whichever reads on the key's centre."""
+    from PIL import ImageDraw, ImageFont
+    back = patch(pack, [category], ["0bg", "keyboard_background_image"])
+    key = patch(pack, [category], ["textinput_qwerty_btn"])
+    if back is None and key is None:
+        return None
+    width, height = KEYBOARD_SIZE
+    out = Image.new("RGBA", (width, height), rgb(pack.colour("xx0", "#101418")) + (255,))
+    if back is not None:
+        out.alpha_composite(back.draw(width, height))
+    light = patch(pack, [category], ["textinput_qwerty_btn_light"]) or key
+    gap, top = 8, 62
+    row_h = (height - top - gap * (len(KEYBOARD_ROWS) + 1)) // len(KEYBOARD_ROWS)
+    unit = (width - gap * 11) / 10
+    size = int(row_h * 0.36)
+    try:
+        font = ImageFont.truetype("DejaVuSans.ttf", size)
+    except OSError:
+        try:
+            font = ImageFont.load_default(size=size)
+        except TypeError:   # Pillow before 10.1
+            font = ImageFont.load_default()
+    labels = {"^": "\u21e7", "<": "\u232b", "!": "!#1", ">": "\u21b5", "_": "", ",": ","}
+    for r, row in enumerate(KEYBOARD_ROWS):
+        spans = [4.6 if c == "_" else 1.5 if c in "^<!>" else 1.0 for c in row]
+        total = sum(spans) * unit + gap * (len(row) - 1)
+        x = (width - total) / 2
+        y = top + gap + r * (row_h + gap)
+        for c, span in zip(row, spans):
+            w = int(span * unit)
+            art = light if c in "^<!>" else key
+            if art is not None:
+                piece = art.draw(w, row_h)
+                out.alpha_composite(piece, (int(x), y))
+                centre = np.asarray(piece.convert("RGBA"))[row_h // 2, w // 2]
+                level = centre[:3].mean() if centre[3] > 96 else np.asarray(out)[y + row_h // 2, int(x) + w // 2][:3].mean()
+            else:
+                level = 0
+            text = labels.get(c, c)
+            if text:
+                ink = (20, 20, 24, 255) if level > 150 else (255, 255, 255, 255)
+                ImageDraw.Draw(out).text((x + w / 2, y + row_h / 2), text, fill=ink, font=font, anchor="mm")
+            x += w + gap
+    return out
+
+
 def save(picture: Image.Image, path: Path, quality: int = 80) -> None:
     """[picture] as WebP: lossy, or lossless when that is smaller (flat vector art often is)."""
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -430,6 +486,11 @@ def build(pack: Pack, out: Path) -> tuple[dict, dict]:
         name = "card-night.webp" if "night" in card.name else "card.webp"
         photo(card, out / name, 720, 74)
         layout["pics"].append([name, "Notification card, dark mode" if "night" in card.name else "Notification card", "card"])
+    for category, name, label in (("keyboard", "keyboard.webp", "Samsung Keyboard"), ("keyboard_night", "keyboard-night.webp", "Samsung Keyboard, dark mode")):
+        picture = keyboard(pack, category) if category in pack.by_category else None
+        if picture is not None:
+            save(picture.convert("RGB"), out / name, 76)
+            layout["pics"].append([name, label, "keys"])
 
     # Icon looks: one sprite sheet per look, every part in the same tile order.
     categories = {raw: Category(raw) for raw in pack.by_category}
