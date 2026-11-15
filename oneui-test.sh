@@ -25,7 +25,7 @@
 # Written for /system/bin/sh (mksh) and the tools every Android 15+ phone has. Keep it that way:
 # no bash, no Termux packages.
 
-SCRIPT_VERSION=1
+SCRIPT_VERSION=2
 
 PATH=/system/bin:/system/xbin:/vendor/bin:/apex/com.android.art/bin:$PATH
 export PATH
@@ -318,6 +318,10 @@ com.samsung.android.da.daagent com.samsung.android.app.sketchbook com.samsung.an
 com.wssyncmldm com.samsung.accessibility com.samsung.android.biometrics.app.setting
 com.samsung.android.privacydashboard com.samsung.android.callassistant com.sec.android.app.camera
 com.samsung.android.app.cameraassistant com.sec.android.daemonapp
+com.samsung.android.scloud com.samsung.android.accessibility.talkback com.samsung.accessory.budsunitemgr
+com.samsung.android.dynamiclock com.samsung.android.samsungpassautofill com.samsung.android.service.tagservice
+com.samsung.android.service.airviewdictionary com.samsung.android.mcfds com.samsung.android.video
+com.samsung.app.newtrim com.samsung.android.visionintelligence com.samsung.android.app.galaxyraw
 com.samsung.android.messaging com.samsung.android.app.galaxyfinder com.samsung.android.themecenter
 com.samsung.systemui.navillera com.samsung.android.goodlock com.samsung.android.themedesigner"
 
@@ -402,7 +406,10 @@ if [ -n "$UNZIP" ] && [ -n "$SYSUI" ]; then
       grep -E 'DarkIconDispatcher|NotificationBackgroundView|BrightnessLottie|EmptyMediaPlayer|DrawablePainter|QSTileViewImpl|QSIconViewImpl|SecQSTile|QSTileImpl|BrightnessSlider|VolumePanel|SecVolume' |
       head -c 8000000 >"$R/systemui-methods.txt" 2>/dev/null
   fi
-  t 30 dumpsys activity service com.android.systemui/.SystemUIService dumpables >"$R/systemui-dumpables.txt" 2>&1
+  # Names only (--list). The full dump holds notification keys, recently used apps, the song that
+  # is playing, Bluetooth and Wi-Fi names; the filter keeps one-word lines in case --list is ignored.
+  t 30 dumpsys activity service com.android.systemui/.SystemUIService dumpables --list 2>/dev/null |
+    grep -E '^[A-Za-z0-9_.$:/-]+$' | head -3000 >"$R/systemui-dumpables.txt"
 fi
 
 # ---------------------------------------------------------------- 5. Hex Next's own files
@@ -470,7 +477,15 @@ lookup() { printf '%s %s -> %s\n' "$1" "$2" "$(t 10 cmd overlay lookup --user cu
 # Crashes and overlay messages only; never the whole log.
 {
   sec "crash buffer: System UI, system server and Hex Next"
-  t 30 logcat -d -b crash 2>/dev/null | grep -i -E -A 25 'com\.android\.systemui|system_server|hexnext' | tail -400
+  # Only the lines of those processes, found by the PID that logged the crash: the buffer holds
+  # other apps' crashes too, and their names would say which apps are installed.
+  t 30 logcat -d -b crash -v threadtime >"$W/crash.txt" 2>/dev/null
+  CRASH_PIDS=$(grep -E 'Process: (com\.android\.systemui|system_server|com\.hexnext\.[A-Za-z0-9_.]+), PID: |FATAL EXCEPTION IN SYSTEM PROCESS|>>> (com\.android\.systemui|system_server|com\.hexnext\.[A-Za-z0-9_.]+) <<<' "$W/crash.txt" 2>/dev/null |
+    sed -n 's/^[0-9-]* [0-9:.]* *\([0-9][0-9]*\) .*/\1/p' | sort -u)
+  for p in $CRASH_PIDS; do
+    grep -E "^[0-9-]+ [0-9:.]+ +$p +[0-9]+ " "$W/crash.txt" 2>/dev/null
+  done | sort | tail -400
+  rm -f "$W/crash.txt"
   sec "overlay and Hex Next lines"
   t 30 logcat -d 2>/dev/null | grep -i -E 'OverlayManager|idmap2|FabricatedOverlay|HexNext|ThemeService|ThemeApplier|FrroWriter' | tail -400
 } >"$R/logcat.txt" 2>&1
