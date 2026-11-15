@@ -24,3 +24,10 @@ in tab order. To refresh after packs change:
 
 Add `--only id,id` to redraw some packs. Only pictures and display names are copied to the site.
 `assets/themes/galaxy/preview-002.webp` is the middle phone of the hero and is kept by hand.
+
+## One UI test (unlisted)
+
+`oneui-test.html` is the step-by-step page for volunteers who test One UI 7 and One UI 8 on a
+rooted phone, and `oneui-test.sh` is the script its one command downloads and runs. The script's
+source of record is `tools/device/oneui-test.sh` in the Hex-Next app repository; copy it here when
+it changes. The page is not linked from the landing page and asks search engines not to index it.

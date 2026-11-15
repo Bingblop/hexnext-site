@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#Hex Next One UI 7 and 8 test</title>
+<meta name="description" content="Step-by-step instructions for volunteers who test #Hex Next on a rooted Samsung Galaxy phone with One UI 7 or One UI 8.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/favicon.png">
+<style>
+  :root { color-scheme: light dark; --fg:#1b1c20; --bg:#ffffff; --muted:#5a5f6b; --line:#e3e5ea; --card:#f5f6f8; --accent:#0a8fa8; }
+  @media (prefers-color-scheme: dark) { :root { --fg:#e8eaee; --bg:#16181e; --muted:#9aa0ad; --line:#2a2e38; --card:#1e2129; --accent:#45d4e6; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:32px 16px 64px; }
+  a { color:var(--accent); overflow-wrap:anywhere; }
+  h1 { font-size:30px; margin:0 0 4px; } h2 { font-size:22px; margin:40px 0 10px; } h3 { font-size:18px; margin:24px 0 6px; }
+  p.meta { color:var(--muted); margin:0 0 24px; }
+  ol, ul { padding-left:22px; } li { margin:6px 0; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:14px 0; }
+  .note { border-left:4px solid var(--accent); }
+  .warn { border-left:4px solid #e0703a; }
+  .btn { display:inline-block; padding:12px 20px; border-radius:999px; background:var(--accent); color:#06121a; font-weight:600; text-decoration:none; margin:6px 0; }
+  code { background:var(--card); border:1px solid var(--line); border-radius:6px; padding:1px 6px; font-size:14px; }
+  nav.top { margin:0 0 24px; font-size:15px; }
+  /* The command to copy: the page's card, code and button, put together. */
+  .cmd code { display:block; background:var(--bg); padding:10px 12px; overflow-wrap:anywhere; -webkit-user-select:all; user-select:all; }
+  button.btn { border:0; font:inherit; font-weight:600; cursor:pointer; margin:10px 0 0; }
+  .cmd .said { display:block; color:var(--muted); min-height:1.6em; }
+</style>
+</head>
+<body>
+<main>
+<nav class="top"><a href="index.html">← #Hex Next home</a></nav>
+<h1>One UI 7 and 8 test</h1>
+<p class="meta">Thank you for helping. This test shows how One UI 7 and One UI 8 name their colours and pictures, so #Hex Next can theme those versions properly. It takes about 20 minutes, and most of that is waiting. You do not need to know anything about rooting or terminals: do the steps in order, exactly as written.</p>
+
+<div class="card warn"><p style="margin:0"><b>Only do this on your own phone, and only if it is rooted right now.</b> The test theme is applied in Test mode, so a restart removes it completely. If the screen ever freezes or looks wrong, hold the <b>Side button</b> and the <b>Volume down</b> button together for about 10 seconds, until the phone restarts. After the restart the phone looks normal again. With temporary root, a restart also ends root until you root the phone again.</p></div>
+
+<h2 id="need">What you need</h2>
+<ul>
+  <li>A Samsung Galaxy phone on <b>One UI 7</b> or <b>One UI 8</b>. To check, open Settings › About phone › Software information and read the line <b>One UI version</b>.</li>
+  <li><b>Root that works right now</b>, with KernelSU, Magisk or APatch. If the phone was restarted after you last rooted it, root it again first.</li>
+  <li>Wi-Fi, at least 30% battery and about 1 GB of free storage.</li>
+  <li>About 20 minutes.</li>
+</ul>
+
+<h2 id="privacy">What the test reads, and what it never reads</h2>
+<p><b>It reads:</b> technical files from Samsung's own system apps (the names of their colours and icons), Samsung's colour palette files, #Hex Next's own logs, the phone's model and software version, and about 16 pictures of system screens that it takes by itself: the Quick panel, Display settings, Sound settings, the App info page of #Hex Next, the phone keypad, the volume slider and the terminal with the keyboard.</p>
+<p><b>It never opens</b> your photos, messages, contacts, accounts or passwords, and it does not list your apps. The test sends nothing anywhere. It makes one file, and you decide to send it.</p>
+<div class="card note"><p style="margin:0">The Quick panel picture shows what is on your Quick panel at that moment, such as the name of your Wi-Fi network, a connected Bluetooth device or the song that is playing. Part 1 clears your notifications, so none of them are in the picture.</p></div>
+
+<h2 id="part1">Part 1: Get the phone ready</h2>
+<ol>
+  <li><b>Turn on Samsung's colour palette.</b> Open <b>Settings</b>. Tap <b>Wallpaper and style</b>. Tap <b>Color palette</b>. If there is a switch at the top, turn it on. Tap any one of the colour sets. Tap <b>Apply</b>. If you already use a colour palette, leave it as it is.</li>
+  <li><b>Clear your notifications.</b> Swipe down from the top of the screen and tap <b>Clear</b>.</li>
+  <li><b>Stay on Wi-Fi</b> until the test is finished.</li>
+</ol>
+
+<h2 id="part2">Part 2: Install #Hex Next Beta and apply the test theme</h2>
+<p>Open this page on the phone you are testing, then tap the button.</p>
+<p><a class="btn" href="https://hexnext-license-server.hexnext.workers.dev/v1/beta/download" rel="nofollow" download>Download #Hex Next Beta</a></p>
+<ol>
+  <li>If the browser asks, tap <b>Download</b> (or <b>Download anyway</b>).</li>
+  <li>When the download is finished, tap <b>Open</b>. No <b>Open</b> button? Open the <b>My Files</b> app, tap <b>Downloads</b> and tap the file whose name starts with <code>HexNext-Beta</code>.</li>
+  <li>If the phone says it is not allowed to install unknown apps, tap <b>Settings</b>, turn on <b>Allow from this source</b> and tap the back arrow.</li>
+  <li>Tap <b>Install</b>. If a Google Play Protect box appears, tap <b>More details</b> and then <b>Install anyway</b>.</li>
+  <li>Tap <b>Open</b>. The app is called <b>#Hex Next Beta</b>.</li>
+  <li>The app opens a guide called <b>Set up Hex Next</b>. Go through its pages like this:
+    <ul>
+      <li><b>Welcome</b>, <b>AI themes</b> and <b>Your phone</b>: tap <b>Next</b> on each.</li>
+      <li><b>Root or Shizuku</b>: tap <b>Request root access</b>.
+        <ul>
+          <li><b>Magisk:</b> a box appears. Tap <b>Grant</b>.</li>
+          <li><b>KernelSU or APatch:</b> no box appears. Open your root app, tap <b>Superuser</b>, find <b>#Hex Next Beta</b> in the list and turn its switch on. Go back to #Hex Next Beta and tap <b>Request root access</b> again.</li>
+        </ul>
+        When the page says <b>Connected</b>, tap <b>Next</b>.</li>
+      <li><b>Notifications</b>: tap <b>Allow notifications</b>, then <b>Allow</b>. Tap <b>Next</b>.</li>
+      <li><b>Test mode first</b>: tap <b>Next</b>.</li>
+      <li><b>Scan your phone</b>: tap <b>Scan</b>. Wait about one minute, until it says <b>Phone scanned</b>. Tap <b>Next</b>.</li>
+      <li><b>Starting pack</b>: do not choose a pack. Leave it on <b>Colours only</b> and tap <b>Next</b>.</li>
+      <li><b>System UI hook</b>: tap <b>Next</b>.</li>
+      <li><b>All set</b>: tap <b>Done</b>.</li>
+    </ul>
+  </li>
+  <li>You now see the main screen. Near the bottom there is a ticked box that says <b>Test Mode: Overlays reset on reboot</b>. It is locked on. That is correct.</li>
+  <li>Tap <b>Apply theme</b> at the bottom right. Wait. It takes one to three minutes and shows a progress bar, and the screen may flicker once or twice. It is finished when you see <b>Theme applied</b>. Do not tap anything else in the app.</li>
+</ol>
+<div class="card note"><p style="margin:0">Some colours on the phone now look different. That is the test theme, and Part 5 removes it. If the app says <b>Couldn't apply the theme</b> instead, that is useful to know as well: carry on with Part 3, and the test records what went wrong.</p></div>
+
+<h2 id="part3">Part 3: Run the test</h2>
+<ol>
+  <li><b>Install Termux</b>, a free terminal app. Open the <b>Play Store</b>, search for <b>Termux</b>, tap <b>Install</b> and then <b>Open</b>. Not in your Play Store? Get it from <a href="https://f-droid.org/packages/com.termux/" rel="noopener">F-Droid's Termux page</a>: tap <b>Download APK</b> there and install it the same way you installed #Hex Next Beta.</li>
+  <li>In Termux, wait until you see a line that ends with <code>$</code> and a blinking block. The first start can take a minute.</li>
+  <li><b>Give Termux root.</b>
+    <ul>
+      <li><b>KernelSU or APatch:</b> open your root app, tap <b>Superuser</b>, find <b>Termux</b> in the list and turn its switch on. Then go back to Termux.</li>
+      <li><b>Magisk:</b> nothing to do yet. A box asks you in step 5.</li>
+    </ul>
+  </li>
+  <li><b>Copy this command.</b> Tap <b>Copy</b>:
+    <div class="card cmd">
+      <code id="cmd">curl -fsSL https://bingblop.github.io/hexnext-site/oneui-test.sh -o t.sh &amp;&amp; su -c "sh $PWD/t.sh"</code>
+      <button class="btn" type="button" id="copy">Copy</button><span class="said" id="said" role="status" aria-live="polite"></span>
+    </div>
+  </li>
+  <li>Go back to Termux. Touch and hold the black screen until a small menu appears, then tap <b>Paste</b>. The command appears. Tap the <b>Enter</b> key on the keyboard (the key at the bottom right). <b>Magisk:</b> when the box appears, tap <b>Grant</b>.</li>
+  <li><b>Put the phone down and do not touch it.</b> For 5 to 10 minutes the screen changes by itself: it opens the Quick panel, Settings and the phone keypad, and it switches between light and dark mode once. That is the test taking its pictures. The screen stays on by itself.</li>
+  <li>The test is finished when Termux is back on the screen and says <b>DONE</b>.</li>
+</ol>
+
+<h2 id="part4">Part 4: Send the result</h2>
+<ol>
+  <li>The result is <b>one file</b> in your Downloads folder. Open the <b>My Files</b> app and tap <b>Downloads</b>. The file's name starts with <code>HexNextTest</code> and ends with <code>.tar.gz</code>. Termux shows the full name under the word DONE.</li>
+  <li>Send that file to the person who gave you this page. Is it too big to attach? Upload it to Google Drive, set sharing to <b>Anyone with the link</b> and send the link.</li>
+</ol>
+
+<h2 id="part5">Part 5: Put your phone back</h2>
+<ol>
+  <li>Open <b>#Hex Next Beta</b>. Tap <b>Remove</b> at the bottom left, then tap <b>Remove</b> again in the box that asks. Wait until it says <b>Theme removed</b>.</li>
+  <li>If you turned the colour palette on only for this test, turn it off again: Settings › Wallpaper and style › Color palette.</li>
+  <li>You can now uninstall #Hex Next Beta and Termux if you do not want to keep them: touch and hold the app's icon and tap <b>Uninstall</b>. After you have sent the result file, you can delete it from Downloads.</li>
+</ol>
+
+<h2 id="help">If something goes wrong</h2>
+<ul>
+  <li><b>Termux says "This test needs root, and it did not get root."</b> Do step 3 of Part 3, then paste the command again.</li>
+  <li><b>Termux says "curl: not found" or "command not found".</b> Type <code>pkg install -y curl</code>, tap Enter and wait until the <code>$</code> line is back. Then paste the command again.</li>
+  <li><b>Termux says "ALMOST DONE. One thing is missing:".</b> Do what the line under it says, then paste the command again. If you cannot do it, send the file anyway.</li>
+  <li><b>The screen went dark or the phone locked during the test.</b> Unlock it and open Termux again. The test carries on by itself. Wait for DONE.</li>
+  <li><b>The phone will not install the app and names Auto Blocker.</b> Open Settings › Security and privacy › Auto Blocker and turn it off. Install the app, then turn Auto Blocker on again after Part 5.</li>
+  <li><b>#Hex Next Beta says the beta has ended.</b> Tell the person who gave you this page. They will send you a newer build.</li>
+  <li><b>You restarted the phone in the middle.</b> With temporary root, root the phone again. Then open #Hex Next Beta, tap <b>Apply theme</b>, wait for <b>Theme applied</b> and do Part 3 from step 5.</li>
+</ul>
+<p>Still stuck? Take a screenshot of what you see and send it to the person who gave you this page.</p>
+
+<p class="meta" style="margin-top:48px"><a href="index.html">#Hex Next</a> · <a href="privacy-policy.html">Privacy policy</a> · <a href="terms-of-service.html">Terms of service</a> · <a href="contact.html">Contact</a></p>
+</main>
+<script>
+(function () {
+  var button = document.getElementById('copy');
+  var code = document.getElementById('cmd');
+  var said = document.getElementById('said');
+  function select() {
+    var range = document.createRange();
+    range.selectNodeContents(code);
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+  function done(ok) {
+    said.textContent = ok ? 'Copied' : 'Touch and hold the command, then tap Copy';
+    setTimeout(function () { said.textContent = ''; }, 4000);
+  }
+  button.addEventListener('click', function () {
+    var text = code.textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { select(); done(false); });
+      return;
+    }
+    select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    done(ok);
+  });
+})();
+</script>
+</body>
+</html>
