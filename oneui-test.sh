@@ -13,6 +13,11 @@
 #
 # What it never reads
 #   Photos, messages, contacts, accounts, passwords, notifications, or the list of installed apps.
+#   Anything that would name another app is left out or replaced with "(app)": overlays of apps
+#   outside Android, Samsung and Google, #Hex Next's App icons overlays (HexNextIcons_<app>) and
+#   the log lines about them (version 3, round-4 review); other apps' overlays on system apps,
+#   their overlay files, the words on screen in the layout dumps, and root module names other than
+#   LSPosed, Zygisk and #Hex Next's own (version 4, 2.6.3 bug check).
 #
 # How a tester runs it (Termux, one line):
 #   curl -fsSL https://bingblop.github.io/hexnext-site/oneui-test.sh -o t.sh && su -c "sh $PWD/t.sh"
@@ -25,7 +30,7 @@
 # Written for /system/bin/sh (mksh) and the tools every Android 15+ phone has. Keep it that way:
 # no bash, no Termux packages.
 
-SCRIPT_VERSION=2
+SCRIPT_VERSION=4
 
 PATH=/system/bin:/system/xbin:/vendor/bin:/apex/com.android.art/bin:$PATH
 export PATH
@@ -86,6 +91,53 @@ if command -v timeout >/dev/null 2>&1; then TO=timeout; else TO=; fi
 t() { if [ -n "$TO" ]; then "$TO" "$@"; else shift; "$@"; fi; }
 sec() { printf '\n===== %s =====\n' "$1"; }
 clean() { printf '%s' "$1" | tr -c 'A-Za-z0-9._-' '_'; }
+
+# System packages may be named; any other app may not (it would say which apps are installed).
+SYSTEM_PKG='^(android|android\.[A-Za-z0-9_.]+|com\.android\.[A-Za-z0-9_.]+|com\.samsung\.[A-Za-z0-9_.]+|com\.sec\.[A-Za-z0-9_.]+|com\.google\.android\.[A-Za-z0-9_.]+|com\.hexnext\.[A-Za-z0-9_.]+)$'
+# names_other_app <text>: true when the text names a package outside Android, Samsung, Google and
+# Hex Next. Code and file names that look like packages (java.lang.Error, base.apk) do not count,
+# nor do the libraries System UI, Hex Next and its module run (Lottie, Dagger, Guava, Shizuku's
+# code, the Xposed and LSPosed frames of a hook): a crash's frames name them. A file name has one
+# dot ("com.example.art" is an app); only native libraries and jars may have more. A name may end
+# a sentence ("Unknown package: com.example.app.").
+names_other_app() {
+  printf '%s\n' "$1" | tr -c 'A-Za-z0-9_.\n' '\n' | grep -E '^[a-z][a-z0-9_]+(\.[A-Za-z][A-Za-z0-9_]*)+[.]*$' |
+    grep -v -E '^((java|javax|kotlin|kotlinx|androidx|dalvik|libcore|sun|dagger|org\.json|org\.xmlpull|org\.w3c|org\.xml|com\.google\.common|com\.airbnb\.lottie|org\.lsposed\.lspd|org\.lsposed\.hiddenapibypass|rikka\.shizuku|rikka\.sui|moe\.shizuku\.server|moe\.shizuku\.api|moe\.shizuku\.privileged)\.|de\.robv\.android\.xposed\.[A-Z])' |
+    grep -v -E '\.(so|jar)[.]*$|^[^.]+\.(apk|frro|idmap|xml|arsc|dex|odex|vdex|oat|art|json|jsonl|txt|log|png|jpg|webp|ttf|otf)[.]*$' |
+    grep -v -q -E "$SYSTEM_PKG"
+}
+# only_system_lines: copies stdin without the lines that name another app (keep it to a few
+# hundred lines: it starts four small tools per line).
+only_system_lines() {
+  while IFS= read -r line; do
+    names_other_app "$line" || printf '%s\n' "$line"
+  done
+}
+# no_posting_app: System UI's crash lines with the app a notification came from written "(app)"
+# (pkg=, opPkg=, "package <name>" and the |<name>| of a notification key), unless it is Android,
+# Samsung, Google or Hex Next. An e-mail address, or a chat id in a notification's tag (a phone
+# number, then @ and the chat service's host), is written "(id)".
+no_posting_app() {
+  sed -E -e 's/(pkg=|opPkg=|packageName=|package=|package |[|])((android|com\.android\.[A-Za-z0-9_.]+|com\.samsung\.[A-Za-z0-9_.]+|com\.sec\.[A-Za-z0-9_.]+|com\.google\.android\.[A-Za-z0-9_.]+|com\.hexnext\.[A-Za-z0-9_.]+)([^A-Za-z0-9_.]|$))/\1@HN_KEEP@\2/g' \
+    -e 's/(pkg=|opPkg=|packageName=|package=|package |[|])[a-z][a-z0-9_]*([.][A-Za-z0-9_]+)+/\1(app)/g' \
+    -e 's/@HN_KEEP@//g' \
+    -e 's/([^@A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+@[A-Za-z][A-Za-z0-9-]*([.][A-Za-z0-9-]+)+([^@A-Za-z0-9-]|$)/\1(id)\3/g'
+}
+# no_app_names: Hex Next's own files, with App icons overlay names and other apps' targets
+# replaced by "(app)" and its icon pass log entries (which list apps) left out. Hex Next's JSON
+# writes / as \/ (Android's org.json), so that is read as / first, or no path rule would match.
+no_app_names() {
+  grep -v -E '"message": ?"(app icon |applyIconOverlays)' |
+    sed -E -e 's#\\/#/#g' \
+      -e 's/HexNextIcons_[A-Za-z0-9_.]+/HexNextIcons_(app)/g' \
+      -e '/"target": ?"(android"|com\.android\.|com\.samsung\.|com\.sec\.|com\.google\.android\.|")/!s/"target": ?"[^"]*"/"target": "(app)"/g' \
+      -e '/"overlayId": ?"(android[:"]|com\.android\.|com\.samsung\.|com\.sec\.|com\.google\.android\.)/!s/"overlayId": ?"[^"]*"/"overlayId": "(app)"/g' \
+      -e '/ -> (android|com\.android\.[A-Za-z0-9_.]+|com\.samsung\.[A-Za-z0-9_.]+|com\.sec\.[A-Za-z0-9_.]+|com\.google\.android\.[A-Za-z0-9_.]+)$/!s/ -> [A-Za-z0-9_.]+$/ -> (app)/' \
+      -e 's#/data/app/[^"[:space:]]*#/data/app/(left out)#g' \
+      -e 's#/data/resource-cache/((android|com\.android|com\.samsung|com\.sec|com\.google\.android|com\.hexnext)[.-])#@HN_KEEP@\1#g' \
+      -e 's#/data/resource-cache/[^"[:space:]]*#/data/resource-cache/(app)#g' \
+      -e 's#@HN_KEEP@#/data/resource-cache/#g'
+}
 
 STEPS=6
 STEP=0
@@ -162,7 +214,12 @@ step "Reading the phone's version"
   done
   t 10 su -v 2>&1 | head -2
   t 10 su -V 2>&1 | head -2
-  sec "root modules (folder names only)"; ls /data/adb/modules 2>&1
+  sec "root modules (LSPosed, Zygisk and Hex Next by name, the rest counted)"
+  # A module's folder name says which root tool it is: only the ones the System UI module and the
+  # early recovery need are named.
+  mods=$(ls /data/adb/modules 2>/dev/null)
+  printf '%s\n' "$mods" | grep -i -E 'hexnext|lsposed|zygisk'
+  say "(other modules: $(printf '%s\n' "$mods" | grep -c -v -i -E '^$|hexnext|lsposed|zygisk'))"
   sec "Shizuku"; pidof shizuku_server 2>&1; pm path moe.shizuku.privileged.api 2>&1
   sec "Hex Next builds installed"; say "${HN_ALL:- none}"
   sec "free space (KB)"; df -k /data 2>&1 | tail -1
@@ -188,12 +245,44 @@ step "Reading the phone's version"
 
 # ---------------------------------------------------------------- 2. overlays
 step "Reading the theme overlays that are on right now"
-t 40 cmd overlay list --user current >"$R/overlay-list.txt" 2>&1
-SEMWT_ON=$(grep -c -E '^\[x\].*SemWT_' "$R/overlay-list.txt" 2>/dev/null)
-SEMWT_ALL=$(grep -c -E 'SemWT_' "$R/overlay-list.txt" 2>/dev/null)
-HN_OVERLAYS_ON=$(grep -c -i -E '^\[x\].*hexnext' "$R/overlay-list.txt" 2>/dev/null)
-HN_OVERLAYS_ALL=$(grep -c -i -E 'hexnext' "$R/overlay-list.txt" 2>/dev/null)
-: "${SEMWT_ON:=0}" "${SEMWT_ALL:=0}" "${HN_OVERLAYS_ON:=0}" "${HN_OVERLAYS_ALL:=0}"
+# The full list stays in the work folder (deleted at the end); the result keeps the overlays of
+# Android, Samsung and Google apps only, without #Hex Next's App icons overlays: those would
+# name the apps installed on the phone. They are counted instead.
+t 40 cmd overlay list --user current >"$W/overlay-all.txt" 2>&1
+SEMWT_ON=$(grep -c -E '^ *\[x\].*SemWT_' "$W/overlay-all.txt" 2>/dev/null)
+SEMWT_ALL=$(grep -c -E 'SemWT_' "$W/overlay-all.txt" 2>/dev/null)
+HN_OVERLAYS_ON=$(grep -c -i -E '^ *\[x\].*hexnext' "$W/overlay-all.txt" 2>/dev/null)
+HN_OVERLAYS_ALL=$(grep -c -i -E 'hexnext' "$W/overlay-all.txt" 2>/dev/null)
+ICONS_ON=$(grep -c -E '^ *\[x\].*HexNextIcons_' "$W/overlay-all.txt" 2>/dev/null)
+ICONS_ALL=$(grep -c -E 'HexNextIcons_' "$W/overlay-all.txt" 2>/dev/null)
+: "${SEMWT_ON:=0}" "${SEMWT_ALL:=0}" "${HN_OVERLAYS_ON:=0}" "${HN_OVERLAYS_ALL:=0}" "${ICONS_ON:=0}" "${ICONS_ALL:=0}"
+OTHER_TARGETS=0
+OTHER_OVERLAYS=0
+KEEP=
+{
+  while IFS= read -r line; do
+    id=${line#"${line%%[! ]*}"}
+    case "$id" in
+      '') [ -n "$KEEP" ] && say "" ;;
+      '['*|'---'*)
+        [ -n "$KEEP" ] || continue
+        case "$id" in *HexNextIcons_*) continue ;; esac
+        # On a system target too an overlay can belong to another app (its RRO package, or the
+        # owner of a fabricated overlay): count it, never name it.
+        if names_other_app "$id"; then OTHER_OVERLAYS=$((OTHER_OVERLAYS + 1)); continue; fi
+        say "$line"
+        ;;
+      *)
+        if printf '%s\n' "$id" | grep -q -E "$SYSTEM_PKG"; then KEEP=1; say "$line"
+        else KEEP=; OTHER_TARGETS=$((OTHER_TARGETS + 1)); fi
+        ;;
+    esac
+  done <"$W/overlay-all.txt"
+  say ""
+  say "(left out: the overlays of $OTHER_TARGETS other apps and $ICONS_ALL App icons overlays, $ICONS_ON of them on)"
+  [ "$OTHER_OVERLAYS" -gt 0 ] && say "(left out too: $OTHER_OVERLAYS overlays other apps put on system apps)"
+} >"$R/overlay-list.txt"
+rm -f "$W/overlay-all.txt"
 
 mkdir -p "$R/overlay-dump"
 grep -i -E 'hexnext|SemWT_|themedesigner|monet' "$R/overlay-list.txt" 2>/dev/null |
@@ -203,11 +292,16 @@ grep -i -E 'hexnext|SemWT_|themedesigner|monet' "$R/overlay-list.txt" 2>/dev/nul
     t 15 cmd overlay dump "$id" >"$R/overlay-dump/$(clean "$id").txt" 2>&1
   done
 
-ls -laZ /data/resource-cache/ >"$R/resource-cache.txt" 2>&1
-{ sec "/data/overlays"; ls -laR /data/overlays 2>&1 | head -400; } >>"$R/resource-cache.txt"
+{
+  ls -laZ /data/resource-cache/ 2>&1 | grep -v -E 'HexNextIcons_|data@app@' | head -600 | only_system_lines
+  sec "/data/overlays"; ls -laR /data/overlays 2>&1 | grep -v -E 'HexNextIcons_|data@app@' | head -400 | only_system_lines
+} >"$R/resource-cache.txt"
 mkdir -p "$R/frro"
 for f in /data/resource-cache/*.frro; do
   [ -f "$f" ] || continue
+  # An App icons overlay, or one for another app, would say which apps are installed.
+  case "$f" in *HexNextIcons_*) continue ;; esac
+  names_other_app "${f##*/}" && continue
   size=$(wc -c <"$f" 2>/dev/null | tr -d ' ')
   case "$size" in ''|*[!0-9]*) continue ;; esac
   # Samsung's palette overlays are a few KB; a Hex Next overlay with pictures can be far bigger.
@@ -223,7 +317,15 @@ shot() {
   t 20 screencap -p "$f.png" 2>/dev/null
   rm -f "$W/ui.xml"
   t 20 uiautomator dump "$W/ui.xml" >/dev/null 2>&1
-  [ -s "$W/ui.xml" ] && cp "$W/ui.xml" "$f.xml"
+  # The layout without its words: a media player, a notification or another app's tile would
+  # name an app. Views and sizes stay, and so do the ids and window names of Android, Samsung,
+  # Google and Hex Next; another app's (a notification it drew, a keyboard) become "(app)".
+  # tap_enabled_text reads the work copy.
+  [ -s "$W/ui.xml" ] || return 0
+  sed -E -e 's/ (text|content-desc|hint|tooltip-text)="[^"]*"/ \1=""/g' \
+    -e 's/ (resource-id|package)="((android|com\.android|com\.samsung|com\.sec|com\.google\.android|com\.hexnext)[:".])/ \1@="\2/g' \
+    -e 's/ (resource-id|package)="[^"]+"/ \1="(app)"/g' \
+    -e 's/ (resource-id|package)@="/ \1="/g' "$W/ui.xml" >"$f.xml"
 }
 # tap_enabled_text <text>: taps a visible, enabled control with exactly that text. English only;
 # on a phone in another language it finds nothing and the step is skipped.
@@ -421,19 +523,19 @@ for pkg in $HN_ALL; do
   D=$R/app/$pkg
   mkdir -p "$D/logs"
   t 15 dumpsys package "$pkg" 2>/dev/null | grep -E 'versionName=|versionCode=|firstInstallTime=|lastUpdateTime=' | head -4 >"$D/version.txt"
-  { ls -la "$A" 2>&1; for d in reports logs scan requests activity; do sec "$d"; ls -laR "$A/$d" 2>&1 | head -600; done; } >"$D/files-list.txt"
+  { ls -la "$A" 2>&1; for d in reports logs scan requests activity; do sec "$d"; ls -laR "$A/$d" 2>&1 | head -600; done; } | no_app_names >"$D/files-list.txt"
   mkdir -p "$D/reports"
   for f in "$A"/reports/*.json "$A"/reports/*.txt; do
     [ -f "$f" ] || continue
-    head -c 12000000 "$f" >"$D/reports/${f##*/}" 2>/dev/null
+    head -c 12000000 "$f" 2>/dev/null | no_app_names >"$D/reports/${f##*/}"
   done
   [ -f "$A/reports/apply-last.json" ] && APPLY_SEEN=1
   ls "$A"/reports/2*.json >/dev/null 2>&1 && SCAN_SEEN=1
   for f in $(ls -t "$A"/logs/*.jsonl 2>/dev/null | head -5); do
-    head -c 8000000 "$f" >"$D/logs/${f##*/}" 2>/dev/null
+    head -c 8000000 "$f" 2>/dev/null | no_app_names >"$D/logs/${f##*/}"
   done
   [ -f "$A/theme.json" ] && head -c 2000000 "$A/theme.json" >"$D/theme.json"
-  [ -f "$A/activity/activity.log" ] && head -c 4000000 "$A/activity/activity.log" >"$D/activity.log"
+  [ -f "$A/activity/activity.log" ] && head -c 4000000 "$A/activity/activity.log" | no_app_names >"$D/activity.log"
   [ -d "$A/requests" ] && cp -r "$A/requests" "$D/requests" 2>/dev/null
   [ -d "$A/scan/semwt" ] && cp -r "$A/scan/semwt" "$D/scan-semwt" 2>/dev/null
 done
@@ -482,12 +584,17 @@ lookup() { printf '%s %s -> %s\n' "$1" "$2" "$(t 10 cmd overlay lookup --user cu
   t 30 logcat -d -b crash -v threadtime >"$W/crash.txt" 2>/dev/null
   CRASH_PIDS=$(grep -E 'Process: (com\.android\.systemui|system_server|com\.hexnext\.[A-Za-z0-9_.]+), PID: |FATAL EXCEPTION IN SYSTEM PROCESS|>>> (com\.android\.systemui|system_server|com\.hexnext\.[A-Za-z0-9_.]+) <<<' "$W/crash.txt" 2>/dev/null |
     sed -n 's/^[0-9-]* [0-9:.]* *\([0-9][0-9]*\) .*/\1/p' | sort -u)
+  # Those crashes still name other apps: a module's hook in the frames, NameNotFound, cmp= and
+  # "Unknown package" messages, native library paths. Such lines are left out; the main thread's
+  # name ("ndroid.systemui") would look like an app, so a dotted thread name is written (thread).
   for p in $CRASH_PIDS; do
     grep -E "^[0-9-]+ [0-9:.]+ +$p +[0-9]+ " "$W/crash.txt" 2>/dev/null
-  done | sort | tail -400
+  done | sort | tail -400 | no_posting_app |
+    sed -E 's/(, name: )[^ ]*[.][^ ]*( +>>> )/\1(thread)\2/' | only_system_lines
   rm -f "$W/crash.txt"
-  sec "overlay and Hex Next lines"
-  t 30 logcat -d 2>/dev/null | grep -i -E 'OverlayManager|idmap2|FabricatedOverlay|HexNext|ThemeService|ThemeApplier|FrroWriter' | tail -400
+  sec "overlay and Hex Next lines (lines naming another app left out)"
+  t 30 logcat -d 2>/dev/null | grep -i -E 'OverlayManager|idmap2|FabricatedOverlay|HexNext|ThemeService|ThemeApplier|FrroWriter' |
+    grep -v -E 'HexNextIcons_|/data/app/' | tail -400 | only_system_lines
 } >"$R/logcat.txt" 2>&1
 
 # ---------------------------------------------------------------- 6. pack
@@ -513,6 +620,8 @@ fi
   say "hexnext scan report seen: ${SCAN_SEEN:-no}"
   say "hexnext apply report seen: ${APPLY_SEEN:-no}"
   say "hexnext overlays: $HN_OVERLAYS_ON on of $HN_OVERLAYS_ALL"
+  say "hexnext app icon overlays (counted, not named): $ICONS_ON on of $ICONS_ALL"
+  say "other apps' overlay groups left out: $OTHER_TARGETS"
   say "samsung palette overlays (SemWT): $SEMWT_ON on of $SEMWT_ALL"
   say "frro files copied: $(ls "$R/frro" 2>/dev/null | grep -c .)"
   say "target apps found: $found of $count"

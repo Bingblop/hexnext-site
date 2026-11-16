@@ -17,43 +17,51 @@
 <body>
 <main>
 <h1>#Hex Next Privacy Policy</h1>
-<p class="meta">Effective 14 November 2026 · Applies to the Android app "#Hex Next" (package com.hexnext.themer) · <a href="terms-of-service.html">Terms of service</a></p>
+<p class="meta">Effective 16 November 2026 · Applies to the Android app "#Hex Next" (package com.hexnext.themer) · <a href="terms-of-service.html">Terms of service</a></p>
 
 <p>Hex Next is a theming app for Samsung phones running One UI. It is built to work on your device, not in the cloud. This policy explains what the app does with information, in plain terms.</p>
 
 <h2>What we collect</h2>
-<p>We do not require an account, and we do not run analytics, advertising or crash-reporting services. The app does not collect or transmit personal information to us.</p>
+<p>We do not require an account, and we do not run analytics, advertising or crash-reporting services. The app sends us information only when you ask it to; each case is described below.</p>
 
 <h2>What stays on your phone</h2>
 <ul>
   <li><strong>Theme settings</strong> you choose (colours, packs, icons, fonts, backgrounds) and the themes the app builds from them.</li>
   <li><strong>Device scan data</strong>: the list of Samsung system apps and their theme resources on your phone, used to build overlays that fit your exact software version.</li>
-  <li><strong>Build logs and reports</strong> that describe what the app changed, so you can undo it and diagnose problems. You can share these files yourself; the app never uploads them.</li>
+  <li id="app-icons"><strong>Your installed apps, with App icons only</strong>: App icons is off until you turn it on and needs root. While it is on, each Apply reads the list of apps installed on your phone through root and redraws their Home screen icons in your theme. The list is used on your phone only and is never sent to us or anyone else.</li>
+  <li><strong>Build logs and reports</strong> that describe what the app changed, so you can undo it and diagnose problems. They stay on your phone unless you send a report from the app, where you choose whether the last apply and the newest log lines go with it. Before a report, or a log or scan you share from the app, leaves your phone, the app replaces the names of apps you installed with [app 1], [app 2] and so on.</li>
   <li><strong>Images and fonts you import</strong> for custom icons, backgrounds and system fonts. They are stored in the app's private storage until you delete them.</li>
   <li><strong>AI provider keys</strong> you choose to enter. They are encrypted with a key held in your phone's hardware-backed keystore, are excluded from backups, and are never sent anywhere except to the provider they belong to.</li>
 </ul>
 <p>Uninstalling the app removes all of this data. "Remove theme" inside the app restores Samsung's defaults.</p>
 
 <h2>Optional AI features</h2>
-<p>If you turn on icon or theme generation, the prompt you type is sent directly from your phone to the AI provider you selected (for example OpenAI, Google, Anthropic, xAI, Perplexity or Stability AI), using your own API key. Those providers process your prompt under their own privacy policies. Nothing is routed through servers operated by us.</p>
-<p>If you have not added a key, the AI features use two free, experimental services that need no account: <a href="https://opencode.ai/zen">OpenCode Zen</a> for theme text and <a href="https://pollinations.ai">Pollinations</a> for images. Your prompt and the theme details the app sends with it (colours and settings, never your files or keys) go directly from your phone to that service. Free models may use the prompts they receive to improve their models, so do not type anything personal into an AI prompt. Add a key for another provider in Settings › AI providers to stop using the free services.</p>
+<p>If you turn on icon or theme generation, the prompt you type, and any files you attach in the AI chat (pictures as small copies), are sent directly from your phone to the AI provider you selected (for example OpenAI, Google, Anthropic, xAI, Perplexity or Stability AI), using your own API key. Those providers process your prompt under their own privacy policies. Nothing is routed through servers operated by us.</p>
+<p>If you have not added a key, the AI features use two free, experimental services that need no account: <a href="https://opencode.ai/zen">OpenCode Zen</a> for theme text and <a href="https://pollinations.ai">Pollinations</a> for images. Your prompt and the theme details the app sends with it (colours and settings, the main colours of pictures you attach and the text of text files you attach; never the pictures themselves or your keys) go directly from your phone to that service. Free models may use the prompts they receive to improve their models, so do not type anything personal into an AI prompt. Add a key for another provider in Settings › AI providers to stop using the free services.</p>
 <p>The app asks for your agreement before it sends your first prompt to a free service. Every AI result has a <strong>Report</strong> action. If you report a result, the app sends our server the reason you picked, the prompt you typed, the name of the AI provider and model, the app version, and a note if you add one. The report carries no account, email address or device identifier, is kept privately to review harmful or wrong results, and is deleted when the review is closed.</p>
 
 <h2>Purchases</h2>
-<p>Theme packs, the subscription and lifetime access are sold through Google Play. Google processes the payment and handles your payment details; we never see them. To confirm a purchase, and to hand you the pack you bought, the app sends the Google Play purchase token (the receipt Google issues to your app) to our licence server. The server asks Google whether that purchase is genuine, answers yes or no, and streams the pack. It keeps nothing: the token is processed within the request and discarded, and no account identifier, device identifier or other personal information is sent with it.</p>
+<p>Theme packs, the subscription and lifetime access are sold through Google Play. Google processes the payment and handles your payment details; we never see them. To confirm a purchase, and to hand you the pack you bought, the app sends the Google Play purchase token (the receipt Google issues to your app) to our licence server. The server asks Google whether that purchase is genuine, answers yes or no, and streams the pack. It does not store the token. For a purchase-checked pack download it keeps a one-way hash of the token with a daily download count, to stop bulk copying. No account identifier, device identifier or other personal information is sent with a purchase token.</p>
+
+<!-- GIFT CODES ONLY: delete this section, and "and gift code records" under "Deleting your data", if the Play build ships without gift codes. -->
+<h2 id="gift-codes">Gift codes</h2>
+<p>The developer gives free gift codes to testers and friends; codes are never sold. A gift code works on one phone only. When you unlock with a code, each time the app checks it again, and with every pack download the code unlocks, the app sends our licence server the code and a one-way hash (SHA-256) of your phone's Android ID together with the app's package name. The Android ID itself is not sent. The server uses the hash to bind the code to your phone, so a copied code works nowhere else, and to limit how often a phone can try codes and how many packs it can download a day. It keeps the hash in the code's record until that record is deleted, and keeps each day's download count under a one-way hash of the code and the phone hash, as it does for purchases. Ask us and we will delete them; the code then stops working on your phone.</p>
 
 <h2 id="contact-form">Contact form</h2>
 <p>When you use the <a href="contact.html">contact form</a>, we receive your email address and what you write, so the developer can reply. An issue report is also posted publicly on GitHub with its subject, message and phone model, but never your email address. A message to the developer is not posted publicly. Messages are kept until the matter is closed; ask through the form or by email and we will delete yours.</p>
 
+<h2 id="reports">Reports from the app</h2>
+<p>Settings › Report Issue / Request Feature sends our server the title and description you write, the files you attach (up to 25 MB) and, if you leave the boxes ticked, your phone model, Android and One UI version, the app version, the last apply and the newest log lines. The report and its attachments become a public issue on GitHub. Before it is sent, the app replaces the names of apps you installed with [app 1], [app 2] and so on, so the issue never lists your apps; files you attach yourself are sent as they are. An email address, if you give one, is kept privately for a reply and is never posted. Reports are kept until you ask us to delete them; we remove the issue, its files and your address within 30 days.</p>
+
 <h2 id="delete-data">Deleting your data</h2>
-<p>Everything the app keeps on your phone is removed when you uninstall it or clear its storage. Our licence server stores no data about you, so there is nothing to delete there; your purchase record is held by Google Play under your Google account and is covered by <a href="https://policies.google.com/privacy">Google's privacy policy</a>. If you believe we hold any information about you, email <a href="mailto:kyle.tameirao@gmail.com?subject=Hex%20Next%20data%20deletion">kyle.tameirao@gmail.com</a> and we will confirm or delete it within 30 days.</p>
+<p>Everything the app keeps on your phone is removed when you uninstall it or clear its storage. Our server keeps no account. It holds the reports you sent, the hashed download counts and gift code records described above, which we delete on request; your purchase record is held by Google Play under your Google account and is covered by <a href="https://policies.google.com/privacy">Google's privacy policy</a>. If you believe we hold any information about you, email <a href="mailto:kyle.tameirao@gmail.com?subject=Hex%20Next%20data%20deletion">kyle.tameirao@gmail.com</a> and we will confirm or delete it within 30 days.</p>
 
 <h2>Permissions</h2>
 <table>
   <tr><th>Permission</th><th>Why</th></tr>
-  <tr><td>Internet</td><td>Downloading theme packs you own, verifying purchases, and optional AI requests.</td></tr>
-  <tr><td>Root or Shizuku access</td><td>Installing and removing system theme overlays. Hex Next only touches Samsung and Android system apps and only the resources needed for your theme.</td></tr>
-  <tr><td>Query installed packages</td><td>Detecting which Samsung system apps are present so the right overlays are built and missing (debloated) apps are skipped.</td></tr>
+  <tr><td>Internet</td><td>Downloading theme packs you own, verifying purchases, sending the reports you file, and optional AI requests.</td></tr>
+  <tr><td>Root or Shizuku access</td><td>Installing and removing system theme overlays. Hex Next themes Samsung and Android system apps and only the resources needed for your theme. Your other apps change only when you turn on App icons, which redraws their Home screen icons.</td></tr>
+  <tr><td>Query installed packages</td><td>Detecting which Samsung system apps are present so the right overlays are built and missing (debloated) apps are skipped. With <a href="#app-icons">App icons</a> on, the list of all installed apps is read through root to draw their icons; it stays on your phone.</td></tr>
   <tr><td>Run at boot</td><td>Re-applying your theme after a restart and running the safe-mode check that undoes a theme if the system fails to start properly.</td></tr>
   <tr><td>Photos and files (via the system picker)</td><td>Importing images and fonts you choose. The app only receives the files you pick.</td></tr>
 </table>
