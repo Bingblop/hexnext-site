@@ -46,7 +46,7 @@
 
 <h2 id="privacy">What the test reads, and what it never reads</h2>
 <p><b>It reads:</b> technical files from Samsung's own system apps (the names of their colours and icons), Samsung's colour palette files, #Hex Next's own logs, the phone's model and software version, and about 16 pictures of system screens that it takes by itself: the Quick panel, Display settings, Sound settings, the App info page of #Hex Next, the phone keypad, the volume slider and the terminal with the keyboard.</p>
-<p><b>It never opens</b> your photos, messages, contacts, accounts or passwords, and it does not list your apps. The test sends nothing anywhere. It makes one file, and you decide to send it.</p>
+<p><b>It never opens</b> your photos, messages, contacts, accounts or passwords, and it does not list your apps. Where a file would name another app, such as an overlay for it, a #Hex Next App icons overlay or a log line about one, the test leaves that out or writes "(app)" instead, and only counts them. An e-mail address or a chat id in a crash line is written "(id)". Each picture comes with the screen's layout: where each part sits, without the words on the screen. Of your root modules, only #Hex Next's, LSPosed and Zygisk are named; the others are counted. The test sends nothing anywhere. It makes one file, and you decide to send it.</p>
 <div class="card note"><p style="margin:0">The Quick panel picture shows what is on your Quick panel at that moment, such as the name of your Wi-Fi network, a connected Bluetooth device or the song that is playing. Part 1 clears your notifications, so none of them are in the picture.</p></div>
 
 <h2 id="part1">Part 1: Get the phone ready</h2>
