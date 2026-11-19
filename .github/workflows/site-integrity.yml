@@ -1,0 +1,244 @@
+name: Site integrity
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-integrity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate published site
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate module manifest and APK
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python <<'PY'
+          import hashlib
+          import json
+          import re
+          import sys
+          from pathlib import Path
+
+          root = Path(".")
+          manifest_path = root / "downloads" / "module.json"
+          html_path = root / "index.html"
+          errors = []
+
+          if not manifest_path.is_file():
+              errors.append("downloads/module.json does not exist.")
+              manifest = None
+          else:
+              try:
+                  manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+              except Exception as exc:
+                  errors.append(f"downloads/module.json is invalid JSON: {exc}")
+                  manifest = None
+
+          required = {"versionCode": int, "versionName": str, "sha256": str, "apk": str}
+          if manifest is not None:
+              for key, expected_type in required.items():
+                  if key not in manifest:
+                      errors.append(f"module.json is missing {key!r}.")
+                  elif not isinstance(manifest[key], expected_type):
+                      errors.append(f"module.json {key!r} must be {expected_type.__name__}.")
+
+              version_code = manifest.get("versionCode")
+              if isinstance(version_code, int) and version_code <= 0:
+                  errors.append("module.json versionCode must be positive.")
+
+              version_name = manifest.get("versionName")
+              if isinstance(version_name, str) and not version_name.strip():
+                  errors.append("module.json versionName cannot be empty.")
+
+              checksum = manifest.get("sha256")
+              if isinstance(checksum, str) and not re.fullmatch(r"[0-9a-fA-F]{64}", checksum):
+                  errors.append("module.json sha256 must be a 64-character hexadecimal SHA-256.")
+
+              apk_name = manifest.get("apk")
+              if isinstance(apk_name, str):
+                  if Path(apk_name).name != apk_name or not apk_name.endswith(".apk"):
+                      errors.append("module.json apk must be an APK filename.")
+
+          if manifest is not None and isinstance(manifest.get("apk"), str):
+              apk_path = root / "downloads" / manifest["apk"]
+              if not apk_path.is_file():
+                  errors.append(f"Published APK does not exist: {apk_path}")
+              else:
+                  digest = hashlib.sha256(apk_path.read_bytes()).hexdigest()
+                  expected = manifest.get("sha256")
+                  if isinstance(expected, str) and digest.lower() != expected.lower():
+                      errors.append(
+                          "Published APK SHA-256 does not match downloads/module.json.\n"
+                          f"  expected: {expected}\n  actual:   {digest}"
+                      )
+
+          if not html_path.is_file():
+              errors.append("index.html does not exist.")
+              html = ""
+          else:
+              html = html_path.read_text(encoding="utf-8")
+
+          if manifest is not None and html:
+              version_match = re.search(
+                  r'id=["\']module-version["\'][^>]*>\s*([^<]+?)\s*</', html, re.IGNORECASE
+              )
+              if not version_match:
+                  errors.append("index.html is missing #module-version.")
+              elif isinstance(manifest.get("versionName"), str) and version_match.group(1).strip() != manifest["versionName"]:
+                  errors.append(
+                      "index.html module version disagrees with downloads/module.json.\n"
+                      f"  HTML:     {version_match.group(1).strip()}\n  manifest: {manifest['versionName']}"
+                  )
+
+              checksum_match = re.search(
+                  r'id=["\']module-sha256["\'][^>]*>\s*([0-9a-fA-F]{64})\s*</', html, re.IGNORECASE
+              )
+              if not checksum_match:
+                  errors.append("index.html is missing #module-sha256 with a SHA-256 value.")
+              elif isinstance(manifest.get("sha256"), str) and checksum_match.group(1).lower() != manifest["sha256"].lower():
+                  errors.append("index.html module SHA-256 disagrees with downloads/module.json.")
+
+              apk_name = manifest.get("apk")
+              if isinstance(apk_name, str) and f"downloads/{apk_name}" not in html:
+                  errors.append("index.html does not link to the APK named by downloads/module.json.")
+
+          if errors:
+              print("\nSite integrity validation FAILED:\n", file=sys.stderr)
+              for error in errors:
+                  print(f" - {error}", file=sys.stderr)
+              sys.exit(1)
+
+          print("Site integrity validation passed.")
+          print("Module:", manifest["versionName"], f"(versionCode {manifest['versionCode']})")
+          print("APK:", manifest["apk"])
+          print("SHA-256:", manifest["sha256"])
+          PY
+
+      - name: Check local links and assets
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          from urllib.parse import unquote, urlsplit
+          import sys
+
+          root = Path(".").resolve()
+          errors = []
+
+          class References(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.references = []
+
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  for attribute in ("href", "src"):
+                      value = attrs.get(attribute)
+                      if value:
+                          self.references.append((tag, attribute, value))
+
+          html_files = sorted(Path(".").glob("*.html"))
+          if not html_files:
+              errors.append("No top-level HTML files were found.")
+
+          known_schemes = {"http", "https", "mailto", "tel", "data", "javascript"}
+          for html_file in html_files:
+              parser = References()
+              try:
+                  parser.feed(html_file.read_text(encoding="utf-8"))
+              except Exception as exc:
+                  errors.append(f"{html_file}: could not parse HTML: {exc}")
+                  continue
+
+              for tag, attribute, reference in parser.references:
+                  reference = reference.strip()
+                  if not reference:
+                      continue
+                  parsed = urlsplit(reference)
+                  if parsed.scheme.lower() in known_schemes or parsed.netloc or not parsed.path:
+                      continue
+                  path_text = unquote(parsed.path)
+                  candidate = root / path_text.lstrip("/") if path_text.startswith("/") else (html_file.parent / path_text).resolve()
+                  try:
+                      candidate.relative_to(root)
+                  except ValueError:
+                      errors.append(f"{html_file}: {tag}[{attribute}] escapes repository root: {reference}")
+                      continue
+                  if not candidate.exists():
+                      errors.append(f"{html_file}: broken local reference {reference!r}")
+
+          if errors:
+              print("\nLocal link/asset validation FAILED:\n", file=sys.stderr)
+              for error in errors:
+                  print(f" - {error}", file=sys.stderr)
+              sys.exit(1)
+
+          print(f"Checked {len(html_files)} HTML files; all local references resolve.")
+          PY
+
+      - name: Check theme manifest JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python <<'PY'
+          import json
+          import re
+          import sys
+          from pathlib import Path
+
+          html = Path("index.html").read_text(encoding="utf-8")
+          match = re.search(
+              r'<script[^>]+id=["\']themes-data["\'][^>]*>(.*?)</script>',
+              html,
+              re.IGNORECASE | re.DOTALL,
+          )
+          if not match:
+              print("index.html does not contain #themes-data.", file=sys.stderr)
+              sys.exit(1)
+
+          try:
+              data = json.loads(match.group(1))
+          except Exception as exc:
+              print(f"#themes-data is invalid JSON: {exc}", file=sys.stderr)
+              sys.exit(1)
+
+          if not isinstance(data, dict):
+              print("#themes-data must contain a JSON object.", file=sys.stderr)
+              sys.exit(1)
+          if not isinstance(data.get("themes"), list):
+              print("#themes-data must contain a themes array.", file=sys.stderr)
+              sys.exit(1)
+          if not isinstance(data.get("layouts"), list):
+              print("#themes-data must contain a layouts array.", file=sys.stderr)
+              sys.exit(1)
+
+          print("Theme manifest JSON is valid.")
+          PY
