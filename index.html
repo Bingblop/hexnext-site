@@ -794,9 +794,9 @@ footer a{color:var(--fg)}
 <section id="module">
   <div class="wrap" style="max-width:820px">
     <div class="sec-head"><span class="eyebrow">Optional download</span><h2>HexNext-QS-Notifications-Module</h2></div>
-    <p style="color:var(--muted)">System UI paints every Quick panel tile one colour and keeps pictures off notification cards, so overlays alone cannot show them the way the theme previews do. This optional LSPosed module keeps a theme's full-colour tile glyphs, puts its art behind your notifications, colours the status bar icons and shows a pack's art on the brightness and volume sliders. It also lets the Quick panel music player icons take a theme's art without restarting System UI. Turn each part on or off in #Hex Next under Theme Packs › System UI hook.</p>
+    <p style="color:var(--muted)">System UI paints every Quick panel tile one colour and keeps pictures off notification cards, so overlays alone cannot show them the way the theme previews do. This optional LSPosed module keeps a theme's full-colour tile glyphs, puts its art behind your notifications, colours the status bar icons and shows a pack's art on the brightness and volume sliders. On One UI 9 it also paints the volume popup, the Quick panel's volume and brightness bars and the circles of the tiles that are on in up to three colours, and gives the lock screen's status bar your icon colours. It lets the Quick panel music player icons take a theme's art without restarting System UI. Turn each part on or off in #Hex Next under Theme Packs › System UI hook.</p>
     <p style="margin:22px 0"><a class="btn btn-primary" href="downloads/HexNext-QS-Notifications-Module.apk" download>Download HexNext-QS-Notifications-Module.apk</a></p>
-    <p style="color:var(--muted);font-size:14px;overflow-wrap:anywhere">Version <span id="module-version">2.2</span> · <span id="module-size">2.1 MB</span> · SHA-256 <code id="module-sha256">8127480f2cdbe7951924622ca3eefe205cfe37022ede1ad6c9a966b73b51c351</code></p>
+    <p style="color:var(--muted);font-size:14px;overflow-wrap:anywhere">Version <span id="module-version">2.3</span> · <span id="module-size">2.1 MB</span> · SHA-256 <code id="module-sha256">96e96a32c885b8b904da3abab60810df1f6f2f0efb17cc38f5dc411a23ca7b6c</code></p>
     <p style="color:var(--muted);font-size:14px">This version is signed with the #Hex Next release key and installs over version 1.3 and every later one as an update. After an update, do a soft reboot before you apply a theme again: System UI loads the module only when it starts. If version 1.2 is installed, uninstall it first: Android does not update an app to a copy signed with another key. Then install this version and switch it on again in Vector.</p>
     <p><a class="btn btn-ghost" href="setup-guide.html">Full setup guide: root, Zygisk, Vector and the module</a></p>
     <details open><summary>How to set it up</summary><p>You need root with Zygisk (Zygisk Next or ReZygisk on KernelSU, or Magisk's Zygisk) and Vector, the current LSPosed.</p>
@@ -804,7 +804,7 @@ footer a{color:var(--fg)}
       2. Open Vector › Modules and tap HexNext-QS-Notifications-Module.<br>
       3. Tick System UI in its scope first, then switch the module on.<br>
       4. Force stop #Hex Next from its app settings page (Settings › Apps › #Hex Next › Force stop) and open it again. No reboot is needed. The System UI hook card then shows a green Module Hook Running badge.<br><b>Note:</b> Vector loads the hook when System UI starts, so on some phones a force stop is not enough. If the badge stays yellow, do a soft reboot.</p></details>
-    <details><summary>Is it safe?</summary><p>The module only changes how System UI draws tile icons, the status bar icons, the slider and music player icons and notification card backgrounds, and only for themes from #Hex Next. It reads nothing else and sends nothing anywhere. To stop it, switch it off in Vector and restart.</p></details>
+    <details><summary>Is it safe?</summary><p>The module only changes how System UI draws the Quick panel tiles and sliders, the volume popup, the status bar icons, the music player icons and notification card backgrounds, and only for themes from #Hex Next. It reads nothing else and sends nothing anywhere. To stop it, switch it off in Vector and restart.</p></details>
   </div>
 </section>
 
@@ -812,7 +812,7 @@ footer a{color:var(--fg)}
   <div class="wrap" style="max-width:820px">
     <div class="sec-head"><span class="eyebrow">FAQ</span><h2>Questions</h2></div>
     <details><summary>Which phones work?</summary><p>Samsung Galaxy phones on One UI 7, 8 and 9 (Android 15 to 17). #Hex Next themes Samsung's own system apps.</p></details>
-    <details><summary>Do I need root?</summary><p>Full theming needs root (any root manager, such as KernelSU or Magisk) or system access through Shizuku running as root. Without root, Shizuku over wireless debugging can still apply the accent colour. The <a href="setup-guide.html">setup guide</a> lists the root methods for each security update, and the community's <a href="https://github.com/fynks/awesome-temporary-root" rel="noopener">Awesome Temporary Root</a> guide keeps the current method for every model.</p></details>
+    <details><summary>Do I need root?</summary><p>Full theming needs root (any root manager, such as KernelSU or Magisk) or system access through Shizuku running as root. Without root, Shizuku over wireless debugging can still apply the accent colour. <a href="dependencies.html">Dependencies</a> lists what each feature needs. The <a href="setup-guide.html">setup guide</a> lists the root methods for each security update, and the community's <a href="https://github.com/fynks/awesome-temporary-root" rel="noopener">Awesome Temporary Root</a> guide keeps the current method for every model.</p></details>
     <details><summary>Is it safe? Can I undo it?</summary><p>Yes. Test Mode tries a theme only until the next restart, Remove takes every overlay off in one tap, and a recovery watchdog turns the theme off if System UI keeps crashing after a restart. #Hex Next never touches your files.</p></details>
     <details><summary>Do I need my own AI key?</summary><p>No. Two free, experimental agents work out of the box, though their themes may be lower quality. For the best results add a key for any supported service. A Google Gemini key is free and needs no card: get one at <a href="https://aistudio.google.com/app/apikey" rel="noopener">aistudio.google.com</a>.</p></details>
     <details><summary>How many theme packs are there?</summary><p>More than 50, from minimal to wild, with new packs added regularly. Any theme you build can also be saved as your own pack.</p></details>
@@ -832,6 +832,7 @@ footer a{color:var(--fg)}
       <a href="terms-of-service.html">Terms of service</a>
       <a href="privacy-policy.html#delete-data">Delete your data</a>
       <a href="#module">System UI module</a>
+      <a href="dependencies.html">Dependencies</a>
       <a href="setup-guide.html">Setup guide</a>
       <a href="https://github.com/fynks/awesome-temporary-root" rel="noopener">Temporary root guide</a>
       <a href="contact.html?type=issue">Report an issue</a>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#Hex Next Dependencies</title>
+<meta name="description" content="What #Hex Next needs on your phone: root or Shizuku for theming, and the System UI module for full-colour Quick panel tiles, the volume popup, the status bar and notification art.">
+<link rel="icon" href="assets/favicon.png">
+<style>
+  :root { color-scheme: light dark; --fg:#1b1c20; --bg:#ffffff; --muted:#5a5f6b; --line:#e3e5ea; --card:#f5f6f8; --accent:#0a8fa8; }
+  @media (prefers-color-scheme: dark) { :root { --fg:#e8eaee; --bg:#16181e; --muted:#9aa0ad; --line:#2a2e38; --card:#1e2129; --accent:#45d4e6; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:32px 16px 64px; }
+  a { color:var(--accent); overflow-wrap:anywhere; }
+  h1 { font-size:30px; margin:0 0 4px; } h2 { font-size:22px; margin:40px 0 10px; scroll-margin-top:16px; } h3 { font-size:18px; margin:24px 0 6px; }
+  p.meta { color:var(--muted); margin:0 0 24px; }
+  ol, ul { padding-left:22px; } li { margin:6px 0; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:14px 0; }
+  .note { border-left:4px solid var(--accent); }
+  .warn { border-left:4px solid #e0703a; }
+  .btn { display:inline-block; padding:12px 20px; border-radius:999px; background:var(--accent); color:#06121a; font-weight:600; text-decoration:none; margin:6px 0; }
+  .btn:focus-visible { outline:2px solid var(--fg); outline-offset:2px; }
+  nav.top { margin:0 0 24px; font-size:15px; }
+</style>
+</head>
+<body>
+<main>
+<nav class="top"><a href="index.html">← #Hex Next home</a></nav>
+<h1>Dependencies</h1>
+<p class="meta">What #Hex Next needs on your phone, and what each part lets it theme. When the app says <b>Dependency missing</b>, the part it is waiting for is on this page.</p>
+
+<h2 id="theming">For theming: root or Shizuku</h2>
+<ul>
+  <li><b>Root</b> with any root manager, such as KernelSU, Magisk or APatch, or <b>Shizuku running as root</b>: every part of a theme, from colours to icons, fonts, pictures and pack art.</li>
+  <li><b>Shizuku over wireless debugging</b>, without root: the accent colour only.</li>
+</ul>
+<p>#Hex Next asks for root or Shizuku itself the first time it needs it. It never roots a phone.</p>
+
+<h2 id="system-ui">For the System UI features: the System UI module</h2>
+<p>System UI draws some of its parts in code, so a theme's overlays cannot reach them on their own. The free <b>HexNext-QS-Notifications-Module</b> is an LSPosed module that lets #Hex Next theme those parts too:</p>
+<ul>
+  <li>Quick panel tiles in full colour, with the theme's art inside each tile icon</li>
+  <li>the circles of the tiles that are on, in up to three colours</li>
+  <li>the volume popup and the Quick panel's volume and brightness bars, in up to three colours</li>
+  <li>the status bar icon colours on the lock screen and the closed status bar</li>
+  <li>notification card art and the Quick panel music player icons</li>
+</ul>
+<p>The multi-colour tile circles, the Quick panel's bars and the lock screen's status bar colours need One UI 9. Without the module, #Hex Next still themes everything else, and these parts keep One UI's own look or a single colour.</p>
+<h3>What the module needs</h3>
+<ol>
+  <li>A rooted phone with <b>Zygisk</b>, for example Zygisk Next with KernelSU, or Magisk's own Zygisk.</li>
+  <li><b>Vector</b> or <b>LSPosed</b>, the framework that runs the module inside System UI.</li>
+  <li>The module itself, with <b>System UI</b> ticked in its scope.</li>
+</ol>
+<p><a class="btn" href="index.html#module">Get the module and its steps</a></p>
+<div class="card note"><p style="margin:0">Once the module runs, the System UI card in #Hex Next (Theme Packs) says it is active, and its switches turn each part on or off. After installing or updating the module, restart System UI with a soft reboot before you apply a theme again.</p></div>
+
+<h2 id="safety">Before you install anything</h2>
+<div class="card warn"><p style="margin:0">Root managers, Zygisk and module frameworks are made by independent developers, not by #Hex Next. Rooting can void your warranty or trip Samsung Knox. Follow each project's own instructions. The module only changes how System UI draws the parts listed above, only for themes from #Hex Next, reads nothing else and sends nothing anywhere.</p></div>
+
+<p class="meta" style="margin-top:48px"><a href="index.html">#Hex Next</a> · <a href="privacy-policy.html">Privacy policy</a> · <a href="terms-of-service.html">Terms of service</a> · <a href="contact.html">Contact</a></p>
+</main>
+</body>
+</html>
